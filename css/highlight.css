@@ -1,0 +1,566 @@
+/* syntax highlight*/
+pre {
+  width: 100%;
+  position: relative;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+pre code {
+  display: block;
+  box-sizing: border-box;
+  overflow-x: auto;
+  font-family: Source Code Pro, Monaco, Menlo, Consolas, monospace;
+  margin: 1.2em 0;
+  padding: 15px 15px 10px 15px;
+  line-height: 1.2em;
+  width: 100%;
+  border-radius: 5px;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.125);
+  font-size: 13px;
+  color: #333;
+  background: #f7f8f8;
+}
+figure.highlight,
+.codeblock {
+  background: #f7f8f8;
+  margin: 10px 0;
+  line-height: 1.1em;
+  padding-top: 15px;
+  margin: 1em 0;
+  border-radius: 5px;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.125);
+}
+figure.highlight figcaption,
+.codeblock figcaption {
+  font-size: 13px;
+  padding: 0 15px 20px;
+  margin: 0;
+  background: #f7f8f8;
+  color: #999;
+}
+figure.highlight figcaption a,
+.codeblock figcaption a {
+  float: right;
+  color: #40759b;
+  font-weight: bold;
+}
+figure.highlight table,
+.codeblock table {
+  width: 100%;
+  margin: 0;
+  padding-bottom: 10px;
+  border-collapse: collapse;
+  position: relative;
+  display: block;
+  overflow-x: auto;
+}
+figure.highlight pre,
+.codeblock pre,
+figure.highlight .gutter,
+.codeblock .gutter,
+figure.highlight .code,
+.codeblock .code,
+figure.highlight .tag,
+.codeblock .tag {
+  background-color: inherit;
+  font-family: Source Code Pro, Monaco, Menlo, Consolas, monospace;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: text;
+}
+figure.highlight .gutter,
+.codeblock .gutter,
+figure.highlight .code,
+.codeblock .code {
+  vertical-align: top;
+}
+figure.highlight.plain .gutter,
+.codeblock.plain .gutter {
+  display: none;
+}
+figure.highlight .gutter,
+.codeblock .gutter {
+  background: #f7f8f8;
+  border-right: 1px solid #e6e6e6;
+  padding: 0.3em 15px;
+}
+figure.highlight .gutter .line,
+.codeblock .gutter .line {
+  color: #aaa;
+}
+figure.highlight .line,
+.codeblock .line {
+  font-size: 13px;
+  color: #333;
+}
+figure.highlight .line.marked,
+.codeblock .line.marked {
+  background: #f5e3de;
+}
+figure.highlight .code,
+.codeblock .code {
+  padding: 0.3em 15px 0.3em 1em;
+  width: 100%;
+}
+.gist .line,
+.gist .line-number {
+  font-family: Source Code Pro, Monaco, Menlo, Consolas, monospace;
+  font-size: 1em;
+  margin: 0 0 5px 0;
+}
+/* code highlight color*/
+.highlight .comment,
+.highlight .title {
+  color: #888;
+}
+.highlight .meta,
+.highlight .tag {
+  color: #324977;
+}
+.highlight .attr {
+  color: #118a04;
+}
+.highlight .string,
+.highlight .value,
+.highlight .inheritance,
+.highlight .header,
+.highlight .ruby .symbol,
+.highlight .xml .cdatabody {
+  color: #920000;
+}
+.highlight .keyword,
+.highlight .javascript .function {
+  color: #ec25ec;
+}
+.highlight .number,
+.highlight .preprocessor,
+.highlight .built_in,
+.highlight .literal,
+.highlight .params,
+.highlight .constant {
+  color: #fb6a00;
+}
+.highlight.apacheconf .code .common,
+.highlight.apacheconf .code .nomarkup,
+.highlight.apacheconf .code .attribute,
+.highlight.apacheconf .code .variable,
+.highlight.apacheconf .code .cbracket,
+.highlight.apacheconf .code .keyword {
+  color: #0086b3;
+}
+.highlight.apacheconf .code .sqbracket {
+  color: #df5000;
+}
+.highlight.apacheconf .code .section,
+.highlight.apacheconf .code .tag {
+  color: #63a35c;
+}
+.highlight.bash .code .literal,
+.highlight.bash .code .built_in {
+  color: #0086b3;
+}
+.highlight.bash .code .title {
+  color: #795da3;
+}
+.highlight.bash .code .shebang {
+  color: #969896;
+}
+.highlight.bash .code .variable {
+  color: #333;
+}
+.highlight.coffeescript .code .subst,
+.highlight.coffeescript .code .regexp,
+.highlight.coffeescript .code .attribute {
+  color: #df5000;
+}
+.highlight.coffeescript .code .literal,
+.highlight.coffeescript .code .built_in,
+.highlight.coffeescript .code .number {
+  color: #0086b3;
+}
+.highlight.coffeescript .code .title {
+  color: #795da3;
+}
+.highlight.coffeescript .code .reserved,
+.highlight.coffeescript .code .attribute {
+  color: #1d3e81;
+}
+.highlight.cpp .code .number,
+.highlight.c .code .number,
+.highlight.cpp .code .built_in,
+.highlight.c .code .built_in {
+  color: #0086b3;
+}
+.highlight.cpp .code .preprocessor,
+.highlight.c .code .preprocessor {
+  color: #df5000;
+}
+.highlight.cpp .code .title,
+.highlight.c .code .title {
+  color: #795da3;
+}
+.highlight.cpp .code .meta-keyword,
+.highlight.c .code .meta-keyword {
+  color: #a71d5d;
+}
+.highlight.cs .code .preprocessor,
+.highlight.cs .code .preprocessor .keyword {
+  color: #333;
+}
+.highlight.cs .code .xmlDocTag,
+.highlight.cs .code .doctag {
+  color: #63a35c;
+}
+.highlight.cs .code .number,
+.highlight.cs .code .built_in {
+  color: #0086b3;
+}
+.highlight.cs .code .title {
+  color: #795da3;
+}
+.highlight.css .code .id,
+.highlight.css .code .class,
+.highlight.css .code .pseudo,
+.highlight.css .code .selector-pseudo {
+  color: #795da3;
+}
+.highlight.css .code .attr_selector,
+.highlight.css .code .value {
+  color: #333;
+}
+.highlight.css .code .attribute,
+.highlight.css .code .hexcolor,
+.highlight.css .code .number,
+.highlight.css .code .function {
+  color: #0086b3;
+}
+.highlight.css .code .at_rule,
+.highlight.css .code .important,
+.highlight.css .code .meta {
+  color: #a71d5d;
+}
+.highlight.css .code .tag,
+.highlight.css .code .selector-tag {
+  color: #63a35c;
+}
+.highlight.diff .code .deletion {
+  color: #bd2c00;
+  background-color: #ffecec;
+}
+.highlight.diff .code .addition {
+  color: #55a532;
+  background-color: #eaffea;
+}
+.highlight.http .code .literal {
+  color: #0086b3;
+}
+.highlight.http .code .request {
+  color: #a71d5d;
+}
+.highlight.http .code .attribute,
+.highlight.http .code attr {
+  color: #183691;
+}
+.highlight.ini .code .value,
+.highlight.ini .code .keyword {
+  color: #333;
+}
+.highlight.ini .code .setting,
+.highlight.ini .code .attr {
+  color: #a71d5d;
+}
+.highlight.ini .code .chunk,
+.highlight.ini .code .meta {
+  color: #795da3;
+  font-weight: bold;
+}
+.highlight.ini .code .title,
+.highlight.ini .code .section {
+  color: #795da3;
+}
+.highlight.js .code .tag .title {
+  color: #333;
+}
+.highlight.js .code .regexp {
+  color: #df5000;
+}
+.highlight.js .code .javadoc {
+  color: #969896;
+}
+.highlight.js .code .literal,
+.highlight.js .code .number {
+  color: #0086b3;
+}
+.highlight.js .code .built_in,
+.highlight.js .code .title {
+  color: #795da3;
+}
+.highlight.js .code .tag,
+.highlight.js .code .javadoctag {
+  color: #a71d5d;
+}
+.highlight.java .code .title {
+  color: #795da3;
+}
+.highlight.java .code .number {
+  color: #0086b3;
+}
+.highlight.java .code .javadoc {
+  color: #969896;
+}
+.highlight.java .code .params {
+  color: #1d3e81;
+}
+.highlight.java .code .meta,
+.highlight.java .code .annotation,
+.highlight.java .code .javadoctag {
+  color: #a71d5d;
+}
+.highlight.mak .code .title {
+  color: #795da3;
+}
+.highlight.mak .code .constant {
+  color: #333;
+}
+.highlight.mak .code .keyword,
+.highlight.mak .code .meta-keyword {
+  color: #0086b3;
+}
+.highlight.json .code .attribute {
+  color: #183691;
+}
+.highlight.json .code .number,
+.highlight.json .code .literal {
+  color: #0086b3;
+}
+.highlight.md .code .link_url,
+.highlight.md .code .link {
+  text-decoration: underline;
+}
+.highlight.md .code .link_reference,
+.highlight.md .code .symbol,
+.highlight.md .code .code {
+  color: #0086b3;
+}
+.highlight.md .code .value,
+.highlight.md .code .link_label,
+.highlight.md .code .strong,
+.highlight.md .code .emphasis,
+.highlight.md .code .blockquote,
+.highlight.md .code .quote,
+.highlight.md .code .section {
+  color: #183691;
+}
+.highlight.nginx .code .title,
+.highlight.nginx .code .attribute {
+  color: #a71d5d;
+}
+.highlight.nginx .code .built_in,
+.highlight.nginx .code .literal {
+  color: #0086b3;
+}
+.highlight.nginx .code .regexp {
+  color: #183691;
+}
+.highlight.nginx .code .variable {
+  color: #333;
+}
+.highlight.objectivec .code .title {
+  color: #795da3;
+}
+.highlight.objectivec .code .preprocessor,
+.highlight.objectivec .code .meta {
+  color: #a71d5d;
+}
+.highlight.objectivec .code .preprocessor .title,
+.highlight.objectivec .code .meta .title {
+  color: #df5000;
+}
+.highlight.objectivec .code .literal,
+.highlight.objectivec .code .number,
+.highlight.objectivec .code .built_in {
+  color: #0086b3;
+}
+.highlight.objectivec .code .meta-string {
+  color: #183691;
+}
+.highlight.perl .code .title {
+  color: #795da3;
+}
+.highlight.perl .code .regexp {
+  color: #df5000;
+}
+.highlight.perl .code .sub {
+  color: #795da3;
+}
+.highlight.php .code .title {
+  color: #795da3;
+}
+.highlight.php .code .regexp {
+  color: #df5000;
+}
+.highlight.php .code .phpdoc,
+.highlight.php .code .doctag {
+  color: #a71d5d;
+}
+.highlight.php .code .literal,
+.highlight.php .code .number {
+  color: #0086b3;
+}
+.highlight.python .code .number {
+  color: #0086b3;
+}
+.highlight.python .code .decorator,
+.highlight.python .code .title,
+.highlight.python .code .meta {
+  color: #795da3;
+}
+.highlight.ruby .code .prompt,
+.highlight.ruby .code .constant,
+.highlight.ruby .code .number,
+.highlight.ruby .code .subst .keyword,
+.highlight.ruby .code .symbol {
+  color: #0086b3;
+}
+.highlight.ruby .code .parent,
+.highlight.ruby .code .title {
+  color: #795da3;
+}
+.highlight.sql .code .number {
+  color: #0086b3;
+}
+.highlight.sql .code .built_in {
+  color: #a71d5d;
+}
+.highlight.xml .code .tag {
+  color: #333;
+}
+.highlight.xml .code .value {
+  color: #183691;
+}
+.highlight.xml .code .title,
+.highlight.xml .code .name {
+  color: #63a35c;
+}
+.highlight.xml .code .attribute,
+.highlight.xml .code .attr {
+  color: #795da3;
+}
+.highlight.puppet .code .title {
+  color: #795da3;
+}
+.highlight.puppet .code .name {
+  color: #a71d5d;
+}
+.highlight.puppet .code .function {
+  color: #0086b3;
+}
+.highlight.puppet .code .attr {
+  color: #0086b3;
+}
+.highlight.less .code .number,
+.highlight.less .code .hexcolor,
+.highlight.less .code .function,
+.highlight.less .code .attribute {
+  color: #0086b3;
+}
+.highlight.less .code .id,
+.highlight.less .code .pseudo,
+.highlight.less .code .class,
+.highlight.less .code .selector-id,
+.highlight.less .code .selector-class,
+.highlight.less .code .selector-tag {
+  color: #795da3;
+}
+.highlight.less .code .tag,
+.highlight.less .code .at_rule {
+  color: #a71d5d;
+}
+.highlight.less .code .built_in {
+  color: #df5000;
+}
+.highlight.sass .code .number,
+.highlight.sass .code .hexcolor,
+.highlight.sass .code .function,
+.highlight.sass .code .attribute {
+  color: #0086b3;
+}
+.highlight.sass .code .tag,
+.highlight.sass .code .selector-tag {
+  color: #63a35c;
+}
+.highlight.sass .code .built_in {
+  color: #df5000;
+}
+.highlight.sass .code .tag,
+.highlight.sass .code .at_rule,
+.highlight.sass .code .important {
+  color: #a71d5d;
+}
+.highlight.sass .code .id,
+.highlight.sass .code .pseudo,
+.highlight.sass .code .class,
+.highlight.sass .code .preprocessor,
+.highlight.sass .code .selector-class,
+.highlight.sass .code .selector-id {
+  color: #795da3;
+}
+.highlight.sass .code .variable {
+  color: #333;
+}
+.highlight.stylus .code .tag,
+.highlight.stylus .code .selector-tag {
+  color: #63a35c;
+}
+.highlight.stylus .code .at_rule {
+  color: #a71d5d;
+}
+.highlight.stylus .code .class,
+.highlight.stylus .code .id,
+.highlight.stylus .code .pseudo,
+.highlight.stylus .code .title,
+.highlight.stylus .code .selector-id,
+.highlight.stylus .code .selector-pseudo,
+.highlight.stylus .code .selector-class {
+  color: #795da3;
+}
+.highlight.stylus .code .number,
+.highlight.stylus .code .hexcolor,
+.highlight.stylus .code .attribute,
+.highlight.stylus .code .params {
+  color: #0086b3;
+}
+.highlight.go .code .built_in,
+.highlight.go .code .constant {
+  color: #0086b3;
+}
+.highlight.go .code .typename {
+  color: #a71d5d;
+}
+.highlight.swift .code .preprocessor {
+  color: #a71d5d;
+}
+.highlight.swift .code .title {
+  color: #795da3;
+}
+.highlight.swift .code .built_in,
+.highlight.swift .code .number,
+.highlight.swift .code .type {
+  color: #0086b3;
+}
+.highlight.yml .code .number {
+  color: #fb6a00;
+}
+.highlight.yml .code .line,
+.highlight.yml .code .attr {
+  color: #795da3;
+}
+.highlight.yml .code .line,
+.highlight.yml .code .string,
+.highlight.yml .code .type,
+.highlight.yml .code .literal,
+.highlight.yml .code .meta {
+  color: #920000;
+}

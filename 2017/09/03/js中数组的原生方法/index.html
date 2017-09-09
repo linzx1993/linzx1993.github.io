@@ -1,0 +1,1559 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="技术文章,javascript," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="数组应该是我们在写程序中应用到最多的数据结构了，相比于无序的对象，有序的数组帮我们在处理数据时，实在是帮了太多的忙了。今天刚好看到一篇Array.include的文章，忽然发现经过几个ES3,ES5,ES6,ES7几个版本的更迭，发现在代码中用到了好多数组的方法，所以准备全部列出来，也是给自己加深印象  1 ES3中的数组方法 ES3兼容现在所有主流浏览器  ES3中的方法毫无疑问大家已经烂熟在">
+<meta name="keywords" content="技术文章,javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js中数组的原生方法">
+<meta property="og:url" content="http://yoursite.com/2017/09/03/js中数组的原生方法/index.html">
+<meta property="og:site_name" content="linzx">
+<meta property="og:description" content="数组应该是我们在写程序中应用到最多的数据结构了，相比于无序的对象，有序的数组帮我们在处理数据时，实在是帮了太多的忙了。今天刚好看到一篇Array.include的文章，忽然发现经过几个ES3,ES5,ES6,ES7几个版本的更迭，发现在代码中用到了好多数组的方法，所以准备全部列出来，也是给自己加深印象  1 ES3中的数组方法 ES3兼容现在所有主流浏览器  ES3中的方法毫无疑问大家已经烂熟在">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-09T04:01:52.127Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="js中数组的原生方法">
+<meta name="twitter:description" content="数组应该是我们在写程序中应用到最多的数据结构了，相比于无序的对象，有序的数组帮我们在处理数据时，实在是帮了太多的忙了。今天刚好看到一篇Array.include的文章，忽然发现经过几个ES3,ES5,ES6,ES7几个版本的更迭，发现在代码中用到了好多数组的方法，所以准备全部列出来，也是给自己加深印象  1 ES3中的数组方法 ES3兼容现在所有主流浏览器  ES3中的方法毫无疑问大家已经烂熟在">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/03/js中数组的原生方法/"/>
+
+
+
+
+
+  <title>js中数组的原生方法 | linzx</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?93e1e7523d9fccc42d9201ace7ca982a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">linzx</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/js中数组的原生方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="linzx">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">js中数组的原生方法</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T23:47:44+08:00">
+                2017-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/09/03/js中数组的原生方法/" class="leancloud_visitors" data-flag-title="js中数组的原生方法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  5,787
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  23
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>数组应该是我们在写程序中应用到最多的数据结构了，相比于无序的对象，有序的数组帮我们在处理数据时，实在是帮了太多的忙了。今天刚好看到一篇Array.include的文章，忽然发现经过几个ES3,ES5,ES6,ES7几个版本的更迭，发现在代码中用到了好多数组的方法，所以准备全部列出来，也是给自己加深印象</p>
+</blockquote>
+<h2 id="1-ES3中的数组方法"><a href="#1-ES3中的数组方法" class="headerlink" title="1 ES3中的数组方法"></a>1 ES3中的数组方法</h2><ul>
+<li>ES3兼容现在所有主流浏览器</li>
+</ul>
+<p>ES3中的方法毫无疑问大家已经烂熟在心了，不过中间有些细节可以回顾加深一下记忆，比如是否修改原数组返回新数组，执行方法之后的返回值是什么，某些参数的意义是否搞混等等。熟悉的的可以直接快速浏览或者跳过。</p>
+<h3 id="1-1-join-方法"><a href="#1-1-join-方法" class="headerlink" title="1.1 join()方法"></a>1.1 join()方法</h3><p>Array.join()方法是将一个数组里面的所有元素转换成字符串，然后再将他们连接起来<strong>返回一个新数组</strong>。可以传入一个可选的字符串来分隔结果字符串中的所有元素。如果没有指定分隔字符串，就默认使用逗号分隔。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let a  = [1,2,3,4,5,6,7];</div><div class="line">let b = a.join();    // b = &quot;1,2,3,4,5,6,7&quot;;</div><div class="line">let c = a.a.join(&quot; &quot;);    // b = &quot;1 2 3 4 5 6 7&quot;;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>方法Array.join()恰好与String.split()相反，后者是通过将一个字符串分隔成几个元素来创建数组</p>
+</blockquote>
+<h3 id="1-2-reverse-方法"><a href="#1-2-reverse-方法" class="headerlink" title="1.2 reverse()方法"></a>1.2 reverse()方法</h3><p>Array.reverse()方法将颠倒数组中元素的顺序并返回一个颠倒后的数组。<strong>它在原数组上执行这一操作，所以说并不是创建了一个新数组</strong>，而是在已存在的数组中对元素进行重排。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a  = [1,2,3,4,5,6,7];</div><div class="line">a.reverse();    // a =  [7,6,5,4,3,2,1]</div></pre></td></tr></table></figure></p>
+<h3 id="1-3-sort-方法"><a href="#1-3-sort-方法" class="headerlink" title="1.3 sort()方法"></a>1.3 sort()方法</h3><p>Array.sort()是在<strong>原数组上进行排序</strong>,返回排序后的数组。如果调用方法时不传入参数，那么它将按照字母顺序对数组元素进行排序，说得更精确点，是按照字符编码的顺序进行排序。要实现这一点，首先应把数组的元素都转换成字符串（如有必要），以便进行比较。</p>
+<p>如果数组中有未定义的元素，这些元素将放在数组的末尾<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let a  = [1,12,23,14,,undefined,null,NaN,56,6,7,&quot;a&quot;,&#123;&#125;,[]];</div><div class="line">a.sort();    //[[], 1, 12, 14, 23, 56, 6, 7, &quot;NaN&quot;, &#123;&#125;, &quot;a&quot;, null,undefined,undefined × 1]  </div><div class="line">//返回的NaN已经是一个字符串，说明在比较过程中将其转化成了字符串进行比较</div></pre></td></tr></table></figure></p>
+<p>仔细看可以发现，上面顺序并没有按照数字大小进行排序。如果想按照其他标准进行排序，就需要提供比较函数。该函数比较前后两个值，然后返回一个用于说明这两个值的相对顺序的数字。比较函数应该具有两个参数 a 和 b，其返回值如下：</p>
+<ul>
+<li>若 a 小于 b，在排序后的数组中 a 应该出现在 b 之前，则返回一个小于 0 的值。</li>
+<li>若 a 等于 b，则返回 0。</li>
+<li>若 a 大于 b，在排序后的数组中 a 应该出现在 b 之后，则返回一个大于 0 的值。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a  = [1,12,23,14,,undefined,null,NaN,56,6,7,&quot;a&quot;,&#123;&#125;,[]];</div><div class="line">a.sort((a,b) =&gt; &#123;return a - b&#125;);   //[null, Array(0), NaN, Object, 1, 6, 7, 12, 14, 23, 56, &quot;a&quot;,undefined, undefined × 1]</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="1-4-concat-方法"><a href="#1-4-concat-方法" class="headerlink" title="1.4 concat()方法"></a>1.4 concat()方法</h3><p>Array.concat() 方法用于连接两个或多个参数（数组，字符串等），<strong>该方法不会改变现有的数组，而会返回连接多个参数的一个新数组</strong>。如果传入的参数是数组，那么它将被展开，将元素添加到返回的数组中。但要注意，<strong>concat并不能递归的展开一个元素为数组的参数。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3];</div><div class="line">let b = a.concat(4,5,[6,7,[9,10]]);  // b = [1,2,3,4,5,6,7,[9,10]]];</div></pre></td></tr></table></figure>
+<h3 id="1-5-slice-方法"><a href="#1-5-slice-方法" class="headerlink" title="1.5 slice()方法"></a>1.5 slice()方法</h3><p>Array.slice() 方法可从已有的数组中返回指定的一个片段(slice)，或者说是子数组。<strong>它是从原数组中截取了一个片段，并返回到了一个新数组</strong>。</p>
+<p>Array.slice(a,b) 它有两个参数a,b</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td><strong>必选</strong>。规定从何处开始选取。如果是负数，那么它规定从数组尾部开始算起的位置。也就是说，-1 指最后一个元素，-2 指倒数第二个元素，以此类推。</td>
+</tr>
+<tr>
+<td>b</td>
+<td><strong>可选</strong>。规定从何处结束选取。该参数是数组片断结束处的数组下标。如果没有指定该参数，那么切分的数组包含从 start 到数组结束的所有元素。如果这个参数是负数，那么它规定的是从数组尾部开始算起的元素。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3,4,5,7,8];</div><div class="line">let b = a.slice(3);     //  [4, 5, 7, 8]</div><div class="line">let c = a.slice(3,5);   //  [4, 5]</div><div class="line">let d = a.slice(-5,-2); //  [3, 4, 5]</div><div class="line">let d = a.slice(2,1);   //  []</div></pre></td></tr></table></figure>
+<p>请注意，该方法并不会修改数组，而是返回一个新的子数组。如果想删除数组中的一段元素，应该使用下面这个方法 Array.splice()。</p>
+<h3 id="1-6-splice-方法"><a href="#1-6-splice-方法" class="headerlink" title="1.6 splice()方法"></a>1.6 splice()方法</h3><p>Array.splice() 方法从数组中添加/删除元素，然后<strong>返回被删除的元素</strong>。<strong>它在原数组上修改数组</strong>，并不像slice和concat那样创建新数组。注意，虽然splice和slice名字非常相似，但是执行的却是完全不同的操作。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>index</td>
+<td><strong>必选,整数</strong>。规定添加/删除项目的位置，使用负数可从数组结尾处倒着寻找位置。</td>
+</tr>
+<tr>
+<td>howmany</td>
+<td><strong>可选,整数</strong>。要删除的元素数量。如果设置为 0，则不会删除元素。如果没有选择，则默认从index开始到数组结束的所有元素</td>
+</tr>
+<tr>
+<td>item1, …, itemX</td>
+<td><strong>可选</strong>。向数组添加新的元素。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3,4,5,7,8];</div><div class="line">let b = a.splice(3);     // a = [1,2,3]  b = [4, 5, 7, 8]</div><div class="line">-----------------------------------------------------------</div><div class="line">let c = [1,2,3,4,5,7,8]; </div><div class="line">let d = c.splice(3,5); // c = [1,2]   d = [3,4,5,7,8]</div><div class="line">-----------------------------------------------------------</div><div class="line">let e = [1,2,3,4,5,7,8]; </div><div class="line">let f = e.splice(3,2,111,222,[1,2]); // e = [1, 2, 3, 111, 222,[1,2], 7, 8]   f = [4,5]</div></pre></td></tr></table></figure>
+<p>大家要记住<strong>slice()和splice()两个方法第二个参数代表的意义是不一样的</strong>。虽然这很基础，可是有时候还是会弄混。</p>
+<h3 id="1-7-push-和pop-方法"><a href="#1-7-push-和pop-方法" class="headerlink" title="1.7 push()和pop()方法"></a>1.7 push()和pop()方法</h3><p>Array.push() 方法可向数组的末尾添加一个或多个元素，并<strong>返回新的长度</strong>。</p>
+<p>Array.pop()方法用于删除并<strong>返回数组的最后一个元素</strong>。如果数组已经为空，则 pop() 不改变数组，并返回 undefined 值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3,4,5];</div><div class="line">let b = a.pop(); //a = [1,2,3,4]    b = 5</div><div class="line">let c =  a.push(1,3,5); // a = [1,2,3,4,1,3,5]  c = 7</div></pre></td></tr></table></figure></p>
+<p>上面两个方法都是直接对原数组进行操作。通过上面两个方法可以实现一个先进后出的栈。</p>
+<h3 id="1-8-unshift和shift-方法"><a href="#1-8-unshift和shift-方法" class="headerlink" title="1.8 unshift和shift()方法"></a>1.8 unshift和shift()方法</h3><p>unshift，shift()的方法行为和push()，pop()非常相似，只不过他们是对数组的头部元素进行插入和删除。</p>
+<p>Array.unshift() 方法可向数组的头部添加一个或多个元素，并<strong>返回新的长度</strong>。</p>
+<p>Array.shift()方法用于删除并<strong>返回数组的第一个元素</strong>。如果数组已经为空，则 pop() 不改变数组，并返回 undefined 值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3,4,5];</div><div class="line">let b = a.shift(); //a = [2,3,4,5]    b = 1</div><div class="line">let c =  a.unshift(1,3,5); // a = [1,3,5,2,3,45]  c = 7</div></pre></td></tr></table></figure></p>
+<h3 id="1-9-toString-和toLocaleString-方法"><a href="#1-9-toString-和toLocaleString-方法" class="headerlink" title="1.9 toString()和toLocaleString()方法"></a>1.9 toString()和toLocaleString()方法</h3><p>和所有javascript的对象一样，数组也有toString()方法，这个方法可以将数组的每一个元素转化成字符串(如果必要的话，就调用元素的toString()方法)，然后输出字符串的列表，字符串之间用逗号隔开。(用我的话来理解，其实就是遍历数组元素调用每个元素自身的toString()方法，然后用逗号连接)</p>
+<p>toString()的返回值和没有参数的join()方法返回的字符串相同<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = let e = [1,undefined,null,Boolean,&#123;&#125;,[],function()&#123;console.log(1);&#125;];</div><div class="line">let b = a.toString();   // b = &quot;1,,,function Boolean() &#123; [native code] &#125;,[object Object],,function ()&#123;console.log(1);&#125;&quot;</div></pre></td></tr></table></figure></p>
+<p>注意，输出的结果中，返回的数组值周围没有括号。</p>
+<p>toLocaleString方法是toString()方法的<strong>本地化版本</strong>。它是使用地区特定的分隔符把生成的字符串连接起来，形成一个字符串。</p>
+<p>虽然是两个方法，但是一般元素两个方法的输出结果却基本是一样的，去网上找了相关文章，发现只有两种情况比较有区分，一个是时间，一个是4位数字以上的数字,举例如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">let a = 1111;</div><div class="line">let b = a.toLocaleString();   // b = &quot;1,111&quot;</div><div class="line">let c = a.toString();   // c = &quot;1111&quot;;</div><div class="line">-------------------------------------------------------</div><div class="line">let date = new Date();</div><div class="line">let d = date.toString();    // d = &quot;Sun Sep 03 2017 21:52:18 GMT+0800 (中国标准时间)&quot;</div><div class="line">let e = date.toLocaleString();  //e = &quot;2017/9/3 下午9:52:18&quot;</div></pre></td></tr></table></figure></p>
+<p>好吧，这个api和数组关系不大。。。主要还是和数组中元素自身有关。啊哈哈，尴尬。</p>
+<h3 id="1-10-valueOf"><a href="#1-10-valueOf" class="headerlink" title="1.10 valueOf()"></a>1.10 valueOf()</h3><p>Array.valueOf()方法在日常中用的比较少，该方法继承与Object。javascript中许多内置对象都针对自身重写了该方法，数组Array.valueOf()直接返回自身。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let a = [1,&quot;1&quot;,&#123;&#125;,[]];</div><div class="line">let b = a.valueOf();</div><div class="line">a === b; // true</div></pre></td></tr></table></figure></p>
+<hr>
+<blockquote>
+<p>好啦，关于ES3的方法就不详细描述了，我相信大家基本上都已经完全是烂熟于心的那种，唯一可能需要加强记忆的就是一些参数含义，返回数据这些了。</p>
+</blockquote>
+<hr>
+<h2 id="2-ES5中的数组方法"><a href="#2-ES5中的数组方法" class="headerlink" title="2 ES5中的数组方法"></a>2 ES5中的数组方法</h2><ol>
+<li>ES5中的数组方法在各大浏览器的兼容性</li>
+</ol>
+<ul>
+<li>Opera 11+</li>
+<li>Firefox 3.6+</li>
+<li>Safari 5+</li>
+<li>Chrome 8+</li>
+<li>Internet Explorer 9+</li>
+</ul>
+<p>2.Array在ES5新增的方法中接受两个参数，第一个参数都是function类型，必选，默认有传参，这些参数分别是：</p>
+<ul>
+<li>currentValue : 数组当前项的值</li>
+<li>index : 数组当前项的索引</li>
+<li>array : 数组对象本身</li>
+</ul>
+<p>第二个参数是当执行回调函数时指向的this(参考对象)，不提供默认为window，严格模式下为undefined。</p>
+<p>以forEach举例</p>
+<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">array.forEach(callback, thisArg)</div><div class="line"></div><div class="line">array.forEach(callback(currentValue, index, array)&#123;</div><div class="line">    //do something</div><div class="line">&#125;, thisArg)</div></pre></td></tr></table></figure></p>
+<p><strong>例子：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//demo,注意this指向</div><div class="line">//我这个demo没有用箭头函数来测试</div><div class="line">let a = [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;];</div><div class="line"></div><div class="line">a.forEach(function(currentValue, index, array)&#123;</div><div class="line">    this.info(currentValue, index, array);</div><div class="line">&#125;,&#123;info:function(value,index,array)&#123;</div><div class="line">    console.log(`当前值$&#123;value&#125;，下标$&#123;index&#125;,数组$&#123;array&#125;`)&#125;</div><div class="line">&#125;);</div><div class="line">function (value,index,array)&#123;</div><div class="line">    console.log(`外放方法 ： 当前值$&#123;value&#125;，下标$&#123;index&#125;,数组$&#123;array&#125;`)&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 当前值a,下标0,数组a,b,c</div><div class="line">// 当前值b,下标1,数组a,b,c</div><div class="line">// 当前值c,下标2,数组a,b,c</div></pre></td></tr></table></figure></p>
+<p>3.ES5中的所有关于遍历的方法按升序为数组中含有效值的每一项执行一次callback函数，那些<strong>已删除（使用delete方法等情况）或者未初始化的项</strong>将被跳过（但不包括那些值为 undefined 的项）（例如在稀疏数组上）。</p>
+<p><strong>例子：数组哪些项被跳过了</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">function logArrayElements(element, index, array) &#123;</div><div class="line">    console.log(`a[$&#123;index&#125;] = $&#123;element&#125;`);</div><div class="line">&#125;</div><div class="line">let xxx;  //定义未赋值</div><div class="line">let a = [1,2,&quot;&quot;, ,undefined,xxx,3];</div><div class="line">delete a[1];  // 移除 2</div><div class="line">a.forEach(logArrayElements);</div><div class="line"></div><div class="line">// a[0] = 1</div><div class="line">// 注意索引1被跳过了，因为在数组的这个位置没有项 被删除了</div><div class="line">// a[2] = &quot;&quot;</div><div class="line">// 注意索引3被跳过了，因为在数组的这个位置没有项,可以理解成没有被初始化</div><div class="line">// a[4] = undefined</div><div class="line">// a[5] = undefined</div><div class="line">// a[6] = 3</div></pre></td></tr></table></figure></p>
+<p>好了，上面3点基本上是ES5中所有方法的共性，下面就不重复述说了。开始正文解析每个方法的不同了</p>
+<hr>
+<h3 id="2-1-forEach"><a href="#2-1-forEach" class="headerlink" title="2.1 forEach()"></a>2.1 forEach()</h3><p>Array.forEach() 为每个数组元素执行callback函数；不像map() 或者reduce() ，<strong>它总是返回 undefined值</strong>，并且不可链式调用。典型用例是在一个链的最后执行副作用。</p>
+<blockquote>
+<p>注意： 没有办法中止或者跳出 forEach 循环，除了抛出一个异常。如果你需要跳出函数，推荐使用Array.some。如果可以，新方法 find() 或者findIndex() 也可被用于真值测试的提早终止。</p>
+</blockquote>
+<p><strong>如果数组在迭代时被修改了</strong></p>
+<p>下面的例子输出”one”, “two”, “three”。当到达包含值”two”的项时，整个数组添加了一个项在第一位，这导致所有的元素下移一个位置。此时在下次执行回调中，因为元素 “two”符合条件，结果一直增加元素，直到遍历次数完毕。forEach()不会在迭代之前创建数组的副本。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">let a = [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;];</div><div class="line">let b = a.forEach((value,index,arr) =&gt; &#123;</div><div class="line">  if (value === &quot;two&quot;) &#123;</div><div class="line">    a.unshift(&quot;zero&quot;);</div><div class="line">  &#125;</div><div class="line">  return &quot;new&quot; + value</div><div class="line">&#125;);</div><div class="line">// one,0,[&quot;one&quot;, &quot;two&quot;, &quot;three&quot;]</div><div class="line">// two,1,[&quot;one&quot;, &quot;two&quot;, &quot;three&quot;]</div><div class="line">// two,2,[&quot;zero&quot;, &quot;one&quot;, &quot;two&quot;, &quot;three&quot;]</div><div class="line">// two,3,[&quot;zero&quot;,&quot;zero&quot;, &quot;one&quot;, &quot;two&quot;, &quot;three&quot;]</div></pre></td></tr></table></figure></p>
+<p>看完例子可以发现，使用 forEach 方法处理数组时，数组元素的范围是在callback方法第一次调用之前就已经确定了。在 forEach 方法执行的过程中：原数组中新增加的元素将不会被 callback 访问到；若已经存在的元素被改变或删除了，则它们的传递到 callback 的值是 forEach 方法遍历到它们的那一个索引时的值。</p>
+<h3 id="2-2-map"><a href="#2-2-map" class="headerlink" title="2.2 map()"></a>2.2 map()</h3><p>Array.map 方法会给原数组中的每个元素都按顺序调用一次callback函数。callback每次执行后的返回值（没有指定返回值则返回undefined）组合起来形成一个新数组。</p>
+<p><strong>例子：返回每个元素的平方根的数组</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [1,4,9];</div><div class="line">let b = a.map((value) =&gt; &#123;</div><div class="line">   return Math.sqrt(value);    //如果没有return，则默认返回undefined</div><div class="line">&#125;);</div><div class="line">// b= [1,2,3]</div></pre></td></tr></table></figure></p>
+<h3 id="2-3-filter"><a href="#2-3-filter" class="headerlink" title="2.3 filter()"></a>2.3 filter()</h3><p>Array.filter()为数组中的每个元素调用一次 callback 函数，并利用所有使得 callback 返回 true 或 等价于 true 的值 的元素创建一个新数组。那些没有通过 callback 测试的元素会被跳过，不会被包含在新数组中</p>
+<p><strong>例子：数组去重</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3,4,32,6,79,0,1,1,8];</div><div class="line">let b = a.filter((value,index,arr) =&gt; &#123;</div><div class="line">   return arr.indexOf(value) === index;</div><div class="line">&#125;);</div><div class="line">// b = [1, 2, 3, 4, 32, 6, 79, 0, 8]</div></pre></td></tr></table></figure></p>
+<h3 id="2-4-some"><a href="#2-4-some" class="headerlink" title="2.4 some()"></a>2.4 some()</h3><p>Array.some 为数组中的每一个元素执行一次 callback 函数，直到找到一个使得 callback 返回一个“真值”（即可转换为布尔值 true 的值）。如果找到了这样一个值，<strong>some 将会立即返回 true。否则，some 返回 false</strong>。callback 只会在那些”有值“的索引上被调用，不会在那些被删除或从来未被赋值的索引上调用。</p>
+<p><strong>例子：查看数组内是否含有大于0的元素</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [-1,4,9];</div><div class="line">let b = a.some((value) =&gt; &#123;</div><div class="line">   return value &gt; 0;    //如果没有return，则默认返回undefined，将无法告诉some判断</div><div class="line">&#125;);</div><div class="line">// b = true</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>some方法可以理解成拥有跳出功能的forEach()函数，可以用在在一些需要中断函数的地方</p>
+<h3 id="2-5-every"><a href="#2-5-every" class="headerlink" title="2.5 every()"></a>2.5 every()</h3></blockquote>
+<p>Array.every() 方法为数组中的每个元素执行一次 callback 函数，直到它找到一个使 callback 返回 false（表示可转换为布尔值 false 的值）的元素。如果发现了一个这样的元素，every 方法将会立即返回 false。否则，callback 为每一个元素返回 true，every 就会返回 true。callback 只会为那些已经被赋值的索引调用。不会为那些被删除或从来没被赋值的索引调用。</p>
+<p><strong>例子：检测所有数组元素的大小，是否都大于0</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [-1,4,9];</div><div class="line">let b = a.every((value) =&gt; &#123;</div><div class="line">   return value &gt; 0;    //如果没有return，则默认返回undefined</div><div class="line">&#125;);</div><div class="line">// b = false</div></pre></td></tr></table></figure></p>
+<h4 id="2-6-indexOf"><a href="#2-6-indexOf" class="headerlink" title="2.6 indexOf()"></a>2.6 indexOf()</h4><p>Array.indexOf()使用严格相等（strict  equality，即===）进行判断searchElement与数组中包含的元素之间的关系。</p>
+<p>Array.indexOf()提供了两个参数，第一个searchElement代表要查询的元素，第二个代表fromIndex表示从哪个下标开始查找，默认为0。</p>
+<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">arr.indexOf(searchElement)</div><div class="line">arr.indexOf(searchElement, fromIndex = 0)</div></pre></td></tr></table></figure></p>
+<p>Array.indexOf()会返回首个被找到的元素在数组中的索引位置; 若没有找到则返回 -1</p>
+<p><strong>例子：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">let array = [2, 5, 9];</div><div class="line">array.indexOf(2);     // 0</div><div class="line">array.indexOf(7);     // -1</div><div class="line">array.indexOf(9, 2);  // 2</div><div class="line">array.indexOf(2, -1); // -1</div><div class="line">array.indexOf(2, -3); // 0</div></pre></td></tr></table></figure></p>
+<h3 id="2-7-lastIndexOf"><a href="#2-7-lastIndexOf" class="headerlink" title="2.7 lastIndexOf()"></a>2.7 lastIndexOf()</h3><p>Array.lastIndexOf()就不细说了，其实从名字大家也可以看出来，indexOf是正向顺序查找，lastIndexOf是反向从尾部开始查找，但是返回的<strong>索引下标仍然是正向的顺序索引</strong><br>。<br><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">arr.lastIndexOf(searchElement, fromIndex = arr.length - 1)</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>需要注意的是，只是查找的方向相反，fromIndex和返回的索引都是正向顺序的，千万不要搞混了（感觉我这么一说，大家可能搞混了，捂脸）。</p>
+</blockquote>
+<p><strong>例子：各种情况下的的indexOf</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var array = [2, 5, 9, 2];</div><div class="line">var index = array.lastIndexOf(2);   // index = 3</div><div class="line">index = array.lastIndexOf(7);   // index = -1</div><div class="line">index = array.lastIndexOf(2, 3);    // index = 3</div><div class="line">index = array.lastIndexOf(2, 2);    // index = 0</div><div class="line">index = array.lastIndexOf(2, -2);   // index = 0</div><div class="line">index = array.lastIndexOf(2, -1);   // index = 3</div></pre></td></tr></table></figure></p>
+<h3 id="2-8-reduce"><a href="#2-8-reduce" class="headerlink" title="2.8 reduce()"></a>2.8 reduce()</h3><p>Array.reduce() 为数组中的每一个元素依次执行回调函数,最后返回一个函数累计处理的结果。</p>
+<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">array.reduce(function(accumulator, currentValue, currentIndex, array), initialValue)</div></pre></td></tr></table></figure></p>
+<p>reduce的回调函数中的参数与前面的不同，多了第一个参数，是上一次的返回值</p>
+<ul>
+<li>accumulator : 上一次调用回调返回的值，或者是提供的初始值（initialValue）</li>
+<li>currentValue : 数组当前项的值</li>
+<li>currentIndex : 数据当前项的索引。第一次遍历时，如果提供了 initialValue ，从0开始；否则从1开始</li>
+<li>array : 调用 reduce 的数组</li>
+<li>initialValue : 可选项，其值用于第一次调用 callback 的第一个参数。如果没有设置初始值，则将数组中的第一个元素作为初始值。<strong>空数组调用reduce时没有设置初始值将会报错</strong>。</li>
+</ul>
+<p><strong>例子：数组求和</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let sum = [0, 1, 2, 3].reduce(function (o,n) &#123;</div><div class="line">  return o + n;</div><div class="line">&#125;);</div><div class="line">// sum = 6</div></pre></td></tr></table></figure></p>
+<p>对了，当回调函数第一次执行时，accumulator 和 currentValue 的取值有两种情况：</p>
+<ul>
+<li>调用 reduce 时提供initialValue，accumulator 取值为 initialValue ，currentValue 取数组中的第一个值；</li>
+<li>没有提供 initialValue ，accumulator 取数组中的第一个值，currentValue 取数组中的第二个值。</li>
+</ul>
+<p><strong>例子：reduce数组去重</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[1,2,3,4,5,6,78,4,3,2,21,1].reduce(function(accumulator,currentValue)&#123;</div><div class="line">	if(accumulator.indexOf(currentValue) &gt; -1)&#123;</div><div class="line">		return accumulator;</div><div class="line">	&#125;else&#123;</div><div class="line">		accumulator.push(currentValue);</div><div class="line">        return accumulator;</div><div class="line">	&#125;</div><div class="line">&#125;,[])</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意 ：如果数组为空并且没有提供initialValue， 会抛出TypeError 。如果数组仅有一个元素并且没有提供initialValue， 或者有提供initialValue但是数组为空，那么此唯一值将被返回并且callback不会被执行。</p>
+</blockquote>
+<h3 id="2-9-reduceRight-方法"><a href="#2-9-reduceRight-方法" class="headerlink" title="2.9 reduceRight()方法"></a>2.9 reduceRight()方法</h3><p>Array.reduceRight() 为数组中的每一个元素依次执行回调函数，方向相反，从右到左,最后返回一个函数累计处理的结果。</p>
+<p>因为这个方法和reduce方法基本是一模一样的，除了方法相反，所以就不详细的再写一遍了</p>
+<h3 id="2-10-isArray-方法"><a href="#2-10-isArray-方法" class="headerlink" title="2.10 isArray()方法"></a>2.10 isArray()方法</h3><p>之所以将这个方法放在最后，是因为这个方法和前面的不太一致，是用于确定传递的值是否是一个 Array,使用方法也很简单</p>
+<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = Array.isArray([1,2,3]);  //true</div><div class="line">let b = Array.isArray(document.getElementsByTagName(&quot;body&quot;));  //类数组也为false</div></pre></td></tr></table></figure></p>
+<p>不过感觉除非是临时判断，不然一般也不会用这个方法去判断，一般还是下面这种万金油型的吧。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Object.prototype.toString.call([]).slice(8, -1) === &quot;Array&quot;;//true</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="gt-好啦，关于ES5的方法基本上就讲到这里了，感觉自己在深入去看了一些文章之后，还是有一些额外的收获的。比如对reduce这个平时不常用的方法了解更加深刻了，感觉之前很多遍历收集数据的场景其实用reduce更加方便。"><a href="#gt-好啦，关于ES5的方法基本上就讲到这里了，感觉自己在深入去看了一些文章之后，还是有一些额外的收获的。比如对reduce这个平时不常用的方法了解更加深刻了，感觉之前很多遍历收集数据的场景其实用reduce更加方便。" class="headerlink" title="&gt; 好啦，关于ES5的方法基本上就讲到这里了，感觉自己在深入去看了一些文章之后，还是有一些额外的收获的。比如对reduce这个平时不常用的方法了解更加深刻了，感觉之前很多遍历收集数据的场景其实用reduce更加方便。"></a>&gt; 好啦，关于ES5的方法基本上就讲到这里了，感觉自己在深入去看了一些文章之后，还是有一些额外的收获的。比如对reduce这个平时不常用的方法了解更加深刻了，感觉之前很多遍历收集数据的场景其实用reduce更加方便。</h2><h2 id="3-ES6中的数组方法"><a href="#3-ES6中的数组方法" class="headerlink" title="3 ES6中的数组方法"></a>3 ES6中的数组方法</h2><blockquote>
+<p>不同于es5主要以遍历方法为主，es6的方法是各式各样的，不过必须要说一句，在性能上，es6的效率基本上是最低的。</p>
+</blockquote>
+<h3 id="3-1-…方法——concat方法的增强"><a href="#3-1-…方法——concat方法的增强" class="headerlink" title="3.1 …方法——concat方法的增强"></a>3.1 …方法——concat方法的增强</h3><p>英文名字叫做Spread syntax，中文名字叫做扩展运算符。</p>
+<h3 id="3-2-from-方法"><a href="#3-2-from-方法" class="headerlink" title="3.2 from()方法"></a>3.2 from()方法</h3><h3 id="3-3-of-方法"><a href="#3-3-of-方法" class="headerlink" title="3.3 of()方法"></a>3.3 of()方法</h3><p>Array.of()方法可以将传入参数以顺序的方式返回成一个新数组的元素。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let a = Array.of(1, 2, 3); // a = [1, 2, 3]</div></pre></td></tr></table></figure></p>
+<p>其实，刚看到这个api和他的用途，还是比较懵逼的，因为看上去这个方法就是直接将传入的参数变成一个数组之外，就没有任何区别了，那么我为什么不直接用以前的写法去实现类似的效果呢，比如 let ＝ [1,2,3];而且看上去也更加直接。然后我去翻了下最新的ECMAScript草案，其中有这么一句话</p>
+<blockquote>
+<p>The of function is an intentionally generic factory method; it does not require that its this value be the Array constructor. Therefore it can be transferred to or inherited by other constructors that may be called with a single numeric argument.</p>
+</blockquote>
+<p>自己理解了一下，其实大概意思就是说为了弥补Array构造函数传入单个函数的不足，所以出了一个of这个更加通用的方法，举个例子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = new Array(1);//a = [undefined × 1]</div><div class="line">let b = new Array(1,2);// b = [1,2]</div></pre></td></tr></table></figure></p>
+<p>大家可以注意到传入一个参数和传入两个参数的结果，完全是不一样的，这就很尴尬了。而为了避免这种尴尬，es6则出了一种通用的of方法，不管你传入了几个参数，都是一种相同类型的输出结果。</p>
+<p>不过我好奇的是，如果只传入几个参数，为什么不直接let a = [1,2,3];效率和直观性也更加的高。如果要创建一个长度的数组，我肯定还是选let a = new Array(10000),这种形式，实在没有感觉到Array.of的实用场景，希望大家可以给我点指导。</p>
+<h3 id="3-4-copyWithin-方法"><a href="#3-4-copyWithin-方法" class="headerlink" title="3.4 copyWithin()方法"></a>3.4 copyWithin()方法</h3><h3 id="3-5-find-和-findIndex-方法"><a href="#3-5-find-和-findIndex-方法" class="headerlink" title="3.5 find() 和 findIndex()方法"></a>3.5 find() 和 findIndex()方法</h3><p> Array.find() 方法返回数组中满足提供的测试函数的第一个元素的值。否则返回 undefined。<br> Array.findIndex() 方法返回数组中满足提供的测试函数的第一个元素的值的索引。否则返回 -1。</p>
+<p> 这两个方法其实使用非常相似，使用场景有点像ES5中Array.some，都是在找到第一个满足条件的时候，跳出循环，区别的是，三种返回的值完全不一样，我想这也许是为什么要在ES6中增加这两个API的原因吧，可以理解成是数组的方法的补足。</p>
+<p>  <strong>例子</strong><br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"> let a = [1,2,3,4,5].find((item)=&gt;&#123;return item &gt; 3&#125;);   // a = 4</div><div class="line">let b = [1,2,3,4,5].findIndex((item)=&gt;&#123;return item &gt; 3&#125;);  // b = 3</div><div class="line">let c = [1,2,3,4,5].some((item)=&gt;&#123;return item &gt; 3&#125;);    // c = true</div><div class="line"></div><div class="line">-----------------不满足条件--------------------</div><div class="line"> let a = [1,2,3,4,5].find((item)=&gt;&#123;return item &gt; 6&#125;);   // a = undefined</div><div class="line">let b = [1,2,3,4,5].findIndex((item)=&gt;&#123;return item &gt; 6&#125;);  // b = -1</div><div class="line">let c = [1,2,3,4,5].some((item)=&gt;&#123;return item &gt; 6&#125;);    // c = false</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意：find()和findIndex()方法识别NaN,可以说是indexOf方法的增强（indexOf内部采用的是 === 判断）</p>
+<h3 id="3-6-entries-，keys-和values-方法"><a href="#3-6-entries-，keys-和values-方法" class="headerlink" title="3.6 entries()，keys()和values() 方法"></a>3.6 entries()，keys()和values() 方法</h3></blockquote>
+<h2 id="4-ES7中的数组方法"><a href="#4-ES7中的数组方法" class="headerlink" title="4 ES7中的数组方法"></a>4 ES7中的数组方法</h2><h3 id="4-1-includes-方法"><a href="#4-1-includes-方法" class="headerlink" title="4.1 includes()方法"></a>4.1 includes()方法</h3><p>方法还真是tmd多啊，，慢慢补充吧</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术文章/" rel="tag"># 技术文章</a>
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/03/js中数组所有的原生方法列表/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/header.jpg"
+               alt="linzx" />
+          <p class="site-author-name" itemprop="name">linzx</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-ES3中的数组方法"><span class="nav-number">1.</span> <span class="nav-text">1 ES3中的数组方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-join-方法"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 join()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-reverse-方法"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 reverse()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-sort-方法"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 sort()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-concat-方法"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 concat()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-slice-方法"><span class="nav-number">1.5.</span> <span class="nav-text">1.5 slice()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-splice-方法"><span class="nav-number">1.6.</span> <span class="nav-text">1.6 splice()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-7-push-和pop-方法"><span class="nav-number">1.7.</span> <span class="nav-text">1.7 push()和pop()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-8-unshift和shift-方法"><span class="nav-number">1.8.</span> <span class="nav-text">1.8 unshift和shift()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-9-toString-和toLocaleString-方法"><span class="nav-number">1.9.</span> <span class="nav-text">1.9 toString()和toLocaleString()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-10-valueOf"><span class="nav-number">1.10.</span> <span class="nav-text">1.10 valueOf()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ES5中的数组方法"><span class="nav-number">2.</span> <span class="nav-text">2 ES5中的数组方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-forEach"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 forEach()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-map"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 map()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-filter"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 filter()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-some"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 some()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-every"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 every()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-6-indexOf"><span class="nav-number">2.5.1.</span> <span class="nav-text">2.6 indexOf()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-lastIndexOf"><span class="nav-number">2.6.</span> <span class="nav-text">2.7 lastIndexOf()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-8-reduce"><span class="nav-number">2.7.</span> <span class="nav-text">2.8 reduce()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-9-reduceRight-方法"><span class="nav-number">2.8.</span> <span class="nav-text">2.9 reduceRight()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-10-isArray-方法"><span class="nav-number">2.9.</span> <span class="nav-text">2.10 isArray()方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gt-好啦，关于ES5的方法基本上就讲到这里了，感觉自己在深入去看了一些文章之后，还是有一些额外的收获的。比如对reduce这个平时不常用的方法了解更加深刻了，感觉之前很多遍历收集数据的场景其实用reduce更加方便。"><span class="nav-number">3.</span> <span class="nav-text">> 好啦，关于ES5的方法基本上就讲到这里了，感觉自己在深入去看了一些文章之后，还是有一些额外的收获的。比如对reduce这个平时不常用的方法了解更加深刻了，感觉之前很多遍历收集数据的场景其实用reduce更加方便。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-ES6中的数组方法"><span class="nav-number">4.</span> <span class="nav-text">3 ES6中的数组方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-…方法——concat方法的增强"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 …方法——concat方法的增强</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-from-方法"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 from()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-of-方法"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 of()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-copyWithin-方法"><span class="nav-number">4.4.</span> <span class="nav-text">3.4 copyWithin()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-find-和-findIndex-方法"><span class="nav-number">4.5.</span> <span class="nav-text">3.5 find() 和 findIndex()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-entries-，keys-和values-方法"><span class="nav-number">4.6.</span> <span class="nav-text">3.6 entries()，keys()和values() 方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-ES7中的数组方法"><span class="nav-number">5.</span> <span class="nav-text">4 ES7中的数组方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-includes-方法"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 includes()方法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+    <div id="music163player">
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=406238&auto=0&height=66"></iframe>
+        </iframe>
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linzx</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (search_path.endsWith("json")) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("l3F7nF9MmsyTnvM5rI1g7V9s-gzGzoHsz", "TyY2L80HJkN4VjXnTqdDxuWw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  <div class="bg_content">
+      <canvas id="canvas"></canvas>
+  </div>
+  <script>
+  'use strict';
+
+      var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+      function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+      function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+      function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+      var Circle = function () {
+         function Circle(x, y) {
+              _classCallCheck(this, Circle);
+
+              this.x = x;
+              this.y = y;
+              this.r = Math.random() * 10;
+              this._mx = Math.random();
+              this._my = Math.random();
+          }
+
+         _createClass(Circle, [{
+              key: 'drawCircle',
+              value: function drawCircle(ctx) {
+                  ctx.beginPath();
+                  //arc() 方法使用一个中心点和半径，为一个画布的当前子路径添加一条弧。
+                  ctx.arc(this.x, this.y, this.r, 0, 360);
+                  ctx.closePath();
+                  ctx.fillStyle = 'rgba(204, 204, 204, 0.3)';
+                  ctx.fill();
+              }
+          }, {
+              key: 'drawLine',
+              value: function drawLine(ctx, _circle) {
+                  var dx = this.x - _circle.x;
+                  var dy = this.y - _circle.y;
+                  var d = Math.sqrt(dx * dx + dy * dy);
+                  if (d < 150) {
+                      ctx.beginPath();
+
+                      ctx.moveTo(this.x, this.y); //起始点
+                      ctx.lineTo(_circle.x, _circle.y); //终点
+                      ctx.closePath();
+                      ctx.strokeStyle = 'rgba(204, 204, 204, 0.3)';
+                      ctx.stroke();
+                  }
+              }
+
+
+          }, {
+              key: 'move',
+              value: function move(w, h) {
+                  this._mx = this.x < w && this.x > 0 ? this._mx : -this._mx;
+                  this._my = this.y < h && this.y > 0 ? this._my : -this._my;
+                  this.x += this._mx / 2;
+                  this.y += this._my / 2;
+              }
+          }]);
+
+          return Circle;
+      }();
+
+
+
+      var currentCirle = function (_Circle) {
+          _inherits(currentCirle, _Circle);
+
+          function currentCirle(x, y) {
+              _classCallCheck(this, currentCirle);
+
+              return _possibleConstructorReturn(this, (currentCirle.__proto__ || Object.getPrototypeOf(currentCirle)).call(this, x, y));
+          }
+
+          _createClass(currentCirle, [{
+              key: 'drawCircle',
+              value: function drawCircle(ctx) {
+                  ctx.beginPath();
+
+                  //this.r = (this.r < 14 && this.r > 1) ? this.r + (Math.random() * 2 - 1) : 2;
+                  this.r = 8;
+                  ctx.arc(this.x, this.y, this.r, 0, 360);
+                  ctx.closePath();
+                  //ctx.fillStyle = 'rgba(0,0,0,' + (parseInt(Math.random() * 100) / 100) + ')'
+                  ctx.fillStyle = 'rgba(255, 77, 54, 0.6)';
+                  ctx.fill();
+              }
+          }]);
+
+          return currentCirle;
+      }(Circle);
+
+
+      window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
+      var canvas = document.getElementById('canvas');
+      var ctx = canvas.getContext('2d');
+      var w = canvas.width = canvas.offsetWidth;
+      var h = canvas.height = canvas.offsetHeight;
+      var circles = [];
+      var current_circle = new currentCirle(0, 0);
+
+      var draw = function draw() {
+          ctx.clearRect(0, 0, w, h);
+          for (var i = 0; i < circles.length; i++) {
+              circles[i].move(w, h);
+              circles[i].drawCircle(ctx);
+              for (var j = i + 1; j < circles.length; j++) {
+                  circles[i].drawLine(ctx, circles[j]);
+              }
+          }
+          if (current_circle.x) {
+              current_circle.drawCircle(ctx);
+              for (var k = 1; k < circles.length; k++) {
+                  current_circle.drawLine(ctx, circles[k]);
+              }
+          }
+          requestAnimationFrame(draw);
+      };
+
+      var init = function init(num) {
+          for (var i = 0; i < num; i++) {
+              circles.push(new Circle(Math.random() * w, Math.random() * h));
+          }
+          draw();
+      };
+      window.addEventListener('load', init(60));
+      window.onmousemove = function (e) {
+          e = e || window.event;
+          current_circle.x = e.clientX;
+          current_circle.y = e.clientY;
+      };
+      window.onmouseout = function () {
+          current_circle.x = null;
+          current_circle.y = null;
+      };
+  </script>
+</body>
+</html>

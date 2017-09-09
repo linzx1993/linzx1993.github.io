@@ -1,0 +1,1409 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="技术文章,javascript,jquery," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="好像自从使用框架之后，对jquery的依赖越来越低了，其好像已经慢慢作为一个工具库的存在了。新项目商量之下，为了减小文件大小，干脆直接不用jquer2，对于一些需要的工具函数直接从jquery提取到一个自己写的工具文件tool.js中。在提取的过程中，也慢慢理解了jquery一些工具函数的源码  深拷贝和浅拷贝的使用场景不同，并没有好坏之分，像对一些基本数据类型，直接可以使用浅拷贝对处理数据。但">
+<meta name="keywords" content="技术文章,javascript,jquery">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解jquery的深拷贝">
+<meta property="og:url" content="http://yoursite.com/2017/08/24/理解jquery的深拷贝源码/index.html">
+<meta property="og:site_name" content="linzx">
+<meta property="og:description" content="好像自从使用框架之后，对jquery的依赖越来越低了，其好像已经慢慢作为一个工具库的存在了。新项目商量之下，为了减小文件大小，干脆直接不用jquer2，对于一些需要的工具函数直接从jquery提取到一个自己写的工具文件tool.js中。在提取的过程中，也慢慢理解了jquery一些工具函数的源码  深拷贝和浅拷贝的使用场景不同，并没有好坏之分，像对一些基本数据类型，直接可以使用浅拷贝对处理数据。但">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20141212220233511?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGRkMTk5MTA1MDU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:updated_time" content="2017-08-26T09:04:06.739Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="理解jquery的深拷贝">
+<meta name="twitter:description" content="好像自从使用框架之后，对jquery的依赖越来越低了，其好像已经慢慢作为一个工具库的存在了。新项目商量之下，为了减小文件大小，干脆直接不用jquer2，对于一些需要的工具函数直接从jquery提取到一个自己写的工具文件tool.js中。在提取的过程中，也慢慢理解了jquery一些工具函数的源码  深拷贝和浅拷贝的使用场景不同，并没有好坏之分，像对一些基本数据类型，直接可以使用浅拷贝对处理数据。但">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20141212220233511?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGRkMTk5MTA1MDU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/24/理解jquery的深拷贝源码/"/>
+
+
+
+
+
+  <title>理解jquery的深拷贝 | linzx</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?93e1e7523d9fccc42d9201ace7ca982a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">linzx</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/24/理解jquery的深拷贝源码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="linzx">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">理解jquery的深拷贝</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-24T23:47:44+08:00">
+                2017-08-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/08/24/理解jquery的深拷贝源码/" class="leancloud_visitors" data-flag-title="理解jquery的深拷贝">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,855
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>好像自从使用框架之后，对jquery的依赖越来越低了，其好像已经慢慢作为一个工具库的存在了。新项目商量之下，为了减小文件大小，干脆直接不用jquer2，对于一些需要的工具函数直接从jquery提取到一个自己写的工具文件tool.js中。在提取的过程中，也慢慢理解了jquery一些工具函数的源码</p>
+</blockquote>
+<p>深拷贝和浅拷贝的使用场景不同，并没有好坏之分，像对一些基本数据类型，直接可以使用浅拷贝对处理数据。但是对于基本引用类型如嵌套对象，数组（包含着对象的数组），那么就需要使用到深拷贝了。</p>
+<blockquote>
+<p>不想看前面深浅拷贝对比的，可以直接拉到第二章看jquery源码实现</p>
+</blockquote>
+<hr>
+<h4 id="1-浅拷贝解析"><a href="#1-浅拷贝解析" class="headerlink" title="1.浅拷贝解析"></a>1.浅拷贝解析</h4><p>原生js也有一些提供拷贝的函数，比如数组的Array.slice(0),Array.concat()，对象的Object.create(),Object.assign()等等，但是都是浅拷贝，遇到二维数组，嵌套对象就通通失败了（以前不懂的时候，真的被坑的不要不要的啊）。</p>
+<p>比如下面这个例子，都是在只有基本数据类型的情况下，使用浅拷贝就可以了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">let arr = [1,2,34,5,67,8,9];</div><div class="line">let cloneArr = arr.slice(4);</div><div class="line">console.log(cloneArr);  //  [67, 8, 9]</div><div class="line"></div><div class="line">cloneArr[0] = 100;  //  修改cloneArr</div><div class="line">console.log(arr);   //  [1,2,34,5,67,8,9],修改cloneArr不影响原数组arr</div><div class="line"></div><div class="line">----------------</div><div class="line"></div><div class="line">let obj = &#123;a : 1,b : 2,c : 3,&#125;;</div><div class="line">let cloneObj = Object.assign(&#123;&#125;,obj);// 将拷贝的属性值拷贝到目标对象，然后返回目标对象</div><div class="line">console.log(cloneObj); //   cloneObj = &#123;a : 1,b : 2,c : 3,&#125;;</div><div class="line"></div><div class="line">cloneObj.a = 444;   //修改对象</div><div class="line">console.log(obj);   //  obj = &#123;a : 1,b : 2,c : 3,&#125;; 修改拷贝对象不影响源对象</div></pre></td></tr></table></figure></p>
+<p>但是如果以上例子将基本数据类型换成引用类型Object和Array呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">let arr = [1,2,&#123;a : 3&#125;,&#123;b : 4&#125;,5];</div><div class="line">let cloneArr = arr.slice(2);</div><div class="line">console.log(cloneArr);  //  [&#123;a : 3&#125;,&#123;b : 4&#125;,5];</div><div class="line"></div><div class="line">cloneArr[0].a = 100;  //  修改cloneArr</div><div class="line">console.log(arr);   //  [1,2,&#123;a : 100&#125;,&#123;b : 4&#125;,5],修改cloneArr影响原数组arr</div><div class="line"></div><div class="line">----------------</div><div class="line"></div><div class="line">let obj = &#123;a : &#123;aa : 1&#125;,b : &#123;bb : 2&#125;,c : 3,&#125;;</div><div class="line">let cloneObj = Object.assign(&#123;&#125;,obj);// 将拷贝的属性值拷贝到目标对象，然后返回目标对象</div><div class="line">console.log(cloneObj); //   cloneObj = &#123;a : &#123;aa : 1&#125;,b : &#123;bb : 2&#125;,c : 3,&#125;;</div><div class="line"></div><div class="line">cloneObj.a.aa = 100;   //修改对象</div><div class="line">console.log(obj);   //  obj = &#123;a : &#123;aa : 100&#125;,b : &#123;bb : 2&#125;,c : 3,&#125;; 修改拷贝对象影响到了源对象</div></pre></td></tr></table></figure>
+<p>为什么会这样子，原因其实也不复杂。js内存分为栈内存和堆内存。所有的基本数据类型都是存储在栈内存中，而引用类型则是存储在堆内存中，提供了一个地址放在了栈内存中。当我们要获取引用类型的值时，先从栈内存获得地址，再根据地址去堆内存中获得值。因此也叫按引用访问。</p>
+<blockquote>
+<p>(去网上浅拷贝了一张图片，因为拷贝了一个图片地址)<br><img src="http://img.blog.csdn.net/20141212220233511?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGRkMTk5MTA1MDU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="去网上浅拷贝了一张图片，拷贝了一个图片地址"></p>
+</blockquote>
+<p>而我们上面例子中，每个数组和对象每个属性存储的引用类型obj其实是个地址，我们只是简单的拷贝了属性值，其实就是拷贝了一个地址。所以我们在新对象里进行修改时，由于是通过同一个地址修改了值。因为和原对象共用了一个地址，所以自然就修改了原对象的值了。</p>
+<h4 id="2-深拷贝解析"><a href="#2-深拷贝解析" class="headerlink" title="2.深拷贝解析"></a>2.深拷贝解析</h4><p>前面解析了浅拷贝。因为我们项目对大型数据处理占据了大头，其中不可避免的会经常用到深拷贝这块。那么深拷贝是怎么实现的。</p>
+<p>其实也很简单，就是根据地址找到你堆内存中的值，不断递归深入拷贝下去，直到为基本数据类型为止，接下去就贴上深拷贝代码。</p>
+<p>在讲jquey前，还有一个很暴力的方式<strong>JSON.parse()和JSON.stringify()</strong>;缺点是</p>
+<ul>
+<li>数据不能包含函数。</li>
+<li>如果某个对象属性值为null，会形成一个对象的闭环<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">let obj = &#123;</div><div class="line">    a: 1,</div><div class="line">    b: 2,</div><div class="line">	c: [1,2,3],</div><div class="line">    d: function() &#123; </div><div class="line">        console.log(&quot;asdfghj&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line">let result1 = JSON.stringify(target);</div><div class="line">console.log(result1); //    输出结果为&quot;&#123;&quot;a&quot;:1,&quot;b&quot;:2,&quot;c&quot;:[1,2,3]&#125;&quot;，函数直接没了</div><div class="line"></div><div class="line">const obj = &#123;</div><div class="line">  foo: &#123;</div><div class="line">    name: &apos;foo&apos;,</div><div class="line">    bar: &#123;</div><div class="line">      name: &apos;bar&apos;</div><div class="line">      baz: &#123;</div><div class="line">        name: &apos;baz&apos;,</div><div class="line">        aChild: null // 待会将指向obj.bar</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">obj.foo.bar.baz.aChild = obj.foo // foo-&gt;bar-&gt;baz-&gt;aChild-&gt;foo形成环</div><div class="line">JSON.stringify(obj) // =&gt; TypeError: Converting circular personucture to JSON</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>好了，最后贴上jquery深拷贝的代码和自己一些理解的注释<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line">$.fn.extend = function () &#123;</div><div class="line">    //jquery喜欢在初始定义好所有的变量</div><div class="line">    let options,//  被拷贝的对象</div><div class="line">    	name,// 遍历时的属性</div><div class="line">    	src,// 返回对象本身的属性值</div><div class="line">    	copy,// 需要拷贝的内容</div><div class="line">    	copyIsArray,//  判断是否为数组</div><div class="line">    	clone,// 返回拷贝的内容</div><div class="line">    	target = arguments[0] || &#123;&#125;,</div><div class="line">    	i = 1,</div><div class="line">    	length = arguments.length,</div><div class="line">    	deep = false;// 默认为浅拷贝</div><div class="line">    	</div><div class="line">    //target 是传入的第一个参数,表示是否要深递归</div><div class="line">    if(typeof target === &apos;boolean&apos;)&#123;</div><div class="line">    	deep = target;</div><div class="line">    	//既然为boolean，则此处初始化target为第二个参数或者空对象</div><div class="line">    	target = arguments[i] || &#123;&#125;;</div><div class="line">    	// 如果传了类型为 boolean 的第一个参数，i 则从 2 开始</div><div class="line">    	i ++</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //如果传入的第一个参数不是对象或者其他，初始化为一个空对象</div><div class="line">    if(typeof target !== &apos;object&apos; &amp;&amp; $.isFunction(target))&#123;</div><div class="line">    	target = &#123;&#125;;</div><div class="line">    &#125;</div><div class="line">    //如果只传入了一个参数，表示是jquery静态方法，直接返回自身</div><div class="line">    if(i === length)&#123;</div><div class="line">    	target = this;</div><div class="line">    	i --;</div><div class="line">    &#125;</div><div class="line">    for(; i &lt; length; i ++)&#123;</div><div class="line">    	if((options = arguments[i]) !== null )&#123;</div><div class="line">            for( name in options)&#123;</div><div class="line">            	src = target[name];//获得源对象的值</div><div class="line">            	copy = options[name];//获得要拷贝对象的值</div><div class="line">            	//说是为了避免无限循环，例如 extend(true, target, &#123;&apos;target&apos;:target&#125;);</div><div class="line">            	if(target === copy) continue;</div><div class="line">            	//如果是数据正确，且是一个纯粹的对象（纯粹的对象指的是 通过 &quot;&#123;&#125;&quot; 或者 &quot;new Object&quot; 创建的）或者是一个数组的话</div><div class="line">            	if(deep &amp;&amp; copy &amp;&amp; ($.isPlainObject(copy) || (copyIsArray = Array.isArray(copy))))&#123;</div><div class="line">                    //如果是一个数组的话</div><div class="line">                    if(copyIsArray)&#123;</div><div class="line">                        copyIsArray = false;</div><div class="line">                        clone = src &amp;&amp; Array.isArray(src) ? src : [];//判断源对象是不是数组，如果不是，直接变为空数组，拷贝属性高优先原则</div><div class="line">                    &#125; else &#123;</div><div class="line">                        clone = src &amp;&amp; $.isPlainObject(src) ? src : &#123;&#125;;//判断原对象属性是否有值，如果有的话，直接返回原值，否则新建一个空对象</div><div class="line">                    &#125;</div><div class="line">                    //继续深拷贝下去</div><div class="line">                    target[name] = $.extend(deep,clone,copy);</div><div class="line">            	&#125;else if(copy !== undefined)&#123;</div><div class="line">                    //如果不为空，则不是需要深拷贝的数据和对象，而是string,data,boolean等等，可以直接赋值</div><div class="line">                    target[name] = copy;</div><div class="line">            	&#125;</div><div class="line">            &#125;</div><div class="line">    	&#125;</div><div class="line">    &#125;</div><div class="line">    // 返回新的拷贝完的对象</div><div class="line">    return target;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在看上段代码中，又发现了几个好方法在业务中会用到的，可以让代码更严谨<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">//判断数据类型</div><div class="line">//判断是否为纯正的数据对象</div><div class="line">isPlainObject: function( obj ) &#123;</div><div class="line">    //如果数据不正确，不是对象类型，或者是dom对象，window对象，则直接返回false</div><div class="line">    if ( !obj || jQuery.type(obj) !== &quot;object&quot; || obj.nodeType || jQuery.isWindow( obj ) ) &#123;</div><div class="line">    	return false;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //这段代码是为了兼容IE89存在的，查看是否有constructor属性，如果没有必然是数据对象</div><div class="line">    try &#123;</div><div class="line">    	if ( obj.constructor &amp;&amp;</div><div class="line">            !core_hasOwn.call(obj, &quot;constructor&quot;) &amp;&amp;</div><div class="line">            !core_hasOwn.call(obj.constructor.prototype, &quot;isPrototypeOf&quot;) ) &#123;</div><div class="line">            return false;</div><div class="line">    	&#125;</div><div class="line">    &#125; catch ( e ) &#123;</div><div class="line">    	return false;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //对象中key的顺序会将自身属性排在最前面遍历，如果最后一个还是自身属性，则必然所有属性都是自己的  </div><div class="line">    var key;</div><div class="line">    for ( key in obj ) &#123;&#125;</div><div class="line">    </div><div class="line">    return key === undefined || core_hasOwn.call( obj, key );</div><div class="line">&#125;,</div></pre></td></tr></table></figure></p>
+<p>以上基本就是jquery.extend代码的解析了。extend是jquery中一个极其重要的方法，jquery本身就用它扩展了许多静态方法和实例方法</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术文章/" rel="tag"># 技术文章</a>
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+            <a href="/tags/jquery/" rel="tag"># jquery</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/20/promise源码解析（译）/" rel="next" title="promise源码解析（译）">
+                <i class="fa fa-chevron-left"></i> promise源码解析（译）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/03/js中数组所有的原生方法列表/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/header.jpg"
+               alt="linzx" />
+          <p class="site-author-name" itemprop="name">linzx</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-浅拷贝解析"><span class="nav-number">1.</span> <span class="nav-text">1.浅拷贝解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-深拷贝解析"><span class="nav-number">2.</span> <span class="nav-text">2.深拷贝解析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+    <div id="music163player">
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=406238&auto=0&height=66"></iframe>
+        </iframe>
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linzx</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (search_path.endsWith("json")) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("l3F7nF9MmsyTnvM5rI1g7V9s-gzGzoHsz", "TyY2L80HJkN4VjXnTqdDxuWw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  <div class="bg_content">
+      <canvas id="canvas"></canvas>
+  </div>
+  <script>
+  'use strict';
+
+      var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+      function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+      function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+      function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+      var Circle = function () {
+         function Circle(x, y) {
+              _classCallCheck(this, Circle);
+
+              this.x = x;
+              this.y = y;
+              this.r = Math.random() * 10;
+              this._mx = Math.random();
+              this._my = Math.random();
+          }
+
+         _createClass(Circle, [{
+              key: 'drawCircle',
+              value: function drawCircle(ctx) {
+                  ctx.beginPath();
+                  //arc() 方法使用一个中心点和半径，为一个画布的当前子路径添加一条弧。
+                  ctx.arc(this.x, this.y, this.r, 0, 360);
+                  ctx.closePath();
+                  ctx.fillStyle = 'rgba(204, 204, 204, 0.3)';
+                  ctx.fill();
+              }
+          }, {
+              key: 'drawLine',
+              value: function drawLine(ctx, _circle) {
+                  var dx = this.x - _circle.x;
+                  var dy = this.y - _circle.y;
+                  var d = Math.sqrt(dx * dx + dy * dy);
+                  if (d < 150) {
+                      ctx.beginPath();
+
+                      ctx.moveTo(this.x, this.y); //起始点
+                      ctx.lineTo(_circle.x, _circle.y); //终点
+                      ctx.closePath();
+                      ctx.strokeStyle = 'rgba(204, 204, 204, 0.3)';
+                      ctx.stroke();
+                  }
+              }
+
+
+          }, {
+              key: 'move',
+              value: function move(w, h) {
+                  this._mx = this.x < w && this.x > 0 ? this._mx : -this._mx;
+                  this._my = this.y < h && this.y > 0 ? this._my : -this._my;
+                  this.x += this._mx / 2;
+                  this.y += this._my / 2;
+              }
+          }]);
+
+          return Circle;
+      }();
+
+
+
+      var currentCirle = function (_Circle) {
+          _inherits(currentCirle, _Circle);
+
+          function currentCirle(x, y) {
+              _classCallCheck(this, currentCirle);
+
+              return _possibleConstructorReturn(this, (currentCirle.__proto__ || Object.getPrototypeOf(currentCirle)).call(this, x, y));
+          }
+
+          _createClass(currentCirle, [{
+              key: 'drawCircle',
+              value: function drawCircle(ctx) {
+                  ctx.beginPath();
+
+                  //this.r = (this.r < 14 && this.r > 1) ? this.r + (Math.random() * 2 - 1) : 2;
+                  this.r = 8;
+                  ctx.arc(this.x, this.y, this.r, 0, 360);
+                  ctx.closePath();
+                  //ctx.fillStyle = 'rgba(0,0,0,' + (parseInt(Math.random() * 100) / 100) + ')'
+                  ctx.fillStyle = 'rgba(255, 77, 54, 0.6)';
+                  ctx.fill();
+              }
+          }]);
+
+          return currentCirle;
+      }(Circle);
+
+
+      window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
+      var canvas = document.getElementById('canvas');
+      var ctx = canvas.getContext('2d');
+      var w = canvas.width = canvas.offsetWidth;
+      var h = canvas.height = canvas.offsetHeight;
+      var circles = [];
+      var current_circle = new currentCirle(0, 0);
+
+      var draw = function draw() {
+          ctx.clearRect(0, 0, w, h);
+          for (var i = 0; i < circles.length; i++) {
+              circles[i].move(w, h);
+              circles[i].drawCircle(ctx);
+              for (var j = i + 1; j < circles.length; j++) {
+                  circles[i].drawLine(ctx, circles[j]);
+              }
+          }
+          if (current_circle.x) {
+              current_circle.drawCircle(ctx);
+              for (var k = 1; k < circles.length; k++) {
+                  current_circle.drawLine(ctx, circles[k]);
+              }
+          }
+          requestAnimationFrame(draw);
+      };
+
+      var init = function init(num) {
+          for (var i = 0; i < num; i++) {
+              circles.push(new Circle(Math.random() * w, Math.random() * h));
+          }
+          draw();
+      };
+      window.addEventListener('load', init(60));
+      window.onmousemove = function (e) {
+          e = e || window.event;
+          current_circle.x = e.clientX;
+          current_circle.y = e.clientY;
+      };
+      window.onmouseout = function () {
+          current_circle.x = null;
+          current_circle.y = null;
+      };
+  </script>
+</body>
+</html>
