@@ -299,7 +299,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/js中数组的原生方法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/Javascripts数组原生方法集合/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="linzx">
@@ -318,7 +318,7 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/03/js中数组的原生方法/" itemprop="url">js中数组的原生方法</a></h2>
+                <a class="post-title-link" href="/2017/09/03/Javascripts数组原生方法集合/" itemprop="url">js中数组的原生方法</a></h2>
         
 
         <div class="post-meta">
@@ -370,7 +370,7 @@
 
           
           
-             <span id="/2017/09/03/js中数组的原生方法/" class="leancloud_visitors" data-flag-title="js中数组的原生方法">
+             <span id="/2017/09/03/Javascripts数组原生方法集合/" class="leancloud_visitors" data-flag-title="js中数组的原生方法">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -395,7 +395,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  5,787
+                  7,514
                 </span>
               
 
@@ -411,7 +411,7 @@
                   <span class="post-meta-item-text">阅读时长</span>
                 
                 <span title="阅读时长">
-                  23
+                  30
                 </span>
               
             </div>
@@ -598,11 +598,15 @@
 <p>不过感觉除非是临时判断，不然一般也不会用这个方法去判断，一般还是下面这种万金油型的吧。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Object.prototype.toString.call([]).slice(8, -1) === &quot;Array&quot;;//true</div></pre></td></tr></table></figure>
 <hr>
-<h2 id="gt-好啦，关于ES5的方法基本上就讲到这里了，感觉自己在深入去看了一些文章之后，还是有一些额外的收获的。比如对reduce这个平时不常用的方法了解更加深刻了，感觉之前很多遍历收集数据的场景其实用reduce更加方便。"><a href="#gt-好啦，关于ES5的方法基本上就讲到这里了，感觉自己在深入去看了一些文章之后，还是有一些额外的收获的。比如对reduce这个平时不常用的方法了解更加深刻了，感觉之前很多遍历收集数据的场景其实用reduce更加方便。" class="headerlink" title="&gt; 好啦，关于ES5的方法基本上就讲到这里了，感觉自己在深入去看了一些文章之后，还是有一些额外的收获的。比如对reduce这个平时不常用的方法了解更加深刻了，感觉之前很多遍历收集数据的场景其实用reduce更加方便。"></a>&gt; 好啦，关于ES5的方法基本上就讲到这里了，感觉自己在深入去看了一些文章之后，还是有一些额外的收获的。比如对reduce这个平时不常用的方法了解更加深刻了，感觉之前很多遍历收集数据的场景其实用reduce更加方便。</h2><h2 id="3-ES6中的数组方法"><a href="#3-ES6中的数组方法" class="headerlink" title="3 ES6中的数组方法"></a>3 ES6中的数组方法</h2><blockquote>
+<blockquote>
+<p>好啦，关于ES5的方法基本上就讲到这里了，感觉自己在深入去看了一些文章之后，还是有一些额外的收获的。比如对reduce这个平时不常用的方法了解更加深刻了，感觉之前很多遍历收集数据的场景其实用reduce更加方便。</p>
+</blockquote>
+<hr>
+<h2 id="3-ES6中的数组方法"><a href="#3-ES6中的数组方法" class="headerlink" title="3 ES6中的数组方法"></a>3 ES6中的数组方法</h2><blockquote>
 <p>不同于es5主要以遍历方法为主，es6的方法是各式各样的，不过必须要说一句，在性能上，es6的效率基本上是最低的。</p>
 </blockquote>
 <h3 id="3-1-…方法——concat方法的增强"><a href="#3-1-…方法——concat方法的增强" class="headerlink" title="3.1 …方法——concat方法的增强"></a>3.1 …方法——concat方法的增强</h3><p>英文名字叫做Spread syntax，中文名字叫做扩展运算符。</p>
-<h3 id="3-2-from-方法"><a href="#3-2-from-方法" class="headerlink" title="3.2 from()方法"></a>3.2 from()方法</h3><h3 id="3-3-of-方法"><a href="#3-3-of-方法" class="headerlink" title="3.3 of()方法"></a>3.3 of()方法</h3><p>Array.of()方法可以将传入参数以顺序的方式返回成一个新数组的元素。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let a = Array.of(1, 2, 3); // a = [1, 2, 3]</div></pre></td></tr></table></figure></p>
+<h3 id="3-2-of-方法"><a href="#3-2-of-方法" class="headerlink" title="3.2 of()方法"></a>3.2 of()方法</h3><p>Array.of()方法可以将传入参数以顺序的方式返回成一个新数组的元素。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let a = Array.of(1, 2, 3); // a = [1, 2, 3]</div></pre></td></tr></table></figure></p>
 <p>其实，刚看到这个api和他的用途，还是比较懵逼的，因为看上去这个方法就是直接将传入的参数变成一个数组之外，就没有任何区别了，那么我为什么不直接用以前的写法去实现类似的效果呢，比如 let ＝ [1,2,3];而且看上去也更加直接。然后我去翻了下最新的ECMAScript草案，其中有这么一句话</p>
 <blockquote>
 <p>The of function is an intentionally generic factory method; it does not require that its this value be the Array constructor. Therefore it can be transferred to or inherited by other constructors that may be called with a single numeric argument.</p>
@@ -610,179 +614,59 @@
 <p>自己理解了一下，其实大概意思就是说为了弥补Array构造函数传入单个函数的不足，所以出了一个of这个更加通用的方法，举个例子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = new Array(1);//a = [undefined × 1]</div><div class="line">let b = new Array(1,2);// b = [1,2]</div></pre></td></tr></table></figure></p>
 <p>大家可以注意到传入一个参数和传入两个参数的结果，完全是不一样的，这就很尴尬了。而为了避免这种尴尬，es6则出了一种通用的of方法，不管你传入了几个参数，都是一种相同类型的输出结果。</p>
 <p>不过我好奇的是，如果只传入几个参数，为什么不直接let a = [1,2,3];效率和直观性也更加的高。如果要创建一个长度的数组，我肯定还是选let a = new Array(10000),这种形式，实在没有感觉到Array.of的实用场景，希望大家可以给我点指导。</p>
-<h3 id="3-4-copyWithin-方法"><a href="#3-4-copyWithin-方法" class="headerlink" title="3.4 copyWithin()方法"></a>3.4 copyWithin()方法</h3><h3 id="3-5-find-和-findIndex-方法"><a href="#3-5-find-和-findIndex-方法" class="headerlink" title="3.5 find() 和 findIndex()方法"></a>3.5 find() 和 findIndex()方法</h3><p> Array.find() 方法返回数组中满足提供的测试函数的第一个元素的值。否则返回 undefined。<br> Array.findIndex() 方法返回数组中满足提供的测试函数的第一个元素的值的索引。否则返回 -1。</p>
-<p> 这两个方法其实使用非常相似，使用场景有点像ES5中Array.some，都是在找到第一个满足条件的时候，跳出循环，区别的是，三种返回的值完全不一样，我想这也许是为什么要在ES6中增加这两个API的原因吧，可以理解成是数组的方法的补足。</p>
-<p>  <strong>例子</strong><br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"> let a = [1,2,3,4,5].find((item)=&gt;&#123;return item &gt; 3&#125;);   // a = 4</div><div class="line">let b = [1,2,3,4,5].findIndex((item)=&gt;&#123;return item &gt; 3&#125;);  // b = 3</div><div class="line">let c = [1,2,3,4,5].some((item)=&gt;&#123;return item &gt; 3&#125;);    // c = true</div><div class="line"></div><div class="line">-----------------不满足条件--------------------</div><div class="line"> let a = [1,2,3,4,5].find((item)=&gt;&#123;return item &gt; 6&#125;);   // a = undefined</div><div class="line">let b = [1,2,3,4,5].findIndex((item)=&gt;&#123;return item &gt; 6&#125;);  // b = -1</div><div class="line">let c = [1,2,3,4,5].some((item)=&gt;&#123;return item &gt; 6&#125;);    // c = false</div></pre></td></tr></table></figure></p>
+<h3 id="3-2-from-方法"><a href="#3-2-from-方法" class="headerlink" title="3.2 from()方法"></a>3.2 from()方法</h3><p>Array.from()方法从一个类似数组（拥有一个 length 属性和若干索引属性的任意对象）或可迭代的对象(String, Array, Map, Set和 Generator)中创建一个新的数组实例。</p>
+<p>我们先查看Array.from()的语法</p>
+<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Array.from(arrayLike, mapFn, thisArg)</div></pre></td></tr></table></figure></p>
+<p>从语法中，我们可以看出Array.from()最基本的功能是将一个类数组的对象转化成数组，然后通过第二个和第三个参数可以对转化成功后的数组再次执行一次遍历数据map方法,也就是Array.from(obj).map(mapFn, thisArg)。</p>
 <blockquote>
-<p>注意：find()和findIndex()方法识别NaN,可以说是indexOf方法的增强（indexOf内部采用的是 === 判断）</p>
-<h3 id="3-6-entries-，keys-和values-方法"><a href="#3-6-entries-，keys-和values-方法" class="headerlink" title="3.6 entries()，keys()和values() 方法"></a>3.6 entries()，keys()和values() 方法</h3></blockquote>
-<h2 id="4-ES7中的数组方法"><a href="#4-ES7中的数组方法" class="headerlink" title="4 ES7中的数组方法"></a>4 ES7中的数组方法</h2><h3 id="4-1-includes-方法"><a href="#4-1-includes-方法" class="headerlink" title="4.1 includes()方法"></a>4.1 includes()方法</h3><p>方法还真是tmd多啊，，慢慢补充吧</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/js中数组所有的原生方法列表/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="linzx">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="linzx">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/03/js中数组所有的原生方法列表/" itemprop="url">未命名</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T18:16:52+08:00">
-                2017-09-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/09/03/js中数组所有的原生方法列表/" class="leancloud_visitors" data-flag-title="">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计</span>
-                
-                <span title="字数统计">
-                  424
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长</span>
-                
-                <span title="阅读时长">
-                  2
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>数组应该是我们在写程序中应用到最多的数据结构了，相比于无序的对象，可控制的数组帮我们在处理数据时，实在是提供了太多的忙了。今天刚好看到一篇Array.include的文章，忽然发现经过几个ES3,ES5,ES6,ES7几个版本的更迭，数组真的有好多方法为我们提供了遍历，所以准备全部列出来，也是给自己打个标记</p>
+<p>对了额外说一句，这个方法的性能很差，和直接的for循环的性能对比了一下，差了百倍不止。</p>
 </blockquote>
-<h2 id="1-ES3中的数组方法"><a href="#1-ES3中的数组方法" class="headerlink" title="1 ES3中的数组方法"></a>1 ES3中的数组方法</h2><blockquote>
-<p>ES3的兼容性使用鱼现在所有的浏览器</p>
+<p><strong>例子 :将一串数字字符串转化为数组</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = Array.from(&quot;242365463432&quot;,(value) =&gt; return value * 2);</div><div class="line">//a = [4, 8, 4, 6, 12, 10, 8, 12, 6, 8, 6, 4]</div></pre></td></tr></table></figure></p>
+<h3 id="3-4-copyWithin-方法"><a href="#3-4-copyWithin-方法" class="headerlink" title="3.4 copyWithin()方法"></a>3.4 copyWithin()方法</h3><p>Array.copyWithin方法，在当前数组内部，将指定位置的成员<strong>浅复制</strong>到其他位置（会覆盖原有成员），然后<strong>返回当前数组</strong>。也就是说，使用这个方法，会修改当前数组。</p>
+<blockquote>
+<p>这个方法有点复杂，光看描述可能大家未必能轻易理解，大家可以先看下语法，再看demo配合理解，而且自己没有想到这个方法合适的应用场景。网上也没又看到相关使用场景。但是讲道理，这个方法设计出来，肯定是经过深思熟虑的，如果大家有想到，欢迎评论给我，谢谢。</p>
 </blockquote>
-<p>记忆中es5好像是2009年出的，找到了一本2007年出版的《Javaascript权威指南》第五版</p>
-<h4 id="1-1-join-方法"><a href="#1-1-join-方法" class="headerlink" title="1.1 join()方法"></a>1.1 join()方法</h4><p>Array.join()方法是将一个数组里面的所有元素转换成字符串，然后再将他们连接起来</p>
-<h4 id="1-2-reverse-方法"><a href="#1-2-reverse-方法" class="headerlink" title="1.2 reverse()方法"></a>1.2 reverse()方法</h4><h4 id="1-3-sort-方法"><a href="#1-3-sort-方法" class="headerlink" title="1.3 sort()方法"></a>1.3 sort()方法</h4><h4 id="1-4-concat-方法"><a href="#1-4-concat-方法" class="headerlink" title="1.4 concat()方法"></a>1.4 concat()方法</h4><h4 id="1-5-slice-方法"><a href="#1-5-slice-方法" class="headerlink" title="1.5 slice()方法"></a>1.5 slice()方法</h4><h4 id="1-6-splice-方法"><a href="#1-6-splice-方法" class="headerlink" title="1.6 splice()方法"></a>1.6 splice()方法</h4><h4 id="1-7-push-和pop-方法"><a href="#1-7-push-和pop-方法" class="headerlink" title="1.7 push()和pop()方法"></a>1.7 push()和pop()方法</h4><h4 id="1-8-unshift和shift-方法"><a href="#1-8-unshift和shift-方法" class="headerlink" title="1.8 unshift和shift()方法"></a>1.8 unshift和shift()方法</h4><h4 id="1-8-toString-和toLocalString-方法"><a href="#1-8-toString-和toLocalString-方法" class="headerlink" title="1.8 toString()和toLocalString()方法"></a>1.8 toString()和toLocalString()方法</h4><h2 id="2-ES5中的数组方法"><a href="#2-ES5中的数组方法" class="headerlink" title="2 ES5中的数组方法"></a>2 ES5中的数组方法</h2><h4 id="2-1-forEach"><a href="#2-1-forEach" class="headerlink" title="2.1 forEach()"></a>2.1 forEach()</h4><h4 id="2-2-map"><a href="#2-2-map" class="headerlink" title="2.2 map()"></a>2.2 map()</h4><h4 id="2-3-filter"><a href="#2-3-filter" class="headerlink" title="2.3 filter()"></a>2.3 filter()</h4><h4 id="2-4-some"><a href="#2-4-some" class="headerlink" title="2.4 some()"></a>2.4 some()</h4><h4 id="2-5-every"><a href="#2-5-every" class="headerlink" title="2.5 every()"></a>2.5 every()</h4><h4 id="2-6-indexOf"><a href="#2-6-indexOf" class="headerlink" title="2.6 indexOf()"></a>2.6 indexOf()</h4><h4 id="2-7-lastIndexOf"><a href="#2-7-lastIndexOf" class="headerlink" title="2.7 lastIndexOf()"></a>2.7 lastIndexOf()</h4><h4 id="2-8-reduce"><a href="#2-8-reduce" class="headerlink" title="2.8 reduce()"></a>2.8 reduce()</h4><h4 id="2-9-reduceRight-方法"><a href="#2-9-reduceRight-方法" class="headerlink" title="2.9 reduceRight()方法"></a>2.9 reduceRight()方法</h4><h2 id="3-ES6中的数组方法"><a href="#3-ES6中的数组方法" class="headerlink" title="3 ES6中的数组方法"></a>3 ES6中的数组方法</h2><blockquote>
-<p>ES6中的一部分数组方法给我的感觉更像是以前方法的简化版，也就是常说的语法糖（个人感觉）</p>
+<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">arr.copyWithin(target, start, end)</div><div class="line">//arr.copyWithin(目标索引, 源开始索引, 结束源索引)</div></pre></td></tr></table></figure></p>
+<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// 将3号位复制到0号位</div><div class="line">[1, 2, 3, 4, 5].copyWithin(0, 3, 4);    // [4, 2, 3, 4, 5]</div><div class="line"></div><div class="line">// 将2号位复制到0号位</div><div class="line">[1, 2, 3, 4, 5].copyWithin(0, 2, 5);    //[3, 4, 5, 4, 5]</div><div class="line"> </div><div class="line"> // 将3号位复制到0号位</div><div class="line">[1, 2, 3, 4, 5].copyWithin(4, 1, 4);    //[1, 2, 3, 4, 2]</div></pre></td></tr></table></figure></p>
+<p>第一个是常规的例子，大家可以对比看第二个可以发现，这个方法是先浅复制了数组一部分暂时存储起来，然后再从目标索引处开始一个个覆盖后面的元素，直到这段复制的数组片段全部粘贴完。</p>
+<p>再看第三个例子，可以发现当复制的数据片段从目标索引开始粘贴时，如果超过了长度，它将停止粘贴，这说明<strong>它不会改变数据的 length，但是会改变数据本身的内容</strong>。</p>
+<p>Array.copyWithin可以理解成复制以及粘贴序列这两者是为一体的操作;即使复制和粘贴区域重叠，粘贴的序列也会有拷贝来的值。</p>
+<h3 id="3-5-find-和-findIndex-方法"><a href="#3-5-find-和-findIndex-方法" class="headerlink" title="3.5 find() 和 findIndex()方法"></a>3.5 find() 和 findIndex()方法</h3><p>Array.find()方法返回数组中满足提供的测试函数的第一个元素的值。否则返回 undefined。<br> Array.findIndex() 方法返回数组中满足提供的测试函数的第一个元素的值的索引。否则返回 -1。</p>
+<p> 这两个方法其实使用非常相似，使用场景有点像ES5中Array.some，都是在找到第一个满足条件的时候，跳出循环，区别的是，三种返回的值完全不一样，我想这也许是为什么要在ES6中增加这两个API的原因吧，可以理解成是数组的方法的补足。</p>
+<p>  <strong>例子：三个方法各自的返回值</strong><br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"> let a = [1,2,3,4,5].find((item)=&gt;&#123;return item &gt; 3&#125;);   // a = 4 返回第一个符合结果的值</div><div class="line">let b = [1,2,3,4,5].findIndex((item)=&gt;&#123;return item &gt; 3&#125;);  // b = 3 返回第一个符合结果的下标</div><div class="line">let c = [1,2,3,4,5].some((item)=&gt;&#123;return item &gt; 3&#125;);    // c = true 返回是否有符合条件的Boolean值</div><div class="line"></div><div class="line">-----------------不满足条件--------------------</div><div class="line"> let a = [1,2,3,4,5].find((item)=&gt;&#123;return item &gt; 6&#125;);   // a = undefined</div><div class="line">let b = [1,2,3,4,5].findIndex((item)=&gt;&#123;return item &gt; 6&#125;);  // b = -1</div><div class="line">let c = [1,2,3,4,5].some((item)=&gt;&#123;return item &gt; 6&#125;);    // c = false</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意：find()和findIndex()方法无法判断NaN,可以说是内部用 ===判断，不同于ES7中的include方法。不过这个判断方式是另外一个话题，不在本文详述了，感兴趣的同学可以去查一下。</p>
 </blockquote>
-<h4 id="3-1-…方法——concat方法的增强"><a href="#3-1-…方法——concat方法的增强" class="headerlink" title="3.1 …方法——concat方法的增强"></a>3.1 …方法——concat方法的增强</h4><h4 id="3-2-from-方法"><a href="#3-2-from-方法" class="headerlink" title="3.2 from()方法"></a>3.2 from()方法</h4><h4 id="3-3-of-方法"><a href="#3-3-of-方法" class="headerlink" title="3.3 of()方法"></a>3.3 of()方法</h4><h4 id="3-4-copyWithin-方法"><a href="#3-4-copyWithin-方法" class="headerlink" title="3.4 copyWithin()方法"></a>3.4 copyWithin()方法</h4><h4 id="3-4-find-和-findIndex-方法"><a href="#3-4-find-和-findIndex-方法" class="headerlink" title="3.4 find() 和 findIndex()方法"></a>3.4 find() 和 findIndex()方法</h4><p>用于初始化话数组十分方便的方法</p>
-<h4 id="3-6-entries-，keys-和values-方法"><a href="#3-6-entries-，keys-和values-方法" class="headerlink" title="3.6 entries()，keys()和values() 方法"></a>3.6 entries()，keys()和values() 方法</h4><h2 id="4-ES7中的数组方法"><a href="#4-ES7中的数组方法" class="headerlink" title="4 ES7中的数组方法"></a>4 ES7中的数组方法</h2><h4 id="4-1-includes-方法"><a href="#4-1-includes-方法" class="headerlink" title="4.1 includes()方法"></a>4.1 includes()方法</h4><p>方法还真是tmd多啊，，慢慢补充吧</p>
+<p>其实还可以发现，Array.find() 方法只是返回第一个符合条件的元素，它的增强版是es5中Array.filter()方法，返回所有符合条件的元素到一个新数组中。可以说是当用find方法时考虑跟多的是跳出吧。</p>
+<p>我感觉这4个方法配合相应的回调函数基本上可以完全覆盖大多数需要数组判断的场景了，大家觉得呢？</p>
+<h3 id="3-5-fill方法"><a href="#3-5-fill方法" class="headerlink" title="3.5 fill方法"></a>3.5 fill方法</h3><p>Array.fill()方法用一个固定值填充一个数组中从起始索引到终止索引内的全部元素,<strong>返回原数组</strong></p>
+<p>这个方法的使用也非常简单，大家基本上看个语法和demo就能懂了。需要注意的是，这个方法是返回数组本身，还有一点就是，类数组不能调用这个方法，刚刚自己去改了MDN上面的文档。</p>
+<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">arr.fill(value) </div><div class="line">arr.fill(value, startIndex) </div><div class="line">arr.fill(value, startIndex, endIndex)</div></pre></td></tr></table></figure></p>
+<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let a = new Array(10);</div><div class="line">a.fill(1);  // a = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];</div><div class="line">let b = [1,2,34,5,6,7,8].fill(3,4);    //b =  [1, 2, 34, 5, 3, 3, 3];</div><div class="line">let c = [1,2,34,5,6,7,8].fill(3,2,5);   // c =  [1, 2, 3, 3, 3, 7, 8];</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>个人感觉这个方法初始化数组挺有用的，自己一周每次测试数据时，只要new Array().fill(1);,比以前遍历直观方便多了</p>
+</blockquote>
+<h3 id="3-6-entries-，keys-values-方法"><a href="#3-6-entries-，keys-values-方法" class="headerlink" title="3.6 entries()，keys(),values()方法"></a>3.6 entries()，keys(),values()方法</h3><p>Array.entries()将数组转化成一个中包含<strong>每个索引的键/值对</strong>的Array Iterator对象</p>
+<p>Array.keys()将数组转化成一个中包含<strong>每个索引的键</strong>的Array Iterator对象</p>
+<p>Array.values()将数组转化成一个中包含<strong>每个索引的值</strong>的Array Iterator对象。</p>
+<blockquote>
+<p>Array.values()方法chrome浏览器并不支持，</p>
+</blockquote>
+<p>之所以将这三个方法放在一起是有原因的额，大家可以看这三个方法其实都是一个数组转化为一种新的数据类型——返回新的Array Iterator对象，唯一区别的是转化之后的元素不一样。跟他们的名字一样，entries()方法转化为全部的键值对，key()方法转化为键，value()保留值。</p>
+<p><strong>例子：观察各个迭代器遍历输出的东西</strong></p>
+<p><strong>Array.entries()</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3].entries();</div><div class="line">for(let i of a)&#123;console.log(i);&#125;</div><div class="line">//[0, 1]</div><div class="line">//[1, 2]</div><div class="line">//[2, 3]</div></pre></td></tr></table></figure></p>
+<p><strong>Array.keys()</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let b = [1,2,3].keys();</div><div class="line">for(let i of b)&#123;console.log(i);&#125;</div><div class="line">//0</div><div class="line">//1</div><div class="line">//2</div></pre></td></tr></table></figure></p>
+<p><strong>Array.values()</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let c = [1,2,3].values();</div><div class="line">for(let i of c)&#123;console.log(i);&#125;</div><div class="line">//1</div><div class="line">//2</div><div class="line">//3</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>关于迭代器这个东西，自己说不上什么，因为自己没有亲自用过，如果大家有什么见解课可以评论给我，我来补充和学习一下</p>
+</blockquote>
+<h2 id="4-ES7中的数组方法"><a href="#4-ES7中的数组方法" class="headerlink" title="4 ES7中的数组方法"></a>4 ES7中的数组方法</h2><h3 id="4-1-includes-方法"><a href="#4-1-includes-方法" class="headerlink" title="4.1 includes()方法"></a>4.1 includes()方法</h3><p>Array.includes方法返回一个布尔值，表示某个数组是否包含给定的值，如果包含，则返回true，否则返回false,与<strong>字符串的includes方法</strong>类似。</p>
+<p>这个方法大家可以看作是ES5中Array.indexOf的语义增强版，“includes”这个是否包含的意思，直接返回Boolean值，比起原来的indexOf是否大于-1,显得更加直观,我就是判断有没有包含哪个值</p>
+<p><strong>语法</strong>，使用方法和indexof一模一样<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">arr.includes(searchElement)</div><div class="line">arr.includes(searchElement, fromIndex)</div></pre></td></tr></table></figure></p>
+<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">let array = [2, 5, 9];</div><div class="line">array.includes(2);     // true</div><div class="line">array.includes(7);     // false</div><div class="line">array.includes(9, 2);  // true</div><div class="line">array.includes(2, -1); // false</div><div class="line">array.includes(2, -3); // true</div></pre></td></tr></table></figure></p>
+<hr>
+<p>方法还真是tmd多啊，感觉基本上应该是更新完了，前后两星期花了我4天时间吧，还是挺累的。不过收货还是很多，比如知道了ES5的方法基本上都有第二个this指向的参数，重新认识了reduce方法，感觉自己之前很多场景用reduce更好，重新熟悉了一些ES6的方法可以试用有些场景</p>
+<p>如果能看到最后的，感觉你也是够累的，哈哈哈。<br>既然这么累，点颗星吧</p>
 
           
         
@@ -2437,6 +2321,189 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/08/12.生活中的经济学原理-----公平正义的真正意义/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="linzx">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/08/12.生活中的经济学原理-----公平正义的真正意义/" itemprop="url">第十二章-公平正义的真正意义</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-08T13:47:44+08:00">
+                2017-06-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/《解释的工具-生活中的经济学原理》/" itemprop="url" rel="index">
+                    <span itemprop="name">《解释的工具-生活中的经济学原理》</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/06/08/12.生活中的经济学原理-----公平正义的真正意义/" class="leancloud_visitors" data-flag-title="第十二章-公平正义的真正意义">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  996
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="《解释的工具-生活中的经济学原理》"><a href="#《解释的工具-生活中的经济学原理》" class="headerlink" title="《解释的工具-生活中的经济学原理》"></a>《解释的工具-生活中的经济学原理》</h4><h6 id="—–第十二章-公平正义的真正意义"><a href="#—–第十二章-公平正义的真正意义" class="headerlink" title="—–第十二章-公平正义的真正意义"></a>—–第十二章-公平正义的真正意义</h6><p>第十二章实在是自己政治理解能力不够，看完都还是有点懵懂的，决定还是跨过去了。过两天抽个时间再看一遍，看看温故能不能知新。</p>
+<p>接下去几章是法律经济学，其实还是和我们周围的生活有一些息息相关的。看完之后，仔细琢磨了生活中一些规章制度，的确隐含着很多法律经济学的影子。</p>
+<p>就我理解来说,法律经济学的观点是衡量一件法律案件是否有理，不应该从绝对的公平正义角度着眼，而值得从经济效益的角度进行评估。</p>
+<p>我仔细想想我们公司有些制度也有异曲同工之妙。以孕妇请假为例，假如刚开始的时候公司没有任何相关规定，那么第一位孕妇在刚开始怀孕的时候，可以带薪请假并且同时无条件享受公司各种各样的福利，那么她这种行为会不会对其他人造成心理上的伤害；她同时也在透支的后面孕妇的福利，因为如果她做的这么过分，意味着后面怀孕的人将再也无法享受到类似的福利，因为公司会从成本角度去衡量。也许让一位孕妇员工享受所有的福利应该是正义的，当时它产生的负面影响将会远远大于对公司正面的生产价值。</p>
+<p>再以生活中一个很常见的例子进行举例。一个爱妈妈的广告也许在许多人的眼中感到的是温馨，但是一些从小没有母爱的孤儿长大之后看到这个广告，却引起了一丝被刺伤的愤怒。那么当这些人告广告商的时候，难道因为对一部分人造成了伤害，就禁止播放吗？</p>
+<p>我相信另一部分人肯定会嗤之以鼻，心里默默念一句凭什么，我就觉得广告拍的很好。当然这只是嘴上的吐槽，我们可以更深入到第二层角度去分析。这支广告固然让一部分人愤怒，可是它同时却让更多的人知道抚慰母亲辛劳，提醒子女孺慕，甚至可能会挽回一些破碎的家庭。它产生的社会价值岂不是更大，如果你不喜欢，你可以拒绝购买广告产品，或者促使周围人一起抵制，但是不应该通过法律来限制。<strong>因为一旦以法律制度来限定，分寸的掌握就变得很微妙了。。更深程度上去看，如果一个人的喜好可以通过法律强加到另外一个人身上，将心比心，你愿意别人用同样的法律来限制你的信仰和喜好吗？你愿意让制度法律的人又那么大权力吗？</strong></p>
+<p>文末抛出了一个问题？既然播放伤心的广告可以，那么为什么抽烟不行呢？我的理解来看，因为抽烟对于社会生产成本产生危害将远大于其生产价值吧。我想说，如果抽烟有助于环境健康，身体长寿，同时还能帮助人们，促进社会产值。恐怕结果就完全相反了。</p>
+<p>本章真的很有意思，文中提出了许多观点在日常生活中都显得那么无话可说。绝对的公平正义如果会将人类带向灭亡，那么他还有意义吗<strong>我们应该明白公平正义本身并不是目的，只是手段。既然是手段，也就是工具，我们当然应该选择好的工具。</strong></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
@@ -2486,7 +2553,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
