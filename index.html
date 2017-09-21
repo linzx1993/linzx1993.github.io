@@ -299,6 +299,226 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/21/js模板内容/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="linzx">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/21/js模板内容/" itemprop="url">未命名</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-21T22:12:23+08:00">
+                2017-09-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/09/21/js模板内容/" class="leancloud_visitors" data-flag-title="">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  719
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>本文章主要是自己用于熟悉正则的几个方法，并没有如何写正则表达式的内容，如果希望学习写正则匹配的，我也不太会(手动捂脸)</p>
+</blockquote>
+<p>首先让我们先熟悉一个最常见的API——replace()方法</p>
+<blockquote>
+<p>replace不会修改原字符串</p>
+</blockquote>
+<p><strong>语法和参数</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">str.replace(regexp|substr, newSubStr|function)</div></pre></td></tr></table></figure></p>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>参数含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>regexp</td>
+<td>一个RegExp 对象或者字符串。该正则所匹配的内容会被第二个参数的返回值替换掉。</td>
+</tr>
+<tr>
+<td>substr</td>
+<td>一个要被 newSubStr 替换的字符串。其被视为一整个字符串，而不是一个正则表达式。仅仅是第一个匹配会被替换。</td>
+</tr>
+<tr>
+<td>newSubStr</td>
+<td>用于替换掉第一个参数在原字符串中的匹配部分的字符串。该字符串中可以内插一些特殊的变量名。参考下面的使用字符串作为参数。</td>
+</tr>
+<tr>
+<td>function</td>
+<td>一个用来创建新子字符串的函数，该函数的返回值将替换掉第一个参数匹配到的结果。参考下面的指定一个函数作为参数。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>先看一个最简单的例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let a = &quot;abcd1234&quot;.replace(&quot;1234&quot;,&quot;e&quot;); //将字符串&quot;1234&quot;替换为字符&quot;e&quot;</div><div class="line">let b = &quot;1234abcd1234&quot;.replace(/\d+/g,&quot;e&quot;); //将数字替换为字符&quot;e&quot;</div><div class="line">console.log(a); //abcde ,用字符串匹配没想到怎么全局替换，知道的可以告诉一下</div><div class="line">console.log(b); //eabcde</div></pre></td></tr></table></figure></p>
+<p>但是很多时候纯粹的替换字符的场景比较少，很多时候我们希望将获得到的值经过操作然后替换上去，所以replace()方法也很聪明的提供了回调函数。接下来我们来熟悉下回调函数的参数</p>
+<p><strong>先看语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">str.replace(regexp, function(match,p1,offset,string)&#123;&#125;)</div></pre></td></tr></table></figure></p>
+<p><strong>再看参数含义</strong></p>
+<table>
+<thead>
+<tr>
+<th>参数名</th>
+<th>参数含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>match</td>
+<td>匹配的子串，即字符串中那一些符合匹配规则的子字符串（可以理解成“abcd”中的是“bc”）</td>
+</tr>
+<tr>
+<td>offset</td>
+<td>匹配到的子字符串在原字符串中索引。（比如，如果原字符串是“abcd”，匹配到的子字符串是“bc”，那么这个参数将是1）</td>
+</tr>
+<tr>
+<td>string</td>
+<td>被匹配的原字符串。</td>
+</tr>
+</tbody>
+</table>
+<p>这个时候再来一个<strong>简单版的小demo</strong>对着看，大家基本上就能明白了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&quot;strss&quot;.replace(/s+/g, function(match,offset,string)&#123;</div><div class="line">    console.log(match)</div><div class="line">    console.log(offset)</div><div class="line">    console.log(string)</div><div class="line">&#125;);</div><div class="line">//  s</div><div class="line">//  0</div><div class="line">//  strss</div><div class="line">//  ss</div><div class="line">//  3</div><div class="line">//  strss</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>有没有一种ES5数组回调参数的既视感</p>
+</blockquote>
+<p>不过回调函数提供的参数还赋予了更强大的功能，这里我们先暂时略过</p>
+<p>我们可以先在熟悉语法的情况下，一步一步从最基本的方法使用来认识这个方法</p>
+<p>因为我们想在最终的替换中进一步转变匹配结果，所以我们必须使用一个函数。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/Javascripts数组原生方法集合/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2321,189 +2541,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/08/12.生活中的经济学原理-----公平正义的真正意义/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="linzx">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="linzx">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/08/12.生活中的经济学原理-----公平正义的真正意义/" itemprop="url">第十二章-公平正义的真正意义</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-08T13:47:44+08:00">
-                2017-06-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/《解释的工具-生活中的经济学原理》/" itemprop="url" rel="index">
-                    <span itemprop="name">《解释的工具-生活中的经济学原理》</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/06/08/12.生活中的经济学原理-----公平正义的真正意义/" class="leancloud_visitors" data-flag-title="第十二章-公平正义的真正意义">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计</span>
-                
-                <span title="字数统计">
-                  996
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长</span>
-                
-                <span title="阅读时长">
-                  3
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="《解释的工具-生活中的经济学原理》"><a href="#《解释的工具-生活中的经济学原理》" class="headerlink" title="《解释的工具-生活中的经济学原理》"></a>《解释的工具-生活中的经济学原理》</h4><h6 id="—–第十二章-公平正义的真正意义"><a href="#—–第十二章-公平正义的真正意义" class="headerlink" title="—–第十二章-公平正义的真正意义"></a>—–第十二章-公平正义的真正意义</h6><p>第十二章实在是自己政治理解能力不够，看完都还是有点懵懂的，决定还是跨过去了。过两天抽个时间再看一遍，看看温故能不能知新。</p>
-<p>接下去几章是法律经济学，其实还是和我们周围的生活有一些息息相关的。看完之后，仔细琢磨了生活中一些规章制度，的确隐含着很多法律经济学的影子。</p>
-<p>就我理解来说,法律经济学的观点是衡量一件法律案件是否有理，不应该从绝对的公平正义角度着眼，而值得从经济效益的角度进行评估。</p>
-<p>我仔细想想我们公司有些制度也有异曲同工之妙。以孕妇请假为例，假如刚开始的时候公司没有任何相关规定，那么第一位孕妇在刚开始怀孕的时候，可以带薪请假并且同时无条件享受公司各种各样的福利，那么她这种行为会不会对其他人造成心理上的伤害；她同时也在透支的后面孕妇的福利，因为如果她做的这么过分，意味着后面怀孕的人将再也无法享受到类似的福利，因为公司会从成本角度去衡量。也许让一位孕妇员工享受所有的福利应该是正义的，当时它产生的负面影响将会远远大于对公司正面的生产价值。</p>
-<p>再以生活中一个很常见的例子进行举例。一个爱妈妈的广告也许在许多人的眼中感到的是温馨，但是一些从小没有母爱的孤儿长大之后看到这个广告，却引起了一丝被刺伤的愤怒。那么当这些人告广告商的时候，难道因为对一部分人造成了伤害，就禁止播放吗？</p>
-<p>我相信另一部分人肯定会嗤之以鼻，心里默默念一句凭什么，我就觉得广告拍的很好。当然这只是嘴上的吐槽，我们可以更深入到第二层角度去分析。这支广告固然让一部分人愤怒，可是它同时却让更多的人知道抚慰母亲辛劳，提醒子女孺慕，甚至可能会挽回一些破碎的家庭。它产生的社会价值岂不是更大，如果你不喜欢，你可以拒绝购买广告产品，或者促使周围人一起抵制，但是不应该通过法律来限制。<strong>因为一旦以法律制度来限定，分寸的掌握就变得很微妙了。。更深程度上去看，如果一个人的喜好可以通过法律强加到另外一个人身上，将心比心，你愿意别人用同样的法律来限制你的信仰和喜好吗？你愿意让制度法律的人又那么大权力吗？</strong></p>
-<p>文末抛出了一个问题？既然播放伤心的广告可以，那么为什么抽烟不行呢？我的理解来看，因为抽烟对于社会生产成本产生危害将远大于其生产价值吧。我想说，如果抽烟有助于环境健康，身体长寿，同时还能帮助人们，促进社会产值。恐怕结果就完全相反了。</p>
-<p>本章真的很有意思，文中提出了许多观点在日常生活中都显得那么无话可说。绝对的公平正义如果会将人类带向灭亡，那么他还有意义吗<strong>我们应该明白公平正义本身并不是目的，只是手段。既然是手段，也就是工具，我们当然应该选择好的工具。</strong></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2553,7 +2590,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
