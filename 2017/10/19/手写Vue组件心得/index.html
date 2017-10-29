@@ -90,17 +90,19 @@
 
 
 
-<meta name="description" content="引用过UI库的人应该都明白，一般来说市面上的UI组件很难完美符合项目的所有需求，所以还是需要自己手写很多组件来满足需求的。">
+<meta name="description" content="记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。  事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。 自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西 1、子组件不允许修改父组件数据之前在写angular的父子组件传递">
 <meta property="og:type" content="article">
 <meta property="og:title" content="linzx">
 <meta property="og:url" content="http://yoursite.com/2017/10/19/手写Vue组件心得/index.html">
 <meta property="og:site_name" content="linzx">
-<meta property="og:description" content="引用过UI库的人应该都明白，一般来说市面上的UI组件很难完美符合项目的所有需求，所以还是需要自己手写很多组件来满足需求的。">
+<meta property="og:description" content="记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。  事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。 自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西 1、子组件不允许修改父组件数据之前在写angular的父子组件传递">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-19T13:11:57.364Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/error1.png">
+<meta property="og:updated_time" content="2017-10-29T05:05:46.159Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linzx">
-<meta name="twitter:description" content="引用过UI库的人应该都明白，一般来说市面上的UI组件很难完美符合项目的所有需求，所以还是需要自己手写很多组件来满足需求的。">
+<meta name="twitter:description" content="记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。  事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。 自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西 1、子组件不允许修改父组件数据之前在写angular的父子组件传递">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/error1.png">
 
 
 
@@ -370,7 +372,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  56
+                  1,203
                 </span>
               
 
@@ -386,7 +388,7 @@
                   <span class="post-meta-item-text">阅读时长</span>
                 
                 <span title="阅读时长">
-                  1
+                  5
                 </span>
               
             </div>
@@ -404,7 +406,25 @@
       
 
       
-        <p>引用过UI库的人应该都明白，一般来说市面上的UI组件很难完美符合项目的所有需求，所以还是需要自己手写很多组件来满足需求的。</p>
+        <blockquote>
+<p>记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。</p>
+</blockquote>
+<p>事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。</p>
+<p>自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西</p>
+<h4 id="1、子组件不允许修改父组件数据"><a href="#1、子组件不允许修改父组件数据" class="headerlink" title="1、子组件不允许修改父组件数据"></a>1、子组件不允许修改父组件数据</h4><p>之前在写angular的父子组件传递数据，子组件可以修改父组件传递进来的数据。不过在Vue中子组件不允许修改父组件穿进来的值，以vue举例来说<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&lt;!--父组件HTML内容--&gt;</div><div class="line">&lt;children-component :value=&quot;data&quot;&gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    props : [&quot;value&quot;],</div><div class="line">    created : &#123;</div><div class="line">        this.value = [5,6,7,8];</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>此举会引发一个非常常见的报错，<br><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/error1.png" alt="image"></p>
+<p>那么解决方法是什么呢，那就要看你需求了。比如传进来的是一个渲染列表，我需要的只是修改渲染的数据，那么可以emit出去，然后在父组件重新赋值，通过双向绑定，触发子组件的再次渲染。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">&lt;!--父组件HTML内容--&gt;</div><div class="line">&lt;children-component :value=&quot;data&quot; @changeProp=&quot;changeData&quot;&gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    methods : &#123;</div><div class="line">        changeData(value)&#123;</div><div class="line">            this.data = value;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    props : [&quot;value&quot;],</div><div class="line">    created : &#123;</div><div class="line">        this.$emit(&quot;changeProp&quot;,[5,6,7,8])</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>例子写的比较简单，其实原理就是emit一个数据到父组件上去，然后在父组件中接受到这个传递上来的新值，将data赋予新值，然后重新传递到了子组件，起到一个变向修改子组件的效果。</p>
+<h4 id="2-Vue给每个组件提供了一个默认的父子传递事件v-model。"><a href="#2-Vue给每个组件提供了一个默认的父子传递事件v-model。" class="headerlink" title="2.Vue给每个组件提供了一个默认的父子传递事件v-model。"></a>2.Vue给每个组件提供了一个默认的父子传递事件v-model。</h4><p>但是你每次父子组件传递数据时，都要父子处定义一个事件是很麻烦的，vue则为每个组件提供了一个默认v-model的语法糖。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&lt;!--父组件HTML内容--&gt;</div><div class="line">&lt;children-component v-mode=&quot;data&quot; &gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    watch : &#123;</div><div class="line">        //可以在此处监听子组件传递上来的数据</div><div class="line">        data(n,o)&#123;</div><div class="line">            console.log(n,o);   //[5,6,7,8],[1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line"></div><div class="line">export default(&#123;</div><div class="line">    &lt;!--大家注意我下面这行代码是打了注释的，说明我在子组件没有定义任何属性--&gt;</div><div class="line">    //  props : [&quot;value&quot;]</div><div class="line">    &lt;!--并且我接下去直接在代码中使用了this.value(一个完全没有定义过的value)。--&gt;</div><div class="line">    created : &#123;</div><div class="line">        console.log(this.value);</div><div class="line">        this.$emit(&quot;input&quot;,[5,6,7,8]);  //当我想改变传进来值的时候</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>因为之前一直使用ng-model来用于表单组件的传递，所以开始对于v-mode也是这个印象，不过后面看了element-ui的源码才发现我想简单了，然后网上搜了一下对于这个语法糖的解释。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//注意，该组件不是表单组件</div><div class="line">&lt;children-component :value=&quot;data&quot; @input=&quot;data = arguments[0]&quot;&gt;&lt;/children-component&gt;</div></pre></td></tr></table></figure></p>
+<p>看了这行代码大家心里估计也能明白的差不多了，其实Vue只是帮我们把父组件上的两段声明合二为一了，同时再帮我们在子组件处直接省略了定义。语法糖说到底就是帮我们省力的嘛。</p>
+<h4 id="3-全局一次性引用写好的组件"><a href="#3-全局一次性引用写好的组件" class="headerlink" title="3.全局一次性引用写好的组件"></a>3.全局一次性引用写好的组件</h4><p>假如我们写好了一些组件，接下去肯定还要引入和使用吧。但是你写了这么多组件，在每个地方一个个引用想要的是一件很麻烦的事情。我们最好是在一个初始的地方一次性全部引入，然后在用的地方直接使用</p>
+<blockquote>
+<p>(当然全部引入无可避免的会引入和打包不需要的东西，不过这是公共组件库的烦恼，我们自己写的肯定会全部用到)。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// 在文件开头初始引入所有的组件文件</div><div class="line">import b from &quot;./components/common/b.vue&quot;</div><div class="line">import c from &quot;./components/common/c.vue&quot;</div><div class="line"></div><div class="line">const components = [b,c];</div><div class="line"></div><div class="line">const install = function (Vue, opts = &#123;&#125;) &#123;</div><div class="line">	components.map(component =&gt; &#123;</div><div class="line">		Vue.component(component.name, component);</div><div class="line">	&#125;);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">export default install</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>然后直接在启动的main.js文件里面引入就好<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">import ui from &quot;install.js&quot;</div><div class="line">Vue.use(ui);</div></pre></td></tr></table></figure></p>
+<p>然后你就可以随意在任何一个组件里面直接调用了，比自己之前在每个组件里重复调用要方便一点。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;b v-model=&quot;data1&quot;&gt;&lt;/b&gt;</div><div class="line">&lt;c v-model=&quot;data2&quot;&gt;&lt;/c&gt;</div></pre></td></tr></table></figure></p>
+<p>好了，暂时到这里，都是自己的踩得坑和心得，希望对大家有所帮助吧，接下去还有的话再补充好了。</p>
 
       
     </div>
@@ -502,8 +522,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/header.jpg"
@@ -539,7 +568,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/technology/index.html">
+              <a href="/tags/index.html">
                 <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">标签</span>
               </a>
@@ -565,6 +594,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、子组件不允许修改父组件数据"><span class="nav-number">1.</span> <span class="nav-text">1、子组件不允许修改父组件数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Vue给每个组件提供了一个默认的父子传递事件v-model。"><span class="nav-number">2.</span> <span class="nav-text">2.Vue给每个组件提供了一个默认的父子传递事件v-model。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-全局一次性引用写好的组件"><span class="nav-number">3.</span> <span class="nav-text">3.全局一次性引用写好的组件</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
