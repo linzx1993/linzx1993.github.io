@@ -74,7 +74,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, linzx" />
+  <meta name="keywords" content="技术文章,javascript," />
 
 
 
@@ -90,17 +90,20 @@
 
 
 
-<meta name="description" content="linzx linzhixiang 林智翔 linzx1993@gmail.com">
-<meta property="og:type" content="website">
-<meta property="og:title" content="explainTools">
-<meta property="og:url" content="http://yoursite.com/tags/index.html">
+<meta name="description" content="记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。  事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。 自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西 1、子组件不允许修改父组件数据之前在写angular的父子组件传递">
+<meta name="keywords" content="技术文章,javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js中数组的原生方法">
+<meta property="og:url" content="http://yoursite.com/2017/10/29/手写Vue组件心得/index.html">
 <meta property="og:site_name" content="linzx">
-<meta property="og:description" content="linzx linzhixiang 林智翔 linzx1993@gmail.com">
+<meta property="og:description" content="记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。  事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。 自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西 1、子组件不允许修改父组件数据之前在写angular的父子组件传递">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-05-21T11:10:28.948Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/error1.png">
+<meta property="og:updated_time" content="2017-10-30T02:21:24.853Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="explainTools">
-<meta name="twitter:description" content="linzx linzhixiang 林智翔 linzx1993@gmail.com">
+<meta name="twitter:title" content="js中数组的原生方法">
+<meta name="twitter:description" content="记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。  事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。 自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西 1、子组件不允许修改父组件数据之前在写angular的父子组件传递">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/error1.png">
 
 
 
@@ -128,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/10/29/手写Vue组件心得/"/>
 
 
 
 
 
-  <title>explainTools | linzx</title>
+  <title>js中数组的原生方法 | linzx</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -170,7 +173,7 @@
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -289,25 +292,239 @@
             
 
   <div id="posts" class="posts-expand">
-  <header class="post-header">
+    
 
-	<h2 class="post-title" itemprop="name headline">explainTools</h2>
+  
 
+  
+  
+  
 
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/29/手写Vue组件心得/">
 
-</header>
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="linzx">
+    </span>
 
     
-    
-      <div class="tag-cloud">
-        <div class="tag-cloud-title">
-            目前共计 8 个标签
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">js中数组的原生方法</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-29T13:47:44+08:00">
+                2017-10-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/10/29/手写Vue组件心得/" class="leancloud_visitors" data-flag-title="js中数组的原生方法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,377
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
         </div>
-        <div class="tag-cloud-tags">
-          <a href="/tags/books/" style="font-size: 30px; color: #111">books</a> <a href="/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/tags/javascript/" style="font-size: 16.5px; color: #9d9d9d">javascript</a> <a href="/tags/jquery/" style="font-size: 12px; color: #ccc">jquery</a> <a href="/tags/vue/" style="font-size: 12px; color: #ccc">vue</a> <a href="/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/tags/《解释的工具-生活中的经济学原理》/" style="font-size: 25.5px; color: #404040">《解释的工具-生活中的经济学原理》</a> <a href="/tags/技术文章/" style="font-size: 21px; color: #6f6f6f">技术文章</a>
-        </div>
-      </div>
+      </header>
     
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。</p>
+</blockquote>
+<p>事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。</p>
+<p>自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西</p>
+<h4 id="1、子组件不允许修改父组件数据"><a href="#1、子组件不允许修改父组件数据" class="headerlink" title="1、子组件不允许修改父组件数据"></a>1、子组件不允许修改父组件数据</h4><p>之前在写angular的父子组件传递数据，子组件可以修改父组件传递进来的数据。不过在Vue中子组件不允许修改父组件穿进来的值，以vue举例来说<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&lt;!--父组件HTML内容--&gt;</div><div class="line">&lt;children-component :value=&quot;data&quot;&gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    props : [&quot;value&quot;],</div><div class="line">    created : &#123;</div><div class="line">        this.value = [5,6,7,8];</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>此举会引发一个非常常见的报错，<br><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/error1.png" alt="image"></p>
+<p>那么解决方法是什么呢，那就要看你需求了。比如传进来的是一个渲染列表，我需要的只是修改渲染的数据，那么可以emit出去，然后在父组件重新赋值，通过双向绑定，触发子组件的再次渲染。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">&lt;!--父组件HTML内容--&gt;</div><div class="line">&lt;children-component :value=&quot;data&quot; @changeProp=&quot;changeData&quot;&gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    methods : &#123;</div><div class="line">        changeData(value)&#123;</div><div class="line">            this.data = value;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    props : [&quot;value&quot;],</div><div class="line">    created : &#123;</div><div class="line">        this.$emit(&quot;changeProp&quot;,[5,6,7,8])</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>例子写的比较简单，其实原理就是emit一个数据到父组件上去，然后在父组件中接受到这个传递上来的新值，将data赋予新值，然后重新传递到了子组件，起到一个变向修改子组件的效果。</p>
+<hr>
+<p>被人提醒到一个方法是用.sync，这个方法也是可以的。之前一直以为是被废弃就没用，才发现它其实是在的。看了一下<a href="https://cn.vuejs.org/v2/guide/components.html#sync-修饰符" target="_blank" rel="external">.synv文档</a>，发现这其实是一个语法糖的形式展现出来。如文档所示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;!--日常使用语法糖形态--&gt;</div><div class="line">&lt;comp :foo.sync=&quot;bar&quot;&gt;&lt;/comp&gt;</div><div class="line">&lt;!--↓↓↓↓↓真实形态↓↓↓↓↓↓--&gt;</div><div class="line">&lt;comp :foo=&quot;bar&quot; @update:foo=&quot;val =&gt; bar = val&quot;&gt;&lt;/comp&gt;</div><div class="line">&lt;!--子组件js代码--&gt;</div><div class="line">this.$emit(&apos;update:foo&apos;, newValue)</div></pre></td></tr></table></figure></p>
+<p>个人感觉Vue框架其实还是不赞同直接修改数据，但是它帮你定义了一个update事件，让你在子组件可以直接显式调用，不需要自己去定义事件这么麻烦了。</p>
+<h4 id="2-Vue给每个组件提供了一个默认的父子传递事件v-model。"><a href="#2-Vue给每个组件提供了一个默认的父子传递事件v-model。" class="headerlink" title="2.Vue给每个组件提供了一个默认的父子传递事件v-model。"></a>2.Vue给每个组件提供了一个默认的父子传递事件v-model。</h4><p>但是你每次父子组件传递数据时，都要父子处定义一个事件是很麻烦的，vue则为每个组件提供了一个默认v-model的语法糖。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&lt;!--父组件HTML内容--&gt;</div><div class="line">&lt;children-component v-mode=&quot;data&quot; &gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    watch : &#123;</div><div class="line">        //可以在此处监听子组件传递上来的数据</div><div class="line">        data(n,o)&#123;</div><div class="line">            console.log(n,o);   //[5,6,7,8],[1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line"></div><div class="line">export default(&#123;</div><div class="line">    &lt;!--大家注意我下面这行代码是打了注释的，说明我在子组件没有定义任何属性--&gt;</div><div class="line">    //  props : [&quot;value&quot;]</div><div class="line">    &lt;!--并且我接下去直接在代码中使用了this.value(一个完全没有定义过的value)。--&gt;</div><div class="line">    created : &#123;</div><div class="line">        console.log(this.value);</div><div class="line">        this.$emit(&quot;input&quot;,[5,6,7,8]);  //当我想改变传进来值的时候</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>因为之前一直使用ng-model来用于表单组件的传递，所以开始对于v-mode也是这个印象，不过后面看了element-ui的源码才发现我想简单了，然后网上搜了一下对于这个语法糖的解释。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//注意，该组件不是表单组件</div><div class="line">&lt;children-component :value=&quot;data&quot; @input=&quot;data = arguments[0]&quot;&gt;&lt;/children-component&gt;</div></pre></td></tr></table></figure></p>
+<p>看了这行代码大家心里估计也能明白的差不多了，其实Vue只是帮我们把父组件上的两段声明合二为一了，同时再帮我们在子组件处直接省略了定义。语法糖说到底就是帮我们省力的嘛。</p>
+<h4 id="3-全局一次性引用写好的组件"><a href="#3-全局一次性引用写好的组件" class="headerlink" title="3.全局一次性引用写好的组件"></a>3.全局一次性引用写好的组件</h4><p>假如我们写好了一些组件，接下去肯定还要引入和使用吧。但是你写了这么多组件，在每个地方一个个引用想要的是一件很麻烦的事情。我们最好是在一个初始的地方一次性全部引入，然后在用的地方直接使用</p>
+<blockquote>
+<p>(当然全部引入无可避免的会引入和打包不需要的东西，不过这是公共组件库的烦恼，我们自己写的肯定会全部用到)。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// 在文件开头初始引入所有的组件文件</div><div class="line">import b from &quot;./components/common/b.vue&quot;</div><div class="line">import c from &quot;./components/common/c.vue&quot;</div><div class="line"></div><div class="line">const components = [b,c];</div><div class="line"></div><div class="line">const install = function (Vue, opts = &#123;&#125;) &#123;</div><div class="line">	components.map(component =&gt; &#123;</div><div class="line">		Vue.component(component.name, component);</div><div class="line">	&#125;);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">export default install</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>然后直接在启动的main.js文件里面引入就好<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">import ui from &quot;install.js&quot;</div><div class="line">Vue.use(ui);</div></pre></td></tr></table></figure></p>
+<p>然后你就可以随意在任何一个组件里面直接调用了，比自己之前在每个组件里重复调用要方便一点。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;b v-model=&quot;data1&quot;&gt;&lt;/b&gt;</div><div class="line">&lt;c v-model=&quot;data2&quot;&gt;&lt;/c&gt;</div></pre></td></tr></table></figure></p>
+<p>好了，暂时到这里，都是自己的踩得坑和心得，希望对大家有所帮助吧，接下去还有的话再补充好了。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术文章/" rel="tag"># 技术文章</a>
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/18/算法读后感/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
   </div>
 
 
@@ -339,8 +556,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/header.jpg"
@@ -402,6 +628,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、子组件不允许修改父组件数据"><span class="nav-number">1.</span> <span class="nav-text">1、子组件不允许修改父组件数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Vue给每个组件提供了一个默认的父子传递事件v-model。"><span class="nav-number">2.</span> <span class="nav-text">2.Vue给每个组件提供了一个默认的父子传递事件v-model。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-全局一次性引用写好的组件"><span class="nav-number">3.</span> <span class="nav-text">3.全局一次性引用写好的组件</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -526,6 +768,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
 
   
 

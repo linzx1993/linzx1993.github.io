@@ -299,7 +299,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/19/手写Vue组件心得/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/29/手写Vue组件心得/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="linzx">
@@ -318,7 +318,7 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/19/手写Vue组件心得/" itemprop="url">未命名</a></h2>
+                <a class="post-title-link" href="/2017/10/29/手写Vue组件心得/" itemprop="url">js中数组的原生方法</a></h2>
         
 
         <div class="post-meta">
@@ -330,8 +330,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-19T21:12:01+08:00">
-                2017-10-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-29T13:47:44+08:00">
+                2017-10-29
               </time>
             
 
@@ -341,6 +341,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -348,7 +370,7 @@
 
           
           
-             <span id="/2017/10/19/手写Vue组件心得/" class="leancloud_visitors" data-flag-title="">
+             <span id="/2017/10/29/手写Vue组件心得/" class="leancloud_visitors" data-flag-title="js中数组的原生方法">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -373,7 +395,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  1,203
+                  1,377
                 </span>
               
 
@@ -418,6 +440,9 @@
 <p>此举会引发一个非常常见的报错，<br><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/error1.png" alt="image"></p>
 <p>那么解决方法是什么呢，那就要看你需求了。比如传进来的是一个渲染列表，我需要的只是修改渲染的数据，那么可以emit出去，然后在父组件重新赋值，通过双向绑定，触发子组件的再次渲染。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">&lt;!--父组件HTML内容--&gt;</div><div class="line">&lt;children-component :value=&quot;data&quot; @changeProp=&quot;changeData&quot;&gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    methods : &#123;</div><div class="line">        changeData(value)&#123;</div><div class="line">            this.data = value;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    props : [&quot;value&quot;],</div><div class="line">    created : &#123;</div><div class="line">        this.$emit(&quot;changeProp&quot;,[5,6,7,8])</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
 <p>例子写的比较简单，其实原理就是emit一个数据到父组件上去，然后在父组件中接受到这个传递上来的新值，将data赋予新值，然后重新传递到了子组件，起到一个变向修改子组件的效果。</p>
+<hr>
+<p>被人提醒到一个方法是用.sync，这个方法也是可以的。之前一直以为是被废弃就没用，才发现它其实是在的。看了一下<a href="https://cn.vuejs.org/v2/guide/components.html#sync-修饰符" target="_blank" rel="external">.synv文档</a>，发现这其实是一个语法糖的形式展现出来。如文档所示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;!--日常使用语法糖形态--&gt;</div><div class="line">&lt;comp :foo.sync=&quot;bar&quot;&gt;&lt;/comp&gt;</div><div class="line">&lt;!--↓↓↓↓↓真实形态↓↓↓↓↓↓--&gt;</div><div class="line">&lt;comp :foo=&quot;bar&quot; @update:foo=&quot;val =&gt; bar = val&quot;&gt;&lt;/comp&gt;</div><div class="line">&lt;!--子组件js代码--&gt;</div><div class="line">this.$emit(&apos;update:foo&apos;, newValue)</div></pre></td></tr></table></figure></p>
+<p>个人感觉Vue框架其实还是不赞同直接修改数据，但是它帮你定义了一个update事件，让你在子组件可以直接显式调用，不需要自己去定义事件这么麻烦了。</p>
 <h4 id="2-Vue给每个组件提供了一个默认的父子传递事件v-model。"><a href="#2-Vue给每个组件提供了一个默认的父子传递事件v-model。" class="headerlink" title="2.Vue给每个组件提供了一个默认的父子传递事件v-model。"></a>2.Vue给每个组件提供了一个默认的父子传递事件v-model。</h4><p>但是你每次父子组件传递数据时，都要父子处定义一个事件是很麻烦的，vue则为每个组件提供了一个默认v-model的语法糖。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&lt;!--父组件HTML内容--&gt;</div><div class="line">&lt;children-component v-mode=&quot;data&quot; &gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    watch : &#123;</div><div class="line">        //可以在此处监听子组件传递上来的数据</div><div class="line">        data(n,o)&#123;</div><div class="line">            console.log(n,o);   //[5,6,7,8],[1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line"></div><div class="line">export default(&#123;</div><div class="line">    &lt;!--大家注意我下面这行代码是打了注释的，说明我在子组件没有定义任何属性--&gt;</div><div class="line">    //  props : [&quot;value&quot;]</div><div class="line">    &lt;!--并且我接下去直接在代码中使用了this.value(一个完全没有定义过的value)。--&gt;</div><div class="line">    created : &#123;</div><div class="line">        console.log(this.value);</div><div class="line">        this.$emit(&quot;input&quot;,[5,6,7,8]);  //当我想改变传进来值的时候</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
 <p>因为之前一直使用ng-model来用于表单组件的传递，所以开始对于v-mode也是这个印象，不过后面看了element-ui的源码才发现我想简单了，然后网上搜了一下对于这个语法糖的解释。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//注意，该组件不是表单组件</div><div class="line">&lt;children-component :value=&quot;data&quot; @input=&quot;data = arguments[0]&quot;&gt;&lt;/children-component&gt;</div></pre></td></tr></table></figure></p>
 <p>看了这行代码大家心里估计也能明白的差不多了，其实Vue只是帮我们把父组件上的两段声明合二为一了，同时再帮我们在子组件处直接省略了定义。语法糖说到底就是帮我们省力的嘛。</p>
@@ -2607,7 +2632,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
+              <a href="/technology/index.html">
                 <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">标签</span>
               </a>
