@@ -299,6 +299,242 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/19/《JavaScript 正则表达式迷你书》读后感/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="linzx">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/19/《JavaScript 正则表达式迷你书》读后感/" itemprop="url">js中数组的原生方法</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-19T13:47:44+08:00">
+                2017-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/11/19/《JavaScript 正则表达式迷你书》读后感/" class="leancloud_visitors" data-flag-title="js中数组的原生方法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  2,417
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>国庆时间看到作者出版了一本正则表达式的书，因为之前一直对模板好奇，于是就去作者的网盘里面下载了这一本书的pdf版观看。最近看完之后觉得作者写的很棒，弥补了自己很多正则的基础 知识。附上链接<a href="https://zhuanlan.zhihu.com/p/29707385?utm_source=com.daimajia.gold&amp;utm_medium=social" target="_blank" rel="external">《JavaScript 正则表达式迷你书》问世了！</a>。</p>
+<p>文章主要记录了一下自己的学习心得</p>
+<h4 id="1-复杂的正则表达式可以由几个简单的正则表达式组合而成"><a href="#1-复杂的正则表达式可以由几个简单的正则表达式组合而成" class="headerlink" title="1. 复杂的正则表达式可以由几个简单的正则表达式组合而成"></a>1. 复杂的正则表达式可以由几个简单的正则表达式组合而成</h4><p>记得之前每次写密码验证的时候，总希望一个正则表达式搞定全部的情况，看完书后觉得原来没有必要。</p>
+<p>以密码验证为例出题：<br><strong>密码长度 6-12 位，由数字、小写字符和大写字母组成，但必须至少包括 2 种字符</strong>。大家可以想一下怎么实现。</p>
+<p>书中一开始得出了一个非常复杂的正则表达式,但是其实后期维护修改未必简单，而且换一个同事来维护，刚开始理解也很辛苦。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;!--复杂版正则表达式--&gt;</div><div class="line">let regex = /(?!^[0-9]&#123;6,12&#125;$)(?!^[a-z]&#123;6,12&#125;$)(?!^[A-Z]&#123;6,12&#125;$)^[0-9A-Za-z]&#123;6,12&#125;$/;</div><div class="line"></div><div class="line">&lt;!--简单易懂版正则表达式--&gt;</div><div class="line">let regex1 = /^[0-9A-Za-z]&#123;6,12&#125;$/; //6-12位的数字、小写字符和大写字母组成</div><div class="line">let regex2 = /^[0-9]&#123;6,12&#125;$/;   //不包含数字（就是只包含大小写字母）</div><div class="line">let regex3 = /^[A-Z]&#123;6,12&#125;$/;   //不包含大写字母（就是只包含数字和小写）</div><div class="line">let regex4 = /^[a-z]&#123;6,12&#125;$/;   //不包含小写字母（就是只包含数字和大写）</div><div class="line">function checkPassword (string) &#123;</div><div class="line">    if (!regex1.test(string)) return false;</div><div class="line">    if (regex2.test(string)) return false;</div><div class="line">    if (regex3.test(string)) return false;</div><div class="line">    if (regex4.test(string)) return false;</div><div class="line">    return true;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到，第一种对于我这种刚开始实战不多的，颇有一点炫技的表现（也有可能是我太菜）。第二种一看，会舒服很多，高可读性和高可维护性。</p>
+<p>我个人认为在团队合作中，第二种对于后期伙伴的维护应该是更佳的。</p>
+<hr>
+<h4 id="2-的各个含义"><a href="#2-的各个含义" class="headerlink" title="2. ?的各个含义"></a>2. ?的各个含义</h4><p>在看书的时候，因为之前正则的基础很薄弱，看见书中频频出现的？用在不同地方实现不一样的效果，我是一脸懵逼，经常要上百度看一下？用在这里表示什么意思。这里小总结一下</p>
+<h5 id="2-1-本身符号“？”"><a href="#2-1-本身符号“？”" class="headerlink" title="2.1 本身符号“？”"></a>2.1 本身符号“？”</h5><p>表达自身一个“？”字符，但是因为？在正则表达式中的作用太多了，所以当它需要表达自身的时候，需要进行一次转义<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">\?</div></pre></td></tr></table></figure></p>
+<h5 id="2-2-表示匹配次数"><a href="#2-2-表示匹配次数" class="headerlink" title="2.2 表示匹配次数,"></a>2.2 表示匹配次数,</h5><p>这是常见的第一种用法，允许重复匹配的次数，0次或者1次。</p>
+<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">let regex1 = /\d*/;</div><div class="line">let str = &quot;12345&quot;;</div><div class="line">str.match(regex);   //[&quot;12345&quot;, index: 0, input: &quot;12345&quot;]</div><div class="line"></div><div class="line"></div><div class="line">//======使用了？号======//</div><div class="line">let regex = /\d?/;  //最大允许匹配一次数字</div><div class="line">let str = &quot;12345&quot;;</div><div class="line">str.match(regex);   //[&quot;1&quot;, index: 0, input: &quot;1234&quot;]</div></pre></td></tr></table></figure></p>
+<h5 id="2-3-表示懒惰匹配"><a href="#2-3-表示懒惰匹配" class="headerlink" title="2.3 表示懒惰匹配"></a>2.3 表示懒惰匹配</h5><p>这是常见的第二种用法，因为正则表达式默认是贪婪匹配的，所以很多时候我们会在某组匹配字符后加一个问号表示非贪婪匹配    </p>
+<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">let regex = /\d&#123;1,3&#125;/</div><div class="line">let str = &quot;12345&quot;;</div><div class="line">str.match(regex);   //[&quot;123&quot;, index: 0, input: &quot;12345&quot;]</div><div class="line"></div><div class="line"></div><div class="line">//======添加了？号======//</div><div class="line">let regex = /\d&#123;1,3&#125;?/</div><div class="line">let str = &quot;12345&quot;;</div><div class="line">str.match(regex);   //[&quot;1&quot;, index: 0, input: &quot;1234&quot;]</div></pre></td></tr></table></figure></p>
+<h5 id="2-4-配合字符实现位置匹配"><a href="#2-4-配合字符实现位置匹配" class="headerlink" title="2.4 配合字符实现位置匹配"></a>2.4 配合字符实现位置匹配</h5><p>书中讲到了 这么一句话</p>
+<blockquote>
+<p>正则表达式是匹配模式，要么匹配字符，要么匹配位置。请记住这句话。</p>
+<p>关于”位置”这个概念的理解推荐看书中的第二章</p>
+</blockquote>
+<p>而当你匹配位置的时候，两个匹配位置的正则表达式就非常关键了。</p>
+<p>(?=p)，其中 p 是一个子模式，即 p 前面的位置，或者说，该位置后面的字符要匹配 p。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let result = &quot;hello&quot;.replace(/(?=l)/g, &apos;#&apos;);</div><div class="line">console.log(result);    // &quot;he#l#lo&quot;</div></pre></td></tr></table></figure></p>
+<p>而 (?!p) 就是 (?=p) 相反的意思，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let result = &quot;hello&quot;.replace(/(?!l)/g, &apos;#&apos;);</div><div class="line">console.log(result);    // &quot;#h#ell#o#&quot;</div></pre></td></tr></table></figure></p>
+<p>这两个用法在数字格式化的时候有非常大的用处。给大家出个题目吧，<strong>如何实现数字的千位分隔符表示</strong>。比如讲1234567转化为12,345,678。</p>
+<p>大家思考一下</p>
+<p>….</p>
+<p>….</p>
+<p>….</p>
+<p><strong>答案</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let regex = /(?!^)(?=(\d&#123;3&#125;)+$)/g;</div><div class="line">&quot;12345678&quot;.replace(regex1,&quot;,&quot;); // &quot;12,345,678&quot;</div></pre></td></tr></table></figure></p>
+<p>具体实现看不懂还是推荐去看原书，作者写的很好，我相信对大家帮助肯定也很大。</p>
+<h5 id="2-5-非捕获模式"><a href="#2-5-非捕获模式" class="headerlink" title="2.5 非捕获模式"></a>2.5 非捕获模式</h5><p>还有最后一种不怎么常见（可能是没怎么见过）的用法(?:),表示非捕获模式。我是这么理解的（不知道自己理解的对不对），就是当你遇到匹配的字符时，它并没有马上捕获匹配的内容，并且记录下拉，而是继续匹配下去作为为整体匹配服务。讲的不好，大家还是看例子实在吧（手动捂脸）。</p>
+<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let regex = /(?:a)(b)(c)/; &quot;abcabc&quot;.match(regex)</div><div class="line">//结果 [&quot;abc&quot;, &quot;b&quot;, &quot;c&quot;]</div><div class="line">// m[0] 是/(?:a)(b)(c)/匹配到的整个字符串，这里包括了a</div><div class="line">// m[1] 是捕获组1，即(b)匹配的子字符串substring or sub sequence</div><div class="line">// m[2] 是捕获组2，即(c)匹配到的</div></pre></td></tr></table></figure></p>
+<p>大家可以注意到第一个括号里面的<strong>a</strong>并没有被提取出来，但是整体匹配的字符时有<strong>a</strong>的。这就是我理解的非捕获模式，为整体存在的匹配。</p>
+<hr>
+<h4 id="3-回溯的学习"><a href="#3-回溯的学习" class="headerlink" title="3. 回溯的学习"></a>3. 回溯的学习</h4><p>性能和效率始终是绕不开的一环，文中提到回溯造成原因我感觉主要是由2点造成的，</p>
+<ul>
+<li>一是由于匹配默认是贪婪的</li>
+<li>二是由于匹配有时候是懒惰的。(使用分支情况下)</li>
+</ul>
+<h5 id="3-1-贪婪匹配造成的回溯"><a href="#3-1-贪婪匹配造成的回溯" class="headerlink" title="3.1 贪婪匹配造成的回溯"></a>3.1 贪婪匹配造成的回溯</h5><p>先说第一种情况，贪婪匹配造成的回溯，举个书中的例子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let str = &apos;&quot;abc&quot;de&apos;;</div><div class="line">let regex = /&quot;.*&quot;/;</div><div class="line">str.match(regex);   //  [&apos;&quot;abc&quot;&apos;, index: 0, input: &apos;&quot;abc&quot;de&apos;]</div></pre></td></tr></table></figure></p>
+<p>当用此正则表达式去匹配字符串的时候，发现最后无法完成整体匹配的时候，会不断回吐一个字符再次去尝试整体正确的匹配。大家可以结合下图理解。<br><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/regex-1.png" alt="image"></p>
+<p>书中最后讲到回溯是<strong>非常影响效率</strong>的，但是自己在写例子测试的时候，发现其实时间基本上没有任何差别，不知道是不是因为自己测试的正则比较简单，还是浏览器现在对于正则的优化做的比较好，总之没有达到书中说的到<strong>非常影响效率</strong>的程度。</p>
+<p><strong>效率对比例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">function test()&#123;</div><div class="line">    let str = &apos;&quot;abc&quot;dddddddddddddddddddddddddddddde&apos;;</div><div class="line">    let regex = /&quot;.*&quot;/;</div><div class="line">&#125;;</div><div class="line">console.time()</div><div class="line">for(var i = 0;i&lt; 1000000000;i++)&#123;test()&#125;</div><div class="line">console.timeEnd()</div><div class="line">//default: 2321.663818359375ms</div><div class="line"></div><div class="line">//========修改为减少贪婪回溯的写法========//</div><div class="line">function test()&#123;</div><div class="line">    let str = &apos;&quot;abc&quot;dddddddddddddddddddddddddddddde&apos;;</div><div class="line">    let regex = /&quot;[^&quot;]]*&quot;/;</div><div class="line">&#125;;</div><div class="line">console.time()</div><div class="line">for(var i = 0;i&lt; 1000000000;i++)&#123;test()&#125;</div><div class="line">console.timeEnd()</div><div class="line"></div><div class="line">//default: 2327.2890625ms</div></pre></td></tr></table></figure></p>
+<p>对于这种回溯的解决方法来说：</p>
+<ul>
+<li>方法1 ：写尽量正确的匹配。像上面例子中的修改版就是这种解决方法，</li>
+<li>方法2 ：尽可能少的匹配。比如加个惰性量词“？”。(其实就是尽量减少贪婪匹配)</li>
+</ul>
+<h5 id="3-2懒惰匹配造成的回溯"><a href="#3-2懒惰匹配造成的回溯" class="headerlink" title="3.2懒惰匹配造成的回溯"></a>3.2懒惰匹配造成的回溯</h5><p>然而并不是所有回溯的情况都是由贪婪造成的。比如当我们在使用分支匹配的时候。 </p>
+<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let str = &apos;candy&apos;;</div><div class="line">let regex =/can|candy/;</div><div class="line">str.match(regex);   //[&quot;can&quot;, index: 0, input: &quot;candy&quot;]</div></pre></td></tr></table></figure></p>
+<p>当我们用/can|candy/去匹配字符串 “candy”，得到的结果是 “can”，因为分支会<br>一个一个尝试，如果前面的满足了，后面就不会再试验了。但是如果我们的目标字符串是“candy”的时候，那怎么办呢。</p>
+<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let str = &apos;candy&apos;;</div><div class="line">let regex = /^(?:can|candy)$/;</div><div class="line">str.match(regex);   //[&quot;candy&quot;, index: 0, input: &quot;candy&quot;]</div></pre></td></tr></table></figure></p>
+<p>大家可以先看图理解一下懒惰造成的回溯<br><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/regex-2.png" alt="image"></p>
+<hr>
+<h4 id="4-跟正则有关几个正则方法"><a href="#4-跟正则有关几个正则方法" class="headerlink" title="4. 跟正则有关几个正则方法"></a>4. 跟正则有关几个正则方法</h4><p>字符串对象和正则对象提供了很多跟正则有关的基础方法，很多方法都都有很好的使用场景。</p>
+<h5 id="4-1-RegExp-test"><a href="#4-1-RegExp-test" class="headerlink" title="4.1 RegExp#test"></a>4.1 RegExp#test</h5><p>比如我在表单验证的场景里，用户每次输入值我需要进行判断用户是否输入正确，我可是使用regex.test()方法来确定是否给用户提示</p>
+<p><strong>只允许输入数字</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;input onkeyup=&quot;test(this.value)&quot; /&gt;</div><div class="line"></div><div class="line">function test(value)&#123;</div><div class="line">    let regex = /[^\d]/g;</div><div class="line">	if(regex.test(value))console.log(&quot;请输入数字&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="4-2-String-replace"><a href="#4-2-String-replace" class="headerlink" title="4.2 String#replace"></a>4.2 String#replace</h5><p>这个replace方法用处实在是太大了，已经到了可以单开一篇的地步了，大家可以前往这里去看<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/replace" target="_blank" rel="external">MDN上replace的文档</a>，这里就不详细介绍了。这里写个简单的例子</p>
+<p><strong>最简单的模板编译</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">let str = &apos;我是&#123;&#123;name&#125;&#125;，年龄&#123;&#123;age&#125;&#125;，性别&#123;&#123;sex&#125;&#125;&apos;;</div><div class="line">let obj = &#123;</div><div class="line">		name:&apos;姓名&apos;,</div><div class="line">		age:18,</div><div class="line">		sex: &apos;男&apos;</div><div class="line">	&#125;</div><div class="line">let strEnd = str.replace(/\&#123;\&#123;(.+?)\&#125;\&#125;/g,function (match, m1) &#123;</div><div class="line">	return obj(m1)</div><div class="line">&#125;)</div><div class="line">//  &quot;我是姓名，年龄18，性别undefined&quot;</div></pre></td></tr></table></figure></p>
+<h5 id="4-3-String-search"><a href="#4-3-String-search" class="headerlink" title="4.3 String#search"></a>4.3 String#search</h5><p>这个方法感觉和indexOf效率有一些相似，都是寻找符合匹配的下标。不过indexOf方法是为字符串使用的，而search是为正则表达式实现的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let str = &apos;abc123456&apos;;</div><div class="line">let regex = /\d/;</div><div class="line">console.log(str.search(regex)); // 3</div></pre></td></tr></table></figure></p>
+<h5 id="4-3-String-split"><a href="#4-3-String-split" class="headerlink" title="4.3 String#split"></a>4.3 String#split</h5><p>字符串的split方法同样支持正则表达式进行切割<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var regex = /,/;</div><div class="line">var string = &quot;html,css,javascript&quot;;</div><div class="line">console.log( string.split(regex) );</div></pre></td></tr></table></figure></p>
+<h5 id="4-4-String-match"><a href="#4-4-String-match" class="headerlink" title="4.4 String#match"></a>4.4 String#match</h5><p>这个方法更多是为了提取匹配内容而存在的。当你的正则表达式里面有小括号（）的存在时，match方法可以帮你提取出字符串中符合括号正则的表达式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var regex = /^(\d&#123;4&#125;)\D(\d&#123;2&#125;)\D(\d&#123;2&#125;)$/;</div><div class="line">var string = &quot;2017-06-26&quot;;</div><div class="line">console.log( string.match(regex) );</div><div class="line">// [&quot;2017-06-26&quot;, &quot;2017&quot;, &quot;06&quot;, &quot;26&quot;, index: 0, input: &quot;2017-06-26&quot;]</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/29/手写Vue组件踩坑与心得/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -647,174 +883,6 @@
 </table>
 <h4 id="三-快速查找排序算法"><a href="#三-快速查找排序算法" class="headerlink" title="三 快速查找排序算法"></a>三 快速查找排序算法</h4><p>快速查找排序算法：最常见的排序算法，举例描述：先找出一个数组中最小的，推出到新数组中，然后来n次遍历，得出由小到大的新数组。时间复杂度为O(n2);</p>
 <h4 id="四递归调用"><a href="#四递归调用" class="headerlink" title="四递归调用"></a>四递归调用</h4><p>主要讲解了基本的栈和递归调用，最后讲到的高级递归主题尾递归需要看一下</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/16/正则表达式读后感/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="linzx">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="linzx">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/16/正则表达式读后感/" itemprop="url">未命名</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-16T20:22:05+08:00">
-                2017-10-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/10/16/正则表达式读后感/" class="leancloud_visitors" data-flag-title="">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计</span>
-                
-                <span title="字数统计">
-                  211
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长</span>
-                
-                <span title="阅读时长">
-                  1
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>1回溯的概念</p>
-<p>2.正则表达式的顺序</p>
-<p>3?的各个含义</p>
-<p>4各个方法集合</p>
-<p>String#search<br>String#split<br>String#match<br>String#replace<br>RegExp#test<br>RegExp#exec</p>
-<p>不解之处 ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var time = /^((0?|1)[0-9])|(2[0-3]):((0?|[1-5])[0-9])$/</div><div class="line"></div><div class="line">var time = /^(0?[0-9]|1[0-9]|[2][0-3]):(0?[0-9]|[1-5][0-9])$/;</div></pre></td></tr></table></figure></p>
-<p>4复杂的正则可以拆分成好几个进行验证，如密码这一块，密码长度 6-12 位，由数字、小写字符和大写字母组成，但必须至少包括 2 种字符，则可以拆分成</p>
-<ul>
-<li><p>同时包含数字和小写字母</p>
-<p>同时包含数字和大写字母</p>
-</li>
-<li>同时包含小写字母和大写字母</li>
-<li>同时包含数字、小写字母和大写字母</li>
-<li>以上的 4 种情况是或的关系（实际上，可以不用第 4 条）。</li>
-</ul>
 
           
         
@@ -2637,7 +2705,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/technology/index.html">
+              <a href="/tags/index.html">
                 <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">标签</span>
               </a>
