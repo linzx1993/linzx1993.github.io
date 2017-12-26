@@ -299,6 +299,216 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/12/重温vue双向绑定原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="linzx">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/12/重温vue双向绑定原理/" itemprop="url">重温vue双向绑定原理</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-12T23:47:44+08:00">
+                2017-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/vue/" itemprop="url" rel="index">
+                    <span itemprop="name">vue</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/08/12/重温vue双向绑定原理/" class="leancloud_visitors" data-flag-title="重温vue双向绑定原理">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  2,224
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>摘要：因为项目刚开始用的vue框架，所以早期也研究了一下他的代码看过相关文章的解析，说说也能说个七七八八。不过今天再去看以前的demo的时候，发现忽然一知半解了，说明当时可能也没有理解透，所以写篇文章让自己理解的更深一些。</p>
+</blockquote>
+<p>本篇文章大多数知识点实在学习了这篇<a href="http://www.cnblogs.com/kidney/p/6052935.html?utm_source=gold_browser_extension" target="_blank" rel="external">Vue.js双向绑定的实现原理</a>之后避免遗忘，所以写这个温故知新，加强理解。</p>
+<p><a href="https://github.com/linzx1993/APS-ng-vue-/tree/master/mes" target="_blank" rel="external">项目位置链接</a></p>
+<hr>
+<h4 id="一、访问器属性"><a href="#一、访问器属性" class="headerlink" title="一、访问器属性"></a>一、访问器属性</h4><p>如果稍微看过相关文章的人都知道vue的实现是依靠Object.defineproperty()来实现的。每个对象都有自己内置的set和get方法，当每次使用set时，去改变引用该属性的地方，从而实现数据的双向绑定。简单举例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">const obj = &#123;&#125;;</div><div class="line">Object.defineProperty(obj,&apos;hello&apos;,&#123;</div><div class="line">    get(value)&#123;</div><div class="line">        console.log(&quot;啦啦啦，方法被调用了&quot;);</div><div class="line">    &#125;,</div><div class="line">    set(newVal,oldVal)&#123;</div><div class="line">        console.log(&quot;set方法被调用了，新的值为&quot; + newVal)</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line">obj.hello; //get方法被调用了</div><div class="line">obj.hello = &quot;1234&quot;; //set方法被调用了</div></pre></td></tr></table></figure>
+<h4 id="二、极简双向绑定的实现"><a href="#二、极简双向绑定的实现" class="headerlink" title="二、极简双向绑定的实现"></a>二、极简双向绑定的实现</h4><p>基于这个原理，如果想实现显示文字根据输入input变化，实现一个简单版的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;input type=&quot;text&quot; id=&quot;a&quot;/&gt;</div><div class="line">&lt;span id=&quot;b&quot;&gt;&lt;/span&gt;</div><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line">    const obj = &#123;&#125;;</div><div class="line">    Object.defineProperty(obj,&apos;hello&apos;,&#123;</div><div class="line">        get()&#123;</div><div class="line">            console.log(&quot;啦啦啦，方法被调用了&quot;);</div><div class="line">        &#125;,</div><div class="line">        set(newVal)&#123;</div><div class="line">            document.getElementById(&apos;a&apos;).value = newVal;</div><div class="line">            document.getElementById(&apos;b&apos;).innerHTML = newVal;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">    document.addEventListener(&apos;keyup&apos;,function(e)&#123;</div><div class="line">        obj.hello = e.target.value;</div><div class="line">    &#125;)</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure></p>
+<p>上面这个实例实现的效果是：随着文本框输入文字的变化，span会同步显示相同的文字内容。同时在控制台用js改变obj.hello，视图也会更新。这样就实现了view-&gt;model，model-&gt;view的双向绑定。</p>
+<h4 id="三、拆解任务，实现vue的双向数据绑定"><a href="#三、拆解任务，实现vue的双向数据绑定" class="headerlink" title="三、拆解任务，实现vue的双向数据绑定"></a>三、拆解任务，实现vue的双向数据绑定</h4><p>我们最终实现下面vue的效果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;app&quot;&gt;</div><div class="line">    &lt;input type=&quot;text&quot; v-model=&quot;text&quot;/&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">&lt;script&gt;</div><div class="line">const vm = new Vue(&#123;</div><div class="line">    id : &quot;app&quot;,</div><div class="line">    data : &#123;</div><div class="line">        text : &quot;hello world&quot;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure></p>
+<p>1.输入框的文本与文本节点的data数据绑定<br>2.输入框的内容发生变化时，data中的数据也发生变化，实现view-&gt;model的变化<br>3.data中的数据发生变化时，文本节点的内容同步发生变化，实现model-&gt;view的变化</p>
+<p>要实现1的要求，则又涉及到了dom的编译，其中有一个DocumentFragment的知识点。</p>
+<h4 id="四、DocumentFragment"><a href="#四、DocumentFragment" class="headerlink" title="四、DocumentFragment"></a>四、DocumentFragment</h4><p>众所周知，vue吸收了react虚拟DOM的优点，使用DocumentFragment处理节点，其性能和速度远胜于直接操作dom。vue进行编译时，就是将所有挂载在dom上的子节点进行劫持到使用DocumentFragment处理节点，等到所有操作都执行完毕，将DocumentFragment再一模一样返回到挂载的目标上。</p>
+<p>先实现一段劫持函数，将要操作的dom全部劫持到DocumentFragment中，然后再append会原位置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;app&quot;&gt;</div><div class="line">    &lt;input type=&quot;text&quot; v-model=&quot;text&quot;/&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">&lt;script&gt;</div><div class="line">const app = document.getElementById(&quot;app&quot;);</div><div class="line">const nodetoFragment = (node) =&gt; &#123;</div><div class="line">    const flag = document.createDocumentFragment();</div><div class="line">    let child;</div><div class="line">    whild(child = node.firstChild)&#123;</div><div class="line">        flag.appendChild(child);//不断劫持挂载元素下的所有dom节点到创建的DocumentFragment</div><div class="line">    &#125;</div><div class="line">    return flag</div><div class="line">&#125;</div><div class="line">const dom = nodetoFragment(app);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure></p>
+<h4 id="五、数据初始化绑定"><a href="#五、数据初始化绑定" class="headerlink" title="五、数据初始化绑定"></a>五、数据初始化绑定</h4><p>当已经获取到所有的dom元素之后，则需要对数据进行初始化绑定，这里简单涉及到了模板的编译。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line">//  编译HTML模板</div><div class="line">	const compile = (node,vm) =&gt; &#123;</div><div class="line">		const regex = /\&#123;\&#123;(.*)\&#125;\&#125;/;//为临时正则表达式，为demo而生</div><div class="line">		//如果节点类型为元素的话</div><div class="line">		if(node.nodeType === 1)&#123;</div><div class="line">			const attrs = node.attributes;//学到一个新属性。。。</div><div class="line">			for(let i = 0;i &lt; attrs.length; i++)&#123;</div><div class="line">				let attr = attrs[i];</div><div class="line">				if(attr.nodeName === &quot;v-model&quot;)&#123;</div><div class="line">					let name = attr.nodeValue;</div><div class="line">					node.addEventListener(&quot;input&quot;,function (e) &#123;</div><div class="line">					    vm.data[name] = e.target.value;</div><div class="line">					&#125;)</div><div class="line">					node.value = vm.data[name];</div><div class="line">					node.removeAttribute(&quot;v-model&quot;);</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		//如果节点类型为文本的话</div><div class="line">		if(node.nodeType === 3)&#123;</div><div class="line">			if(regex.test(node.nodeValue))&#123;</div><div class="line">				let name = RegExp.$1;//获取搭配匹配的字符串，又学到了。。。</div><div class="line">				name = name.trim();</div><div class="line">				node.nodeValue = vm.data[name];</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;;</div><div class="line"></div><div class="line">	//劫持挂载元素到虚拟dom</div><div class="line">	let nodeToFragment = (node,vm) =&gt; &#123;</div><div class="line">		const flag = document.createDocumentFragment();</div><div class="line">		let child;</div><div class="line">		while(child = node.firstChild)&#123;</div><div class="line">			compile(child,vm);//绑定数据，插入到虚拟DOM中</div><div class="line">			flag.appendChild(child);</div><div class="line">		&#125;</div><div class="line">		return flag;</div><div class="line">	&#125;;</div><div class="line"></div><div class="line">	//初始化</div><div class="line">	class Vue &#123;</div><div class="line">		constructor(option)&#123;</div><div class="line">			this.data = option.data;</div><div class="line">			let id = option.el;</div><div class="line">			let dom = nodeToFragment(document.getElementById(id),this);</div><div class="line">			document.getElementById(id).appendChild(dom);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	const vm = new Vue(&#123;</div><div class="line">		el : &quot;app&quot;,</div><div class="line">		data : &#123;</div><div class="line">			text : &quot;hello world&quot;</div><div class="line">		&#125;</div><div class="line">	&#125;)</div></pre></td></tr></table></figure>
+<p>通过以上代码先实现了第一个要求，文本框和文本节点已经出现了hello woeld了</p>
+<h4 id="六、响应式的数据绑定"><a href="#六、响应式的数据绑定" class="headerlink" title="六、响应式的数据绑定"></a>六、响应式的数据绑定</h4><p>接下来我们要实现数据双向绑定的第一步，即view-&gt;model的绑定。根据之前那个简单的例子看到，我们实时获取input中的值，通过Object.defineProperty将data中的text设置为vm的访问器属性，通过set方法，当我们在设置vm.data的值时，实现数据层的绑定。在这一步，set中要做的操作是更新属性的值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">let defineReactive = (obj,key,val) =&gt; &#123;</div><div class="line">    Object.defineProperty(obj,key,&#123;</div><div class="line">        get(val)&#123;</div><div class="line">            return val;</div><div class="line">        &#125;</div><div class="line">    	set(newVal,oldVal)&#123;</div><div class="line">    	    if(newVal === oldVal) return;</div><div class="line">    	    val = newVal;</div><div class="line">    	    console.log(val);</div><div class="line">    	&#125;</div><div class="line">    &#125;)</div><div class="line">&#125;;</div><div class="line"></div><div class="line">//监听数据</div><div class="line">let observe = (obj,vm) =&gt; &#123;</div><div class="line">	Object.keys(obj).forEach((key)=&gt;&#123;</div><div class="line">		defineReactive(vm.data,key,obj[key]);</div><div class="line">	&#125;)</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h4 id="七、订阅-发布模式（subscribe-amp-publish）"><a href="#七、订阅-发布模式（subscribe-amp-publish）" class="headerlink" title="七、订阅/发布模式（subscribe&amp;publish）"></a>七、订阅/发布模式（subscribe&amp;publish）</h4><p> text 属性变化了，set方法触发了，可以通过view层的改变实时改变数据，可是并没有改变文本节点的数据。一个新的知识点：订阅发布模式。</p>
+<p> 订阅发布模式（又称为观察者模式）定义了一种一对多的关系，让多个观察者同时监听一个主题对象，这个主体对象的改变会通知所有观察者对象。</p>
+<p> 发布者发出通知=&gt;主题对象收到通知并推送给订阅者=&gt;订阅者执行操作<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"> //	三个订阅者</div><div class="line">	let sub1 = &#123;updata()&#123;console.log(1);&#125;&#125;;</div><div class="line">	let sub2 = &#123;updata()&#123;console.log(2);&#125;&#125;;</div><div class="line">	let sub3 = &#123;updata()&#123;console.log(3);&#125;&#125;;</div><div class="line"></div><div class="line">	//  一个主题发布器</div><div class="line">	class Dep&#123;</div><div class="line">		constructor()&#123;</div><div class="line">			this.subs = [sub1,sub2,sub3];</div><div class="line">		&#125;</div><div class="line">		notify()&#123;</div><div class="line">			subs.forEach((sub) =&gt; &#123;</div><div class="line">				sub.updata();</div><div class="line">			&#125;)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	const dep = new Dep();</div><div class="line">//	一个发布者</div><div class="line">	const pub = &#123;</div><div class="line">		publish()&#123;</div><div class="line">		    dep.notipy();</div><div class="line">		&#125;</div><div class="line">	&#125;;</div><div class="line">	pub.publish();</div></pre></td></tr></table></figure></p>
+<p>上图为一个简单实例，发布者执行发布命令，所有这个主题的订阅者执行更新操作。接下去我们要做的就是，当set方法触发后，input作为发布者，改变了text属性；而文本节点作为订阅者，在收到消息后执行更新操作。</p>
+<h4 id="八、双向绑定的实现"><a href="#八、双向绑定的实现" class="headerlink" title="八、双向绑定的实现"></a>八、双向绑定的实现</h4><p>每次new一个新的vue对象时，主要是做了两件事，一件是监听数据：observer(监听数据)，第二个是编译HTML，nodeToFragement(id)。</p>
+<p>在监听数据的过程中，会为data中的每一个属性生成一个主题对象。</p>
+<p>而在编译HTML的过程中，会为每个与数据绑定的相关节点生成一个订阅者watcher，订阅者watcher会将自己订阅到相应属性的dep中。</p>
+<p>在前面的方法中已经实现了：修改输入框内容=&gt;再时间回调中修改属性值=&gt;触发属性的set方法。</p>
+<p>接下来要做的是发出通知dep.notify=&gt;发出订阅者的uodate方法=&gt;更新视图。</p>
+<p>那么如何将watcher添加到关联属性的dep中呢。</p>
+<p>编译HTML过程中，为每一个与data关联的节点生成一个watcher，那么watcher中又发生了什么？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">//  每一个属性节点的watcher</div><div class="line">class Watcher&#123;</div><div class="line">	constructor(vm,node,name)&#123;</div><div class="line">		Dep.target = this;</div><div class="line">		this.name = name;</div><div class="line">		this.node = node;</div><div class="line">		this.vm = vm;</div><div class="line">		this.update();</div><div class="line">		Dep.target = null;</div><div class="line">	&#125;</div><div class="line">	update()&#123;</div><div class="line">		//获得最新值，然后更新视图</div><div class="line">		this.get();</div><div class="line">		this.node.nodeValue = this.value;</div><div class="line">	&#125;</div><div class="line">	get()&#123;</div><div class="line">		this.value = this.vm.data[this.name];</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在编译HTML的过程中，生成watcher<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">let complie = (node,vm)&#123;</div><div class="line">    ......</div><div class="line">    //如果节点类型为文本的话</div><div class="line">    if(node.nodeType === 3)&#123;</div><div class="line">	    if(regex.test(node.nodeValue))&#123;</div><div class="line">	        let name = RegExp.$1;</div><div class="line">	        name = name.trim();</div><div class="line">            node.nodeValue = vm.data[name];</div><div class="line">            </div><div class="line">            new Watcher(vm,node,name);//在此处添加订阅者</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>首先将自己赋给了一个全局变量Dep.target;然后执行了uodate方法，进而执行了get方法，读取了vm的访问器属性，从而触发了访问器属性的get方法，get方法将相应的watcher添加到对应访问器属性的dep中。再次，获取属性的值，然后更新视图。最后将dep.target设置为空，是因为这是个全局变量也是watcher与dep之间唯一的桥梁，任何时间都只能保证只有一个值。（其实就是说全局一个主题，每个订阅者和发布者都是通过这个主题进行沟通。当执行代码时，这个主题接受到一个发布通知，通知完所有订阅者，然后注销掉，用于下一个通知发布。啰嗦了一段就是想讲为什么要设置Dep.target = null）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">//  一个主题发布器</div><div class="line">class Dep()&#123;</div><div class="line">    constructor()&#123;</div><div class="line">        this.subs = [];</div><div class="line">    &#125;</div><div class="line">    notify()&#123;</div><div class="line">        this.subs.forEach((sub) =&gt; &#123;</div><div class="line">            sub.update();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    addSub(sub)&#123;</div><div class="line">        this.subs.push(sub);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">let defineReactive = (obj,key,val) =&gt; &#123;</div><div class="line">    let dep = new Dep();</div><div class="line">    Object.defineProperty(obk,key,&#123;</div><div class="line">        get()&#123;</div><div class="line">            if(dep.target) dep.addSub(dep.target);</div><div class="line">        &#125;        </div><div class="line">        set(newVal,oldVal)&#123;</div><div class="line">            if(newVal === oldVal) return;</div><div class="line">            val = newVal;</div><div class="line">            dep.notify();</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>至此，hello world 双向绑定就基本实现了。文本内容会随输入框内容同步变化，在控制器中修改 vm.text 的值，会同步反映到文本内容中。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/07/15.生活中的经济学原理-----以管窥天？/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1922,187 +2132,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/12/5.生活中的经济学原理-----谁懂谁的心（信息问题）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="linzx">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="linzx">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/12/5.生活中的经济学原理-----谁懂谁的心（信息问题）/" itemprop="url">第五章-谁懂谁的心</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-12T23:47:44+08:00">
-                2017-05-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/《解释的工具-生活中的经济学原理》/" itemprop="url" rel="index">
-                    <span itemprop="name">《解释的工具-生活中的经济学原理》</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/05/12/5.生活中的经济学原理-----谁懂谁的心（信息问题）/" class="leancloud_visitors" data-flag-title="第五章-谁懂谁的心">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计</span>
-                
-                <span title="字数统计">
-                  797
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长</span>
-                
-                <span title="阅读时长">
-                  3
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="《解释的工具-生活中的经济学原理》"><a href="#《解释的工具-生活中的经济学原理》" class="headerlink" title="《解释的工具-生活中的经济学原理》"></a>《解释的工具-生活中的经济学原理》</h4><h6 id="—–第五章-谁懂谁的心"><a href="#—–第五章-谁懂谁的心" class="headerlink" title="—–第五章-谁懂谁的心"></a>—–第五章-谁懂谁的心</h6><p>由于自己身处互联网的大环境中，给我印象最深的还是“信息不对称”所带来的影响。</p>
-<p>关于信息不对称也有好几个维度可以阐述。</p>
-<p>1.信息交换。《囚徒困境》（官府抓了两个没有证据的两个江洋大盗，隔离在两个小房间，如果谁先招供承认就从轻发落，另外一人则受到严重处分，如果都不松口，则官府因为没有证据释放两个人。那么到底招还是不招呢？）。这个故事中信息的不对称体现在两人无法交换信息。如果两人有机会偷偷交换信息并在官府不知道的情况下，则两人都可以化险为夷。这让我想到许多间谍片中，在众人眼皮子地下，两人暗藏机锋的话语或者动作其实传递出价值千金的重要信息。</p>
-<p>2.信息不对称的价值。互联网可以说是将信息不对称的价值几何倍的放大。以旅行产业链为例，价值几千的住宿和机票，可以通过某些途径花几百元可以获得。许多小公司ru大公司的羊毛（补贴）也能轻松年入上百万。而在caoz公众号中所说的，许多草根运营公司依靠自己独特的流量技巧生活可以说过的是非常滋润。</p>
-<p>3.判断信息的能力。信息不对称必然会带给某一方价值中介公司，，但是如果每个人都抱着这样的想法，那么在人们生活也会越来越复杂。但是除非社会可以产生良心循环，否则我们本人也只能根据这些信息培养自己的判断力，进行斟酌取舍。我们平时会去固定的餐馆，水果店消费，也是根据之前信息交换产生的讯号，根据自己的判断力，找出对自己最有价值的地方。</p>
-<p>4.信息的泛滥。当信息不足的时候，会有人以提供信息能力来获取报酬，托福机构，法律顾问，补习班都是这个例子，信息价值的提高往往是由于其稀缺性。但是在互联网的环境下，人们也许面对的是满船的鱼和虾，而怎么找出其中所藏的珍珠则是能力的体现。这也透露出，在信息过多的情况下，处理信息本身也是一个信息 问题。也许我们自己没有这个能力去筛选那么多鱼龙混杂的信息，不过我们可以依赖一些人帮我们去解读生活里的各种讯息，在已筛选信息的帮助下，依据自己的经验进行判断，找到自己最有价值的地方。这也体现出一个道理，成为独特理性信息的提供者，你就对别人产生了价值，那么你就有价值了！！！。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2152,7 +2181,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-count">26</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2174,7 +2203,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
