@@ -74,7 +74,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, linzx" />
+  <meta name="keywords" content="技术文章,javascript," />
 
 
 
@@ -90,17 +90,20 @@
 
 
 
-<meta name="description" content="linzx linzhixiang 林智翔 linzx1993@gmail.com">
-<meta property="og:type" content="website">
-<meta property="og:title" content="技术文章">
-<meta property="og:url" content="http://yoursite.com/技术文章/index.html">
+<meta name="description" content="单页应用在随着框架的诞生已经是大趋势，自己平时在项目中也已经用了不少vur-router的代码了。用久了自然对其中的实现好奇了起来，于是想着自己能不能做出一个简单的vue-router。一开始扒了源码研究，实在是看不懂。于是从一篇篇文章开始慢慢补充起自己的基础。  一、写一个最简单的前端路由如果使用过vue-router的人应该知道，Router插件是通过切换hash值来切换页面的。而浏览器则提">
+<meta name="keywords" content="技术文章,javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js中数组的原生方法">
+<meta property="og:url" content="http://yoursite.com/2018/01/13/一步步实现一个简单的router插件/index.html">
 <meta property="og:site_name" content="linzx">
-<meta property="og:description" content="linzx linzhixiang 林智翔 linzx1993@gmail.com">
+<meta property="og:description" content="单页应用在随着框架的诞生已经是大趋势，自己平时在项目中也已经用了不少vur-router的代码了。用久了自然对其中的实现好奇了起来，于是想着自己能不能做出一个简单的vue-router。一开始扒了源码研究，实在是看不懂。于是从一篇篇文章开始慢慢补充起自己的基础。  一、写一个最简单的前端路由如果使用过vue-router的人应该知道，Router插件是通过切换hash值来切换页面的。而浏览器则提">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-05-25T06:13:08.592Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/differState.jpg">
+<meta property="og:updated_time" content="2018-01-13T11:10:22.136Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="技术文章">
-<meta name="twitter:description" content="linzx linzhixiang 林智翔 linzx1993@gmail.com">
+<meta name="twitter:title" content="js中数组的原生方法">
+<meta name="twitter:description" content="单页应用在随着框架的诞生已经是大趋势，自己平时在项目中也已经用了不少vur-router的代码了。用久了自然对其中的实现好奇了起来，于是想着自己能不能做出一个简单的vue-router。一开始扒了源码研究，实在是看不懂。于是从一篇篇文章开始慢慢补充起自己的基础。  一、写一个最简单的前端路由如果使用过vue-router的人应该知道，Router插件是通过切换hash值来切换页面的。而浏览器则提">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/differState.jpg">
 
 
 
@@ -128,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/技术文章/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/13/一步步实现一个简单的router插件/"/>
 
 
 
 
 
-  <title>技术文章 | linzx</title>
+  <title>js中数组的原生方法 | linzx</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -170,7 +173,7 @@
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -289,25 +292,233 @@
             
 
   <div id="posts" class="posts-expand">
-  <header class="post-header">
+    
 
-	<h2 class="post-title" itemprop="name headline">技术文章</h2>
+  
 
+  
+  
+  
 
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/13/一步步实现一个简单的router插件/">
 
-</header>
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="linzx">
+    </span>
 
     
-    
-      <div class="tag-cloud">
-        <div class="tag-cloud-title">
-            目前共计 9 个标签
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">js中数组的原生方法</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-13T13:47:44+08:00">
+                2018-01-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/01/13/一步步实现一个简单的router插件/" class="leancloud_visitors" data-flag-title="js中数组的原生方法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  802
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
         </div>
-        <div class="tag-cloud-tags">
-          <a href="/tags/books/" style="font-size: 30px; color: #111">books</a> <a href="/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/tags/javascript/" style="font-size: 16.5px; color: #9d9d9d">javascript</a> <a href="/tags/jquery/" style="font-size: 12px; color: #ccc">jquery</a> <a href="/tags/vue/" style="font-size: 12px; color: #ccc">vue</a> <a href="/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/tags/《解释的工具-生活中的经济学原理》/" style="font-size: 25.5px; color: #404040">《解释的工具-生活中的经济学原理》</a> <a href="/tags/技术文章/" style="font-size: 21px; color: #6f6f6f">技术文章</a> <a href="/tags/随笔/" style="font-size: 12px; color: #ccc">随笔</a>
-        </div>
-      </div>
+      </header>
     
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>单页应用在随着框架的诞生已经是大趋势，自己平时在项目中也已经用了不少vur-router的代码了。用久了自然对其中的实现好奇了起来，于是想着自己能不能做出一个简单的vue-router。一开始扒了源码研究，实在是看不懂。于是从一篇篇文章开始慢慢补充起自己的基础。</p>
+</blockquote>
+<h4 id="一、写一个最简单的前端路由"><a href="#一、写一个最简单的前端路由" class="headerlink" title="一、写一个最简单的前端路由"></a>一、写一个最简单的前端路由</h4><p>如果使用过vue-router的人应该知道，Router插件是通过切换hash值来切换页面的。而浏览器则提供了一个<strong>hashchange</strong>的回调方法监听的hash值的变化。我们可以就这个原生API实现一个简单的前端路由。</p>
+<blockquote>
+<p>之所以用这个API作为我们第一个出场嘉宾，其好处是可以兼容低版本的IE8浏览器</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">&lt;a href=&quot;#/&quot;&gt;home&lt;/a&gt;</div><div class="line">&lt;a href=&quot;#/router1&quot;&gt;router1&lt;/a&gt;</div><div class="line">&lt;a href=&quot;#/router2&quot;&gt;router2&lt;/a&gt;</div><div class="line"></div><div class="line">&lt;div id=&quot;content&quot;&gt;&lt;/div&gt;</div><div class="line"></div><div class="line">--------</div><div class="line"></div><div class="line">class Router &#123;</div><div class="line">    constructor(router = &#123;&#125;)&#123;</div><div class="line">    	this.router = router;</div><div class="line">    	this.init();</div><div class="line">    &#125;</div><div class="line">    refresh()&#123;</div><div class="line">        let url = window.location.hash.slice(1) || &quot;/&quot;;</div><div class="line">        if(this.router[url])&#123;</div><div class="line">        	this.router[url]();</div><div class="line">        &#125;else&#123;</div><div class="line">        	throw new Error(&quot;It isn&apos;t  a router name that registered&quot;);</div><div class="line">        &#125;</div><div class="line">    </div><div class="line">    &#125;</div><div class="line">    init()&#123;</div><div class="line">    	window.addEventListener(&quot;hashchange&quot;,this.refresh.bind(this),false);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function changeContent(text)&#123;</div><div class="line">	document.getElementById(&quot;content&quot;).innerText = text;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let router = new Router(&#123;</div><div class="line">    &quot;/&quot;()&#123;</div><div class="line">    	changeContent(&apos;home&apos;)</div><div class="line">    &#125;,</div><div class="line">    &apos;/router1&apos;()&#123;</div><div class="line">    	changeContent(&apos;router1&apos;)</div><div class="line">    &#125;,</div><div class="line">    &apos;/router1&apos;()&#123;</div><div class="line">    	changeContent(&apos;router2&apos;)</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>当浏览器监听到hash值发生改变之后，自动调用对应路由提供的回调，这样子就出现了一个简单的单页路由demo。</p>
+<h4 id="二、实现一个简单的H5版本的前端路由"><a href="#二、实现一个简单的H5版本的前端路由" class="headerlink" title="二、实现一个简单的H5版本的前端路由"></a>二、实现一个简单的H5版本的前端路由</h4><p>随着HTML5的发布，我们则多了一个新的选择<strong>history</strong>。</p>
+<p>浏览器原生的<strong>history</strong>对象为我们提供了一些新的方法如下,具体意思基本上也可以做<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">history.go();   //加载 history 列表中的某个具体页面。</div><div class="line">history.back(); //加载 history 列表中的前一个 URL,等同于history.go(-1)。</div><div class="line">history.foward();   //加载 history 列表中的下一个 URL,等同于history.go(1)。</div><div class="line">history.pushState(state,title,url);    //添加一条页面地址记录</div><div class="line">history.replaceState(state,title,url); //更新当前的历史地址记录</div></pre></td></tr></table></figure></p>
+<p>这里再额外说一句<strong>pushState</strong>方法和<strong>replaceState</strong>的区别，从网上找了一张图来表示</p>
+<p><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/differState.jpg" alt="image"></p>
+<p>pushState()是在history栈中添加一个地址并同时跳往该地址，replaceState()是直接替换当前地址为新地址。</p>
+<p>每当你使用<strong>pushState()</strong>或者<strong>replaceState()</strong>方法时，会触发<strong>popstate</strong>事件的回调</p>
+<p>然后我们以这两个方法为基础，重新写一个Router的类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div></pre></td><td class="code"><pre><div class="line">&lt;a href=&quot;#/&quot;&gt;home&lt;/a&gt;</div><div class="line">&lt;a href=&quot;#/router1&quot;&gt;router1&lt;/a&gt;</div><div class="line">&lt;a href=&quot;#/router2&quot;&gt;router2&lt;/a&gt;</div><div class="line"></div><div class="line">&lt;div id=&quot;content&quot;&gt;&lt;/div&gt;</div><div class="line"></div><div class="line">--------</div><div class="line">class Router&#123;</div><div class="line">    constructor(router = &#123;&#125;)&#123;</div><div class="line">        this.router = router;</div><div class="line">        this.init();</div><div class="line">    &#125;</div><div class="line">    route(path,cb)&#123;</div><div class="line">        this.router[path] = cb || function () &#123;</div><div class="line">        		throw new Error(&quot;please give a callback&quot;);</div><div class="line">        	&#125;;</div><div class="line">    	&#125;</div><div class="line">    refresh(state)&#123;</div><div class="line">        let url = state.path || &quot;/&quot;;</div><div class="line">        if(this.router[url])&#123;</div><div class="line">            this.router[url]();</div><div class="line">        &#125;else&#123;</div><div class="line">            throw new Error(&quot;It&apos;s not register router&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    route(path,cb)&#123;</div><div class="line">        this.router[path] = cb || function () &#123;</div><div class="line">        	throw new Error(&quot;please give a callback&quot;);</div><div class="line">        &#125;;</div><div class="line">    &#125;</div><div class="line">    init()&#123;</div><div class="line">        let _this = this;</div><div class="line">        window.addEventListener(&quot;popstate&quot;,function (event) &#123;</div><div class="line">        	this.refresh(event.state || &#123;&#125;);</div><div class="line">        &#125;.bind(this))</div><div class="line">        </div><div class="line">        document.querySelectorAll(&quot;a&quot;).forEach(a =&gt; &#123;</div><div class="line">            a.addEventListener(&quot;click&quot;,function (e) &#123;</div><div class="line">                e.preventDefault();</div><div class="line">                </div><div class="line">                let path = link.slice(1) || &quot;/&quot;;</div><div class="line">                let link = a.getAttribute(&quot;href&quot;);</div><div class="line">                _this.refresh(&#123;path : path&#125; || &#123;&#125;);</div><div class="line">                if(e.target.getAttribute(&quot;type&quot;) === &apos;replace&apos;)&#123;</div><div class="line">                    window.history.replaceState(&#123;&apos;path&apos;:path&#125;,path,e.target.hre;</div><div class="line">                &#125; else &#123;</div><div class="line">                    window.history.pushState(&#123;&apos;path&apos; : path&#125;,path,e.target.href);</div><div class="line">                &#125;</div><div class="line">            &#125;)</div><div class="line">        &#125;,false);</div><div class="line">        </div><div class="line">        //首次进入路由</div><div class="line">        let path = window.location.hash.slice(1) || &apos;/&apos;;</div><div class="line">        this.refresh(&#123;path : path&#125; || &#123;&#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">function changeContent(text)&#123;</div><div class="line">        document.getElementById(&apos;content&apos;).innerHTML = text;</div><div class="line">&#125;</div><div class="line">    </div><div class="line">let router = new Router(&#123;</div><div class="line">    &apos;/&apos;()&#123;</div><div class="line">        changeContent(&quot;home&quot;);</div><div class="line">    &#125;,</div><div class="line">    &apos;/router1&apos;()&#123;</div><div class="line">        changeContent(&quot;router1&quot;);</div><div class="line">    &#125;,</div><div class="line">    &apos;/router2&apos;()&#123;</div><div class="line">        changeContent(&quot;router2&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line">    </div><div class="line">    router.route(&apos;/router3&apos;,function()&#123;</div><div class="line">    changeContent(&apos;路由3&apos;);</div><div class="line">    &#125;)</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术文章/" rel="tag"># 技术文章</a>
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/25/我的圣诞老人/" rel="next" title="我的圣诞老人">
+                <i class="fa fa-chevron-left"></i> 我的圣诞老人
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
   </div>
 
 
@@ -339,8 +550,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/header.jpg"
@@ -402,6 +622,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、写一个最简单的前端路由"><span class="nav-number">1.</span> <span class="nav-text">一、写一个最简单的前端路由</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、实现一个简单的H5版本的前端路由"><span class="nav-number">2.</span> <span class="nav-text">二、实现一个简单的H5版本的前端路由</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -526,6 +762,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
 
   
 

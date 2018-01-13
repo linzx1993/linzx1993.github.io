@@ -299,6 +299,197 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/13/一步步实现一个简单的router插件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="linzx">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/13/一步步实现一个简单的router插件/" itemprop="url">js中数组的原生方法</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-13T13:47:44+08:00">
+                2018-01-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/01/13/一步步实现一个简单的router插件/" class="leancloud_visitors" data-flag-title="js中数组的原生方法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  802
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>单页应用在随着框架的诞生已经是大趋势，自己平时在项目中也已经用了不少vur-router的代码了。用久了自然对其中的实现好奇了起来，于是想着自己能不能做出一个简单的vue-router。一开始扒了源码研究，实在是看不懂。于是从一篇篇文章开始慢慢补充起自己的基础。</p>
+</blockquote>
+<h4 id="一、写一个最简单的前端路由"><a href="#一、写一个最简单的前端路由" class="headerlink" title="一、写一个最简单的前端路由"></a>一、写一个最简单的前端路由</h4><p>如果使用过vue-router的人应该知道，Router插件是通过切换hash值来切换页面的。而浏览器则提供了一个<strong>hashchange</strong>的回调方法监听的hash值的变化。我们可以就这个原生API实现一个简单的前端路由。</p>
+<blockquote>
+<p>之所以用这个API作为我们第一个出场嘉宾，其好处是可以兼容低版本的IE8浏览器</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">&lt;a href=&quot;#/&quot;&gt;home&lt;/a&gt;</div><div class="line">&lt;a href=&quot;#/router1&quot;&gt;router1&lt;/a&gt;</div><div class="line">&lt;a href=&quot;#/router2&quot;&gt;router2&lt;/a&gt;</div><div class="line"></div><div class="line">&lt;div id=&quot;content&quot;&gt;&lt;/div&gt;</div><div class="line"></div><div class="line">--------</div><div class="line"></div><div class="line">class Router &#123;</div><div class="line">    constructor(router = &#123;&#125;)&#123;</div><div class="line">    	this.router = router;</div><div class="line">    	this.init();</div><div class="line">    &#125;</div><div class="line">    refresh()&#123;</div><div class="line">        let url = window.location.hash.slice(1) || &quot;/&quot;;</div><div class="line">        if(this.router[url])&#123;</div><div class="line">        	this.router[url]();</div><div class="line">        &#125;else&#123;</div><div class="line">        	throw new Error(&quot;It isn&apos;t  a router name that registered&quot;);</div><div class="line">        &#125;</div><div class="line">    </div><div class="line">    &#125;</div><div class="line">    init()&#123;</div><div class="line">    	window.addEventListener(&quot;hashchange&quot;,this.refresh.bind(this),false);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function changeContent(text)&#123;</div><div class="line">	document.getElementById(&quot;content&quot;).innerText = text;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let router = new Router(&#123;</div><div class="line">    &quot;/&quot;()&#123;</div><div class="line">    	changeContent(&apos;home&apos;)</div><div class="line">    &#125;,</div><div class="line">    &apos;/router1&apos;()&#123;</div><div class="line">    	changeContent(&apos;router1&apos;)</div><div class="line">    &#125;,</div><div class="line">    &apos;/router1&apos;()&#123;</div><div class="line">    	changeContent(&apos;router2&apos;)</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>当浏览器监听到hash值发生改变之后，自动调用对应路由提供的回调，这样子就出现了一个简单的单页路由demo。</p>
+<h4 id="二、实现一个简单的H5版本的前端路由"><a href="#二、实现一个简单的H5版本的前端路由" class="headerlink" title="二、实现一个简单的H5版本的前端路由"></a>二、实现一个简单的H5版本的前端路由</h4><p>随着HTML5的发布，我们则多了一个新的选择<strong>history</strong>。</p>
+<p>浏览器原生的<strong>history</strong>对象为我们提供了一些新的方法如下,具体意思基本上也可以做<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">history.go();   //加载 history 列表中的某个具体页面。</div><div class="line">history.back(); //加载 history 列表中的前一个 URL,等同于history.go(-1)。</div><div class="line">history.foward();   //加载 history 列表中的下一个 URL,等同于history.go(1)。</div><div class="line">history.pushState(state,title,url);    //添加一条页面地址记录</div><div class="line">history.replaceState(state,title,url); //更新当前的历史地址记录</div></pre></td></tr></table></figure></p>
+<p>这里再额外说一句<strong>pushState</strong>方法和<strong>replaceState</strong>的区别，从网上找了一张图来表示</p>
+<p><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/differState.jpg" alt="image"></p>
+<p>pushState()是在history栈中添加一个地址并同时跳往该地址，replaceState()是直接替换当前地址为新地址。</p>
+<p>每当你使用<strong>pushState()</strong>或者<strong>replaceState()</strong>方法时，会触发<strong>popstate</strong>事件的回调</p>
+<p>然后我们以这两个方法为基础，重新写一个Router的类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div></pre></td><td class="code"><pre><div class="line">&lt;a href=&quot;#/&quot;&gt;home&lt;/a&gt;</div><div class="line">&lt;a href=&quot;#/router1&quot;&gt;router1&lt;/a&gt;</div><div class="line">&lt;a href=&quot;#/router2&quot;&gt;router2&lt;/a&gt;</div><div class="line"></div><div class="line">&lt;div id=&quot;content&quot;&gt;&lt;/div&gt;</div><div class="line"></div><div class="line">--------</div><div class="line">class Router&#123;</div><div class="line">    constructor(router = &#123;&#125;)&#123;</div><div class="line">        this.router = router;</div><div class="line">        this.init();</div><div class="line">    &#125;</div><div class="line">    route(path,cb)&#123;</div><div class="line">        this.router[path] = cb || function () &#123;</div><div class="line">        		throw new Error(&quot;please give a callback&quot;);</div><div class="line">        	&#125;;</div><div class="line">    	&#125;</div><div class="line">    refresh(state)&#123;</div><div class="line">        let url = state.path || &quot;/&quot;;</div><div class="line">        if(this.router[url])&#123;</div><div class="line">            this.router[url]();</div><div class="line">        &#125;else&#123;</div><div class="line">            throw new Error(&quot;It&apos;s not register router&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    route(path,cb)&#123;</div><div class="line">        this.router[path] = cb || function () &#123;</div><div class="line">        	throw new Error(&quot;please give a callback&quot;);</div><div class="line">        &#125;;</div><div class="line">    &#125;</div><div class="line">    init()&#123;</div><div class="line">        let _this = this;</div><div class="line">        window.addEventListener(&quot;popstate&quot;,function (event) &#123;</div><div class="line">        	this.refresh(event.state || &#123;&#125;);</div><div class="line">        &#125;.bind(this))</div><div class="line">        </div><div class="line">        document.querySelectorAll(&quot;a&quot;).forEach(a =&gt; &#123;</div><div class="line">            a.addEventListener(&quot;click&quot;,function (e) &#123;</div><div class="line">                e.preventDefault();</div><div class="line">                </div><div class="line">                let path = link.slice(1) || &quot;/&quot;;</div><div class="line">                let link = a.getAttribute(&quot;href&quot;);</div><div class="line">                _this.refresh(&#123;path : path&#125; || &#123;&#125;);</div><div class="line">                if(e.target.getAttribute(&quot;type&quot;) === &apos;replace&apos;)&#123;</div><div class="line">                    window.history.replaceState(&#123;&apos;path&apos;:path&#125;,path,e.target.hre;</div><div class="line">                &#125; else &#123;</div><div class="line">                    window.history.pushState(&#123;&apos;path&apos; : path&#125;,path,e.target.href);</div><div class="line">                &#125;</div><div class="line">            &#125;)</div><div class="line">        &#125;,false);</div><div class="line">        </div><div class="line">        //首次进入路由</div><div class="line">        let path = window.location.hash.slice(1) || &apos;/&apos;;</div><div class="line">        this.refresh(&#123;path : path&#125; || &#123;&#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">function changeContent(text)&#123;</div><div class="line">        document.getElementById(&apos;content&apos;).innerHTML = text;</div><div class="line">&#125;</div><div class="line">    </div><div class="line">let router = new Router(&#123;</div><div class="line">    &apos;/&apos;()&#123;</div><div class="line">        changeContent(&quot;home&quot;);</div><div class="line">    &#125;,</div><div class="line">    &apos;/router1&apos;()&#123;</div><div class="line">        changeContent(&quot;router1&quot;);</div><div class="line">    &#125;,</div><div class="line">    &apos;/router2&apos;()&#123;</div><div class="line">        changeContent(&quot;router2&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line">    </div><div class="line">    router.route(&apos;/router3&apos;,function()&#123;</div><div class="line">    changeContent(&apos;路由3&apos;);</div><div class="line">    &#125;)</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/25/我的圣诞老人/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2405,212 +2596,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/13/基于vue-cli的webpack优化之路/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="linzx">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="linzx">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/13/基于vue-cli的webpack优化之路/" itemprop="url">基于vue-cli的webpack优化之路</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-13T23:47:44+08:00">
-                2017-08-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/webpack/" itemprop="url" rel="index">
-                    <span itemprop="name">webpack</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/08/13/基于vue-cli的webpack优化之路/" class="leancloud_visitors" data-flag-title="基于vue-cli的webpack优化之路">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计</span>
-                
-                <span title="字数统计">
-                  1,695
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长</span>
-                
-                <span title="阅读时长">
-                  6
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>最近的项目度过了开始忙碌的基建期，也慢慢轻松下来，准备记录一下自己最近webpack优化的措施，希望有温故知新的效果。</p>
-</blockquote>
-<p>项目采用的是vue全家桶，构建配置都是基于vue-cli去改进的。关于原始webpack配置大家可以看下这篇文章<a href="https://github.com/DDFE/DDFE-blog/issues/10" target="_blank" rel="external">vue-cli#2.0 webpack配置分析</a>,文章基本对于文件每行代码都做了详细的解释，有助于更好的理解webpack。<br><a href="https://github.com/linzx1993/APS-ng-vue-/tree/master/mes" target="_blank" rel="external">项目位置链接</a></p>
-<p>仔细总结了一下，自己的优化基本还是网上流传的那几点</p>
-<ul>
-<li>通过 externals 配置来提取常用库，引用cdn</li>
-<li>合理配置CommonsChunkPlugin</li>
-<li>善用alias</li>
-<li>dllplugin启用预编译</li>
-<li>happypack多核构建项目</li>
-</ul>
-<p>不过经过自己的实践最后三点是对自己项目优化最大的。文章也主要对后面几点详细说明一下</p>
-<p>原来打包一个项目所需要的时间基本在35-40秒左右(第二次有缓存会稍微快一点)，但是偶尔来一次大姨妈，时间甚至要到50s左右，我也是醉了。不过大家可以期待一下经过下面这三步优化大概需要多久</p>
-<h4 id="1-使用dllplugin预编译与引用"><a href="#1-使用dllplugin预编译与引用" class="headerlink" title="1.使用dllplugin预编译与引用"></a>1.使用dllplugin预编译与引用</h4><p>首先为什么要引用Dll？在网上浏览了一些文章后，我发现上除了加快构建速度以外，使用webpack的dll还有一个好处。</p>
-<p><strong>Dll打包以后是独立存在的，只要其包含的库没有增减、升级，hash也不会变化，因此线上的dll代码不需要随着版本发布频繁更新。</strong> 因为使用Dll打包的基本上都是独立库文件，这类文件有一个特性就是变化不大。当我们正常打包这些库文件到一个app.js里的时候，由于其他业务文件的改变，影响了缓存对构建的优化，导致每次都要重新去npm包里寻找相关文件。而使用了DLL之后，只要包含的库没有升级， 增减，就不需要重新打包。这样也提高了构建速度。</p>
-<p>那么如何使用Dll去优化项目呢<br>首先要建立一个dll的配置文件,引入项目所需要的第三方库。这类库的特点是不需要随着版本发布频繁更新，长期稳定。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">const webpack = require(&apos;webpack&apos;);</div><div class="line">const path = require(&apos;path&apos;);</div><div class="line"></div><div class="line">module.exports = &#123;</div><div class="line">  entry: &#123;</div><div class="line">    //你需要引入的第三方库文件</div><div class="line">    vendor: [&apos;vue&apos;,&apos;vuex&apos;,&apos;vue-router&apos;,&apos;element-ui&apos;,&apos;axios&apos;,&apos;echarts/lib/echarts&apos;,&apos;echarts/lib/chart/bar&apos;,&apos;echarts/lib/chart/line&apos;,&apos;echarts/lib/chart/pie&apos;,</div><div class="line">      &apos;echarts/lib/component/tooltip&apos;,&apos;echarts/lib/component/title&apos;,&apos;echarts/lib/component/legend&apos;,&apos;echarts/lib/component/dataZoom&apos;,&apos;echarts/lib/component/toolbox&apos;],</div><div class="line">  &#125;,</div><div class="line"></div><div class="line">  output: &#123;</div><div class="line">    path: path.join(__dirname, &apos;dist-[hash]&apos;),</div><div class="line">    filename: &apos;[name].js&apos;,</div><div class="line">    library: &apos;[name]&apos;,</div><div class="line">  &#125;,</div><div class="line"></div><div class="line">  plugins: [</div><div class="line">    new webpack.DllPlugin(&#123;</div><div class="line">      path: path.join(__dirname, &apos;dll&apos;, &apos;[name]-manifest.json&apos;),</div><div class="line">      filename: &apos;[name].js&apos;,</div><div class="line">      name: &apos;[name]&apos;,</div><div class="line">    &#125;),</div><div class="line">  ]</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
-<p>基本配置参数和webpack基本一模一样，相信来看优化的都明白什么意思，我就不解释了。然后执行代码编译文件。<strong>(我的配置文件是放在build里面，下方路径根据项目路径需要变动)</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack -p --progress --config build/webpack.dll.config.js</div></pre></td></tr></table></figure></p>
-<p>当运行完执行后，会生成两个新文件在目录同级，一个是生成在dist文件夹下的<strong>verdor.js</strong>，里面是刚刚入口依赖被压缩后的代码;一个是dll文件夹下的<strong>verdor-manifest.json</strong>，将每个库进行了编号索引，并且使用的是id而不是name。</p>
-<p>接下去你只要去你的webpack配置文件的里的plugin中添加一行代码就ok了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">const manifest = require(&apos;./dll/vendor-manifest.json&apos;);</div><div class="line">...</div><div class="line">...,</div><div class="line">plugin:[</div><div class="line">    new webpack.DllReferencePlugin(&#123;</div><div class="line">        context: __dirname,</div><div class="line">        manifest,</div><div class="line">    &#125;),</div><div class="line">]</div></pre></td></tr></table></figure></p>
-<p>这时候再执行webpack命令，可以发现时间直接从40秒锐减到了18-20s左右，整整快了一倍有木有(不知道是不是因为自己依赖库太多了才这样的，手动捂脸)。</p>
-<h4 id="2-happypack多线程编译"><a href="#2-happypack多线程编译" class="headerlink" title="2.happypack多线程编译"></a>2.happypack多线程编译</h4><p>一般node.js是单线程执行编译，而<a href="https://github.com/amireh/happypack" target="_blank" rel="external">happypack</a>则是启动node的多线程进行构建，大大提高了构建速度。使用方法也比较简单。以我项目为例,在插件中new一个新的happypack进程出来，然后再使用使用loader的地方替换成对应的id<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">var HappyPack = require(&apos;happypack&apos;);</div><div class="line">...</div><div class="line">...</div><div class="line">modules:&#123;</div><div class="line">    rules : [</div><div class="line">        ...</div><div class="line">        &#123;</div><div class="line">            test: /\.js$/,</div><div class="line">            loader:[ &apos;happypack/loader?id=happybabel&apos;],</div><div class="line">            include: [resolve(&apos;src&apos;)]</div><div class="line">        &#125;,</div><div class="line">        ...</div><div class="line">    ]</div><div class="line">&#125;,</div><div class="line">...</div><div class="line">...</div><div class="line">plugin:[</div><div class="line">    //happypack对对 url-loader,vue-loader 和 file-loader 支持度有限，会有报错，有坑。。。</div><div class="line">    new HappyPack(&#123;</div><div class="line">          id: &apos;happybabel&apos;,</div><div class="line">          loaders: [&apos;babel-loader&apos;],</div><div class="line">          threads: 4,//HappyPack 使用多少子进程来进行编译</div><div class="line">    &#125;),</div><div class="line">    new HappyPack(&#123;</div><div class="line">          id: &apos;scss&apos;,</div><div class="line">          threads: 4,</div><div class="line">          loaders: [</div><div class="line">                &apos;style-loader&apos;,</div><div class="line">                &apos;css-loader&apos;,</div><div class="line">                &apos;sass-loader&apos;,</div><div class="line">          ],</div><div class="line">    &#125;)</div><div class="line">]</div></pre></td></tr></table></figure></p>
-<p>这时候再去执行编译webpack的代码，打印出来的console则变成了另外一种提示。而编译时间大概从20s优化到了15s左右(感觉好像没有网上说的那么大，不知道是不是因为本身js比重占据太大的缘故)。</p>
-<h4 id="3-配合resolve，善用alias"><a href="#3-配合resolve，善用alias" class="headerlink" title="3.配合resolve，善用alias"></a>3.配合resolve，善用alias</h4><p>本来是没有第三点的，只不过在搜索网上webpack优化相关文章的时候，看到用人提到把引入文件改成库提供的文件(原理我理解其实就是1.先通过resolve指定文件寻找位置，减小搜索范围；2.直接根据alias找到库提供的文件位置)。</p>
-<p>vue-cli配置文件中提示也有提到这一点，就是下面这段代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">resolve: &#123;</div><div class="line">    //自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名</div><div class="line">    extensions: [&apos;.js&apos;, &apos;.vue&apos;, &apos;.json&apos;],</div><div class="line">    //模块别名定义，方便后续直接引用别名，无须多写长长的地址</div><div class="line">    alias: &#123;</div><div class="line">      &apos;vue$&apos;: &apos;vue/dist/vue.esm.js&apos;,//就是这行代码，提供你直接引用文件</div><div class="line">      &apos;@&apos;: resolve(&apos;src&apos;),</div><div class="line">    &#125;</div><div class="line">  &#125;,</div></pre></td></tr></table></figure></p>
-<p>然后我将其他所有地方关于vue的引用都替换成了vue$之后，比如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// import &apos;vue&apos;;</div><div class="line">import &apos;vue/dist/vue.esm.js&apos;;</div></pre></td></tr></table></figure></p>
-<p>时间竟然到了12s，也是把我吓了一跳。。。</p>
-<p>然后我就把jquery，axios，vuex等等全部给替换掉了。。。大概优化到了9s-11s左右，美滋滋，O(∩_∩)O~~</p>
-<h4 id="4-webpack3升级"><a href="#4-webpack3升级" class="headerlink" title="4.webpack3升级"></a>4.webpack3升级</h4><p>本来是没第四点，刚刚看到公众号推出来一篇文章讲到升级到webpack3的一些新优点，比如<strong>Scope Hoisting</strong>(webpack2升级到webpack3基本上没有太大问题)。通过添加一个新的插件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//  2017-08-13配合最新升级的webpack3提供的新功能，可以使压缩的代码更小，运行更快</div><div class="line">...</div><div class="line">plugin : [</div><div class="line">    new webpack.optimize.ModuleConcatenationPlugin(),</div><div class="line">]</div></pre></td></tr></table></figure></p>
-<p>不过在添加这行代码之后，构建时间并没有太大变化，不过运行效率没试过，不知道新的效果怎么样</p>
-<p>好了基本上感觉就是以上这些效果对项目的优化最大，虽然没有到网上说的那种只要3~4秒时间那么变态，不过感觉基本8,9秒的时间也可以了。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2660,7 +2645,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2681,7 +2666,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
+              <a href="/technology/index.html">
                 <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>
