@@ -74,7 +74,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, linzx" />
+  <meta name="keywords" content="技术文章,javascript," />
 
 
 
@@ -90,17 +90,18 @@
 
 
 
-<meta name="description" content="linzx linzhixiang 林智翔 linzx1993@gmail.com">
-<meta property="og:type" content="website">
-<meta property="og:title" content="explainTools">
-<meta property="og:url" content="http://yoursite.com/tags/index.html">
+<meta name="description" content="因为最近在写项目的UI库，遇到自定义滚动条这一个槛还是卡了我挺久的，主要在于如何去监听内容变化引起的滚动条变化。后面扒了element的源码，写的实在是比我好太多了，然后仔细研究了一下，最后基于自己的理解和记忆，仿了一个出来。  接下去以垂直滚动条为例，水平滚动条基本同理，将相关api如scrollHeight改成scrollWidth，scrollTop改成scrollLeft即可。 1234">
+<meta name="keywords" content="技术文章,javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js中数组的原生方法">
+<meta property="og:url" content="http://yoursite.com/2017/10/29/自定义滚动条/index.html">
 <meta property="og:site_name" content="linzx">
-<meta property="og:description" content="linzx linzhixiang 林智翔 linzx1993@gmail.com">
+<meta property="og:description" content="因为最近在写项目的UI库，遇到自定义滚动条这一个槛还是卡了我挺久的，主要在于如何去监听内容变化引起的滚动条变化。后面扒了element的源码，写的实在是比我好太多了，然后仔细研究了一下，最后基于自己的理解和记忆，仿了一个出来。  接下去以垂直滚动条为例，水平滚动条基本同理，将相关api如scrollHeight改成scrollWidth，scrollTop改成scrollLeft即可。 1234">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-05-21T11:10:28.948Z">
+<meta property="og:updated_time" content="2018-02-04T08:07:11.025Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="explainTools">
-<meta name="twitter:description" content="linzx linzhixiang 林智翔 linzx1993@gmail.com">
+<meta name="twitter:title" content="js中数组的原生方法">
+<meta name="twitter:description" content="因为最近在写项目的UI库，遇到自定义滚动条这一个槛还是卡了我挺久的，主要在于如何去监听内容变化引起的滚动条变化。后面扒了element的源码，写的实在是比我好太多了，然后仔细研究了一下，最后基于自己的理解和记忆，仿了一个出来。  接下去以垂直滚动条为例，水平滚动条基本同理，将相关api如scrollHeight改成scrollWidth，scrollTop改成scrollLeft即可。 1234">
 
 
 
@@ -128,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/10/29/自定义滚动条/"/>
 
 
 
 
 
-  <title>explainTools | linzx</title>
+  <title>js中数组的原生方法 | linzx</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -170,7 +171,7 @@
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -289,25 +290,254 @@
             
 
   <div id="posts" class="posts-expand">
-  <header class="post-header">
+    
 
-	<h2 class="post-title" itemprop="name headline">explainTools</h2>
+  
 
+  
+  
+  
 
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/29/自定义滚动条/">
 
-</header>
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="linzx">
+    </span>
 
     
-    
-      <div class="tag-cloud">
-        <div class="tag-cloud-title">
-            目前共计 9 个标签
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">js中数组的原生方法</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-29T13:47:44+08:00">
+                2017-10-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/10/29/自定义滚动条/" class="leancloud_visitors" data-flag-title="js中数组的原生方法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,549
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
         </div>
-        <div class="tag-cloud-tags">
-          <a href="/tags/books/" style="font-size: 30px; color: #111">books</a> <a href="/tags/http/" style="font-size: 12px; color: #ccc">http</a> <a href="/tags/javascript/" style="font-size: 16.5px; color: #9d9d9d">javascript</a> <a href="/tags/jquery/" style="font-size: 12px; color: #ccc">jquery</a> <a href="/tags/vue/" style="font-size: 12px; color: #ccc">vue</a> <a href="/tags/webpack/" style="font-size: 12px; color: #ccc">webpack</a> <a href="/tags/《解释的工具-生活中的经济学原理》/" style="font-size: 25.5px; color: #404040">《解释的工具-生活中的经济学原理》</a> <a href="/tags/技术文章/" style="font-size: 21px; color: #6f6f6f">技术文章</a> <a href="/tags/随笔/" style="font-size: 12px; color: #ccc">随笔</a>
-        </div>
-      </div>
+      </header>
     
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>因为最近在写项目的UI库，遇到自定义滚动条这一个槛还是卡了我挺久的，主要在于如何去监听内容变化引起的滚动条变化。后面扒了element的源码，写的实在是比我好太多了，然后仔细研究了一下，最后基于自己的理解和记忆，仿了一个出来。</p>
+</blockquote>
+<p>接下去以垂直滚动条为例，水平滚动条基本同理，将相关api如scrollHeight改成scrollWidth，scrollTop改成scrollLeft即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;div</div><div class="line">    class=&quot;scrollbar-wrap&quot;</div><div class="line">    ref=&quot;wrap&quot;</div><div class="line">    onScroll=&#123;this.handleScroll&#125;</div><div class="line">&gt;</div><div class="line">    &lt;div class=&quot;scrollbar-content&quot;&gt;这里用来放内容&lt;/div&gt;</div><div class="line">    &lt;div class=&apos;scrollbar-bar&apos; ref=&quot;bar&quot;&gt;</div><div class="line">        &lt;div ref=&quot;thumb&quot; class=&quot;scrollbar-thumb&quot;&gt;&lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">    &#123;[view]&#125;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<p>滚动条的框架如上面所示，接下午我会以简称wrap，bar,thumb分别对应上面refs的dom元素</p>
+<hr>
+<p>1.首先我们需要对产生滚动条的元素执行一个隐藏滚动条的操作。先写一个获取到区域内滚动条的宽度（scrollWidth）的回调getScrollWidth,获取到滚动条高度之后，我们对dom元素执行css。</p>
+<blockquote>
+<p>记住这里是隐藏，并不是消失，我们后面还要借助隐藏的滚动条。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">wrap.style.marginRight = -scrollWidth + &quot;px&quot;;</div><div class="line">wrap.style.marginBottom = -scrollWidth + &quot;px&quot;;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>2.第二步我们需要计算出滚动条的高度。计算方法首先得到wrap包裹框的高度也就是scrollHieght，然后再去获取内容高度clientHeight,获得高度的百分比。</p>
+<p>updateThumb回调函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let heightPercentage = (wrap.clientHeight * 100 / wrap.scrollHeight);</div><div class="line">thumb.style.height = heightPercentage + &quot;%&quot;;</div></pre></td></tr></table></figure></p>
+<p>但是滚动条的高度并不是我们一开始能够确定的，它需要在dom内容渲染出来之后才能确定。<strong>而且我们需要做到随着内容的变化，实时改变滚动条的高度</strong>，市面上的滚动条基本都没有满足这一功能。缺少了这一点，使用起来是缺少视觉交互的。举个例子，一个有滚动条的dom元素在删减内容之后，内容高度低于元素高度，却仍然保留着自定义滚动条，必然会给用户造成困扰。</p>
+<p>之前自己也一直是被困在这一步，想不出来有什么方法可以监测到内容引起滚动条的改变。不过在element源码里面找到了答案。</p>
+<p>实时变化的关键点在于我们希望可以随时监听倒内容的改变。但是我们不可能再每次改变内容时加一个外部通知来告诉滚动条。在element中，它再次利用到了原生的滚动条。</p>
+<p>大家应该还记得前提醒到我们是将把原生滚动条给隐藏掉并不是消失，实际上它在暗处默默的帮我们的忙。</p>
+<p>我们知道当通过鼠标滑轮滚动时，会触发scroll事件。实际上，如果我们改变元素的scrollTop，其实也会触发scroll事件。大家可以理解一下下面的逻辑。</p>
+<p>你的内容发生改变–&gt;原生滚动条发生长短的变化–&gt;scrollTop值的变化–&gt;触发scroll事件的回调函数，在函数里面调整滚动条的高度。</p>
+<p>不过在实施时，仍然碰到了一个很麻烦的问题。如果滚动条停留位置在最顶部时，无论内容怎么改变，原生滚动条的scrollTop永远为0。那怎么办？那我们只能自己造一个不管怎么样都能发生变化的滚动条监听。正所谓没有枪，没有炮，那我们自己造。</p>
+<p>这个方法是研究了很久element的方法，虽然能感觉</p>
+<p>3.经过以上两步，我们已经可以看到成型的滚动条的UI界面了，但是还缺少滚动的功能。关键点是在于如何去监听滚动条的变化。</p>
+<p>如果大家理解了我上面说的话，那么问题就简单了，因为涉及到的所有变化都会触发scroll事件，那么我们只要写一个相应的回调函数<strong>handleScroll</strong>，在每次触发的时候，实时修改我们自定义滚动条的样式就行了。</p>
+<p>在handleScroll函数中实时计算出滚动条在滚动框内的位置<br>获取到元素的scrollTop然后除以wrap（滚动框） 的scrollHeight<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let moveY = (wrap.scrollTop *100 / wrap.clientHeight) + %;</div><div class="line"></div><div class="line">//通过计算出来的百分比，然后对滚动条执行translate移动</div><div class="line">thumb.style.transform = &quot;translateY&quot; + moveY;</div></pre></td></tr></table></figure></p>
+<h4 id="4-上面是通过鼠标滚轮滚动监听事件，我们还有两种情况"><a href="#4-上面是通过鼠标滚轮滚动监听事件，我们还有两种情况" class="headerlink" title="4.上面是通过鼠标滚轮滚动监听事件，我们还有两种情况"></a>4.上面是通过鼠标滚轮滚动监听事件，我们还有两种情况</h4><ol>
+<li>点击滚动框的某个位置，滚动条移动到点击位置</li>
+<li>拖动滚动条移动到滚动框的任意位置</li>
+</ol>
+<p>接下去我们会去是实现这两块代码，第一种情况还是比较简单的。我们点击滚动框的一个位置，必然能获取他的坐标,然后计算出和滚动框顶部的距离，算出占滚动框的百分比赋值给滚动条的高度就好了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let top = e.clientY;</div><div class="line">let barTop = bar.getBoundingClientRect().top;</div><div class="line">let thumbPositionPercentage = (top - barTop) / bar.scrollHeight * 100 + &quot;%&quot;;</div><div class="line">thumb.style.top = thumbPositionPercentage;</div></pre></td></tr></table></figure></p>
+<p>接下来我们再去实现手动拖拽滚动条去实现移动内容，这个知识点就是拖拽的知识点，不过在看源码的时候发现elm的习惯很好，他是在当你点击滚动条的时候绑定拖拽,然后松开的时候取消绑定。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">let mouseMoveDocumentHandler;   //实时记录滚动条位置的拖拽函数</div><div class="line"></div><div class="line">//当点击滚动条时</div><div class="line">document.addEventListener(&quot;mousedown&quot;,mouseMoveDocumentHandler);</div><div class="line">document.onselectstart = false; //同时阻止选中</div><div class="line">//当松开滚动条时</div><div class="line">document.removeEventListener(&quot;mousedown&quot;,mouseMoveDocumentHandler);</div><div class="line">document.onselectstart = null; //同时阻止选中</div></pre></td></tr></table></figure></p>
+<h4 id="5-内容变化导致滚动条高度的变化"><a href="#5-内容变化导致滚动条高度的变化" class="headerlink" title="5.内容变化导致滚动条高度的变化"></a>5.内容变化导致滚动条高度的变化</h4><p>滚动条的基本功能已经实现了，接下去就剩最后一步了，就是内容发生变化时，滚动条的高度也要随之调整。</p>
+<p>这一步的关键点一样在于我前面提及scroll函数，当你内容发生改变的时候去触发一个更新滚动条长度的回调。</p>
+<p>基本上经过以上几步大概就能实现一个基本版的滚动条了</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术文章/" rel="tag"># 技术文章</a>
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/29/手写Vue组件踩坑与心得/" rel="next" title="js中数组的原生方法">
+                <i class="fa fa-chevron-left"></i> js中数组的原生方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/19/《JavaScript 正则表达式迷你书》读后感/" rel="prev" title="js中数组的原生方法">
+                js中数组的原生方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
   </div>
 
 
@@ -339,8 +569,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/header.jpg"
@@ -402,6 +641,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-上面是通过鼠标滚轮滚动监听事件，我们还有两种情况"><span class="nav-number">1.</span> <span class="nav-text">4.上面是通过鼠标滚轮滚动监听事件，我们还有两种情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-内容变化导致滚动条高度的变化"><span class="nav-number">2.</span> <span class="nav-text">5.内容变化导致滚动条高度的变化</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -526,6 +781,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
 
   
 
