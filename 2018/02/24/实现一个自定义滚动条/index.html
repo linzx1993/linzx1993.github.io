@@ -74,7 +74,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="随笔," />
+  <meta name="keywords" content="技术文章,javascript," />
 
 
 
@@ -90,18 +90,22 @@
 
 
 
-<meta name="description" content="我不知道大家是什么时候知道圣诞节的，也不知道很多人会不会有和我一样的童年经历。 在我很小很小的时候，也许是幼儿园，也许是学前班，也许是记忆开始的时候，不知道从哪里听到了圣诞老人的传说。只要将一只空袜子放在床头，圣诞老人会在袜子里放上你最想要的礼物。 不知道刚听到这个传说的时候，自己是怎么样的心情，喜悦？迷惑？还是好奇。只记得自己小心翼翼的挑了一只最大的袜子，抚平了放在头边，然后带着期待的心情进入了">
-<meta name="keywords" content="随笔">
+<meta name="description" content="因为最近在写项目的UI库，遇到自定义滚动条这一个槛还是卡了我挺久的，主要卡在了如何自动监听内容变化并更新滚动条高度。市面上基本所有的滚动条插件都没有实现这一点，最后面扒了element的源码才最终解决。本文主要讲的也是这个。  首先，我们先把需要实现的功能先确定下来。  鼠标左键点击可以拖动 鼠标滑轮滚动 内容发生变化，自动更新滚动条长度 提供开发者回调函数  前面两点依靠原生滚动条其实比较简单">
+<meta name="keywords" content="技术文章,javascript">
 <meta property="og:type" content="article">
-<meta property="og:title" content="我的圣诞老人">
-<meta property="og:url" content="http://yoursite.com/2017/12/25/我的圣诞老人/index.html">
+<meta property="og:title" content="实现一个自定义滚动条">
+<meta property="og:url" content="http://yoursite.com/2018/02/24/实现一个自定义滚动条/index.html">
 <meta property="og:site_name" content="linzx">
-<meta property="og:description" content="我不知道大家是什么时候知道圣诞节的，也不知道很多人会不会有和我一样的童年经历。 在我很小很小的时候，也许是幼儿园，也许是学前班，也许是记忆开始的时候，不知道从哪里听到了圣诞老人的传说。只要将一只空袜子放在床头，圣诞老人会在袜子里放上你最想要的礼物。 不知道刚听到这个传说的时候，自己是怎么样的心情，喜悦？迷惑？还是好奇。只记得自己小心翼翼的挑了一只最大的袜子，抚平了放在头边，然后带着期待的心情进入了">
+<meta property="og:description" content="因为最近在写项目的UI库，遇到自定义滚动条这一个槛还是卡了我挺久的，主要卡在了如何自动监听内容变化并更新滚动条高度。市面上基本所有的滚动条插件都没有实现这一点，最后面扒了element的源码才最终解决。本文主要讲的也是这个。  首先，我们先把需要实现的功能先确定下来。  鼠标左键点击可以拖动 鼠标滑轮滚动 内容发生变化，自动更新滚动条长度 提供开发者回调函数  前面两点依靠原生滚动条其实比较简单">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-03T12:36:08.422Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/scroll-03.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/scroll-1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/scroll-2.png">
+<meta property="og:updated_time" content="2018-02-27T02:41:40.939Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="我的圣诞老人">
-<meta name="twitter:description" content="我不知道大家是什么时候知道圣诞节的，也不知道很多人会不会有和我一样的童年经历。 在我很小很小的时候，也许是幼儿园，也许是学前班，也许是记忆开始的时候，不知道从哪里听到了圣诞老人的传说。只要将一只空袜子放在床头，圣诞老人会在袜子里放上你最想要的礼物。 不知道刚听到这个传说的时候，自己是怎么样的心情，喜悦？迷惑？还是好奇。只记得自己小心翼翼的挑了一只最大的袜子，抚平了放在头边，然后带着期待的心情进入了">
+<meta name="twitter:title" content="实现一个自定义滚动条">
+<meta name="twitter:description" content="因为最近在写项目的UI库，遇到自定义滚动条这一个槛还是卡了我挺久的，主要卡在了如何自动监听内容变化并更新滚动条高度。市面上基本所有的滚动条插件都没有实现这一点，最后面扒了element的源码才最终解决。本文主要讲的也是这个。  首先，我们先把需要实现的功能先确定下来。  鼠标左键点击可以拖动 鼠标滑轮滚动 内容发生变化，自动更新滚动条长度 提供开发者回调函数  前面两点依靠原生滚动条其实比较简单">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/scroll-03.png">
 
 
 
@@ -129,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/12/25/我的圣诞老人/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/02/24/实现一个自定义滚动条/"/>
 
 
 
 
 
-  <title>我的圣诞老人 | linzx</title>
+  <title>实现一个自定义滚动条 | linzx</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -299,7 +303,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/25/我的圣诞老人/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/24/实现一个自定义滚动条/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="linzx">
@@ -316,7 +320,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">我的圣诞老人</h2>
+          <h2 class="post-title" itemprop="name headline">实现一个自定义滚动条</h2>
         
 
         <div class="post-meta">
@@ -328,8 +332,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-25T23:47:44+08:00">
-                2017-12-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-24T13:47:44+08:00">
+                2018-02-24
               </time>
             
 
@@ -368,7 +372,7 @@
 
           
           
-             <span id="/2017/12/25/我的圣诞老人/" class="leancloud_visitors" data-flag-title="我的圣诞老人">
+             <span id="/2018/02/24/实现一个自定义滚动条/" class="leancloud_visitors" data-flag-title="实现一个自定义滚动条">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -393,7 +397,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  769
+                  2,919
                 </span>
               
 
@@ -409,7 +413,7 @@
                   <span class="post-meta-item-text">阅读时长</span>
                 
                 <span title="阅读时长">
-                  3
+                  11
                 </span>
               
             </div>
@@ -427,17 +431,77 @@
       
 
       
-        <p>我不知道大家是什么时候知道圣诞节的，也不知道很多人会不会有和我一样的童年经历。</p>
-<p>在我很小很小的时候，也许是幼儿园，也许是学前班，也许是记忆开始的时候，不知道从哪里听到了圣诞老人的传说。只要将一只空袜子放在床头，圣诞老人会在袜子里放上你最想要的礼物。</p>
-<p>不知道刚听到这个传说的时候，自己是怎么样的心情，喜悦？迷惑？还是好奇。只记得自己小心翼翼的挑了一只最大的袜子，抚平了放在头边，然后带着期待的心情进入了梦乡。</p>
-<p>现在已经想不起来自己第一次收到了什么礼物，一盒水彩笔？还是什么？</p>
-<p>但还能回忆出醒来之后睁大眼睛找袜子的我，拿着礼物在床上蹦蹦跳跳的我，告诉爸妈圣诞老人来了，最后拿起礼物飞奔出去炫耀的我。你知道吗，圣诞老人来我家送礼物啦！</p>
-<p>之后几年，自己依然和以前一样准备好了空袜子，也开始好奇圣诞老人到底是什么样子。只知道电视里的他是一个穿着红衣服，有的白胡子的老爷爷，他会从家里的烟囱爬进来，然后从大麻袋中挑出你最想要的礼物。</p>
-<p>于是我不断在那一晚提醒着自己，不要睡着，要一直守着，要亲眼看看圣诞老人是什么样子的。可是孩子的好奇终究抵不过睡意，虽然第二天仍然收到了礼物，但还是没有看到老爷爷的样子。</p>
-<p>只不过对孩子而言，只要有礼物就好了，圣诞老人到底是什么模样，他是不是从烟囱爬进来又有什么关系呢。</p>
-<p>后来，直到有一年我再也没有在袜子边上看见礼物的时候，哭闹着打爸妈的时候，圣诞老人的故事在我身上就结束了。</p>
-<p>懂事以后，自然知道了圣诞老人是假的。只是真的感谢我的圣诞老人，在我的童年里满足了一个爱幻想的小孩子，当别的小孩在说“圣诞老人就是你妈妈的时候”，“世界上没有圣诞老人”时，我仍然可以一口坚定，“世界上有圣诞老人”，“看，这就是圣诞老人给我的礼物”。<br>感谢我的圣诞老人。</p>
-<p>不知道为什么今晚会想写这一些的文字，只是真的很感谢我的爸爸妈妈。因为你们，帮助我在这个城市生活的远比很多人轻松，也是今年经历了太多的事情，我才明白，你们给我的帮助，远比我想象的还要更多。也许我永远无法当面说出“我爱你们”这些话，可是我会努力不让你们失望。</p>
+        <blockquote>
+<p>因为最近在写项目的UI库，遇到自定义滚动条这一个槛还是卡了我挺久的，主要卡在了如何自动监听内容变化并更新滚动条高度。市面上基本所有的滚动条插件都没有实现这一点，最后面扒了element的源码才最终解决。本文主要讲的也是这个。</p>
+</blockquote>
+<p>首先，我们先把需要实现的功能先确定下来。</p>
+<ul>
+<li>鼠标左键点击可以拖动</li>
+<li>鼠标滑轮滚动</li>
+<li>内容发生变化，自动更新滚动条长度</li>
+<li>提供开发者回调函数</li>
+</ul>
+<p>前面两点依靠原生滚动条其实比较简单，但是在第三点上实在是卡了我好久，想了好久都没有想出来。最后还是看了element源码才实现成功。</p>
+<p>接下去我会以垂直滚动条为例(水平滚动条基本同理)，实现一个自定义的滚动条出来。因为项目背景采用的是Vue，所以最后我们成型的其实是一个Vue组件。不过我争取把其中原理细节讲清楚，毕竟这些是共通的，和使用框架无关。</p>
+<p><a href="https://github.com/linzx1993/linzx1993.github.io/issues/6" target="_blank" rel="external">没有写过写Vue组件的可以看看这一篇，少踩些坑</a></p>
+<h4 id="1、搭建好基本的样式框架"><a href="#1、搭建好基本的样式框架" class="headerlink" title="1、搭建好基本的样式框架"></a>1、搭建好基本的样式框架</h4><p>开始我们先把HTML和样式写好</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;scrollbar&quot;&gt;</div><div class="line">	&lt;div class=&quot;scrollbar-content&quot;&gt;</div><div class="line">		&lt;ul class=&quot;box&quot;&gt;</div><div class="line">			&lt;li&gt;11111&lt;/li&gt;&lt;li&gt;11111&lt;/li&gt;&lt;li&gt;11111&lt;/li&gt;&lt;li&gt;11111&lt;/li&gt;</div><div class="line">			&lt;li&gt;11111&lt;/li&gt;&lt;li&gt;11111&lt;/li&gt;&lt;li&gt;11111&lt;/li&gt;&lt;li&gt;11111&lt;/li&gt;</div><div class="line">			&lt;li&gt;11111&lt;/li&gt;&lt;li&gt;11111&lt;/li&gt;&lt;li&gt;11111&lt;/li&gt;&lt;li&gt;11111&lt;/li&gt;</div><div class="line">			&lt;li&gt;11111&lt;/li&gt;&lt;li&gt;11111&lt;/li&gt;&lt;li&gt;11111&lt;/li&gt;&lt;li&gt;11111&lt;/li&gt;</div><div class="line">		&lt;/ul&gt;</div><div class="line">	&lt;/div&gt;</div><div class="line">	&lt;div class=&apos;scrollbar-bar&apos;&gt;</div><div class="line">		&lt;div ref=&quot;thumb&quot; class=&quot;scrollbar-thumb&quot;&gt;&lt;/div&gt;</div><div class="line">	&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<p><a href="https://jsfiddle.net/linzx/fedq7vva/2" target="_blank" rel="external">第一步的HTML和CSS</a></p>
+<p>滚动条的框架如上面所示，接下午我会以简称<code>wrap</code>，<code>bar</code>,<code>thumb</code>进行简称</p>
+<ul>
+<li><code>wrap</code> ：内容区域包裹框</li>
+<li><code>bar</code> ： 包裹区域中自定义滚动条的滚动框</li>
+<li><code>thumb</code> ：自定义滚动条</li>
+</ul>
+<hr>
+<blockquote>
+<p>开始之前要大家可以先记住一点，我们并不是不用原生滚动条，实际上我们所有的操作都需要依靠原生滚动条才能实现。只不过它隐藏在了暗处，而让UI更好看的自定义滚动条出现在明处。</p>
+</blockquote>
+<h5 id="1-1计算出滚动条的宽度。"><a href="#1-1计算出滚动条的宽度。" class="headerlink" title="1.1计算出滚动条的宽度。"></a>1.1计算出滚动条的宽度。</h5><p>第一步我们先将原生的滚动条隐藏掉。但是这里涉及到第一个问题，那就是不同浏览器的下滚动条宽度是<strong>不一样</strong>的。我们需要准确的知道，如果<code>wrap</code>产生了滚动条，那它的宽度是多少。</p>
+<p>先写一个获取到区域内滚动条的宽度（scrollWidth）的回调函数<code>getScrollWidth</code>,获取到滚动条高度之后，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">function getScrollWidth()&#123;</div><div class="line">    const outer = document.createElement(&quot;div&quot;);</div><div class="line">    outer.className = &quot;el-scrollbar__wrap&quot;;</div><div class="line">    outer.style.width = &apos;100px&apos;;</div><div class="line">    outer.style.visibility = &quot;hidden&quot;;</div><div class="line">    outer.style.position = &quot;absolute&quot;;</div><div class="line">    outer.style.top = &quot;-9999px&quot;;</div><div class="line">    document.body.appendChild(outer);</div><div class="line"></div><div class="line">    const widthNoScroll = outer.offsetWidth;</div><div class="line">    outer.style.overflow = &quot;scroll&quot;;</div><div class="line"></div><div class="line">    const inner = document.createElement(&quot;div&quot;);</div><div class="line">    inner.style.width = &quot;100%&quot;;</div><div class="line">    outer.appendChild(inner);</div><div class="line"></div><div class="line">    const widthWithScroll = inner.offsetWidth;</div><div class="line">    outer.parentNode.removeChild(outer);</div><div class="line">    scrollBarWidth = widthNoScroll - widthWithScroll;</div><div class="line"></div><div class="line">    return scrollBarWidth;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>获取到滚动条的宽度<code>scrollBarWidth</code>之后，通过再来设置<code>wrap</code>的css样式，通过<code>marginRight</code>将滚动条移动到视线之外<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">wrap.style.overflow = scroll;</div><div class="line">wrap.style.marginRight = -scrollWidth + &quot;px&quot;;</div></pre></td></tr></table></figure></p>
+<h5 id="1-2计算出滚动条的高度。"><a href="#1-2计算出滚动条的高度。" class="headerlink" title="1.2计算出滚动条的高度。"></a>1.2计算出滚动条的高度。</h5><p>第二步我们需要计算出滚动条的高度。计算方法也很简单，元素高度<code>scrollHieght</code>/内容高度<code>clientHeight</code>，得出来的就是滚动条所占的百分比。</p>
+<p>因为内容高度经常变更，我们可以写一个更新滚动条高度的回调函数<code>updateThumb</code>，方便后期s随时调用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">function updateThumb()&#123;</div><div class="line">    let heightPercentage = (wrap.clientHeight * 100 / wrap.scrollHeight);</div><div class="line">    thumb.style.height = heightPercentage + &quot;%&quot;;   </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>到了这一步，基本上一个滚动条的基本样式已经出来了。接下去我们要实现它的使用功能。</p>
+<p><a href="https://jsfiddle.net/linzx/fedq7vva/3/" target="_blank" rel="external">查看第一步的成果</a></p>
+<h4 id="2、添加滚动条滑动功能"><a href="#2、添加滚动条滑动功能" class="headerlink" title="2、添加滚动条滑动功能"></a>2、添加滚动条滑动功能</h4><p>到这里我们已经可以看到成型的滚动条的UI界面了，但是仍然缺少滚动和拖动的功能。关键点是在于如何去监听滚动条的变化。</p>
+<h5 id="2-1滚轮滑动"><a href="#2-1滚轮滑动" class="headerlink" title="2.1滚轮滑动"></a>2.1滚轮滑动</h5><p>还记得文章开头说过，我们所有功能的实现都依赖隐藏起来的原生滚动条。如果大家理解了我上面说的话，那么问题就简单了。<strong>当我们开始滑动滚轮的时候，隐藏在暗处的原生滚动条也会同时滚动，此时便会触发原生滚动条的scroll事件</strong>。</p>
+<blockquote>
+<p>这里可以再详细说明下。只要元素的scrollTop发生变化，就必然会触发scroll事件。所以我们操作滚轮，其实本质上是改变元素的scrollTop。</p>
+</blockquote>
+<p>所以我们只需要写一个相应的回调函数<code>handleScroll</code>，在每次触发回调的时候，实时修改我们自定义滚动条的样式就行了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">function handleScroll()&#123;</div><div class="line">    this.moveY = (wrap.scrollTop *100 / wrap.clientHeight);</div><div class="line">    //通过计算出来的百分比，然后对滚动条执行translate移动</div><div class="line">    thumb.style.transform = &quot;translateY&quot; + moveY;</div><div class="line">&#125;,</div><div class="line"></div><div class="line">//将滚动代码绑定在HTML上</div><div class="line">&lt;div</div><div class="line">    class=&quot;scrollbar-wrap&quot;</div><div class="line">    ref=&quot;wrap&quot;</div><div class="line">    onScroll=&#123;this.handleScroll&#125;</div><div class="line">&gt;</div><div class="line">    &lt;div class=&quot;scrollbar-content&quot;&gt;</div><div class="line">        &lt;!--这里用来放内容--&gt;</div><div class="line">        &lt;slot&gt;&lt;/slot&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">    &lt;div class=&apos;scrollbar-bar&apos; ref=&quot;bar&quot;&gt;</div><div class="line">        &lt;div ref=&quot;thumb&quot; class=&quot;scrollbar-thumb&quot;&gt;&lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<p><a href="https://jsfiddle.net/linzx/fedq7vva/5/" target="_blank" rel="external">查看滚轮滑动效果</a></p>
+<h5 id="2-2点击滚动框，内容滚动条及内容移动到相应位置"><a href="#2-2点击滚动框，内容滚动条及内容移动到相应位置" class="headerlink" title="2.2点击滚动框，内容滚动条及内容移动到相应位置"></a>2.2点击滚动框，内容滚动条及内容移动到相应位置</h5><p>接下去我们实现第二个功能。当我们点击滚动框的一个位置时，滚动条也会跳到这个位置，同时内容位置也会发生改变。</p>
+<p>第一步先获得点击的y坐标,然后计算出和<code>滚动框bar</code>顶部的距离，再算出占滚动框的百分比，这个百分比就是滚动条的高度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">function clickTrackHandle(e)&#123;</div><div class="line">    //获得点击位置与滚动框顶部之间的距离</div><div class="line">    const offset = Math.abs(e.target.getBoundingClientRect().top - e.clientY)</div><div class="line">    //让点击位置处于滚动条的中间</div><div class="line">    const thumbHalf = thumb.offsetHeight / 2;</div><div class="line">    //计算出滚动条在滚动框的百分比位置</div><div class="line">    const thumbPositionPercentage = (offset - thumbHalf) * 100 / wrap.offsetHeight;</div><div class="line">    //通过改变scrollTop来操作。所有操作滚动条的最后一步都是通过handleScroll来实现</div><div class="line">    wrap.scrollTop = (thumbPositionPercentage * wrap.scrollHeight / 100);</div><div class="line">&#125;</div><div class="line"></div><div class="line">bar.addEventListener(&quot;click&quot;,clickTrackHandle);</div></pre></td></tr></table></figure></p>
+<h5 id="2-3拖动滚动条，移动内容"><a href="#2-3拖动滚动条，移动内容" class="headerlink" title="2.3拖动滚动条，移动内容"></a>2.3拖动滚动条，移动内容</h5><p>接下来我们再去实现手动拖拽滚动条去实现移动内容，这个知识点就是拖拽的知识点，不过在看源码的时候发现<code>element</code>的习惯很好，他是在当你点击滚动条的时候绑定拖拽,然后松开的时候取消绑定。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function mouseMoveDocumentHandler()&#123;&#125;;   //实时记录滚动条位置的拖拽函数</div><div class="line"></div><div class="line">//当点击滚动条时</div><div class="line">document.addEventListener(&quot;mousedown&quot;,mouseMoveDocumentHandler);</div><div class="line">document.onselectstart = false; //同时阻止选中</div><div class="line">//当松开滚动条时</div><div class="line">document.removeEventListener(&quot;mousedown&quot;,mouseMoveDocumentHandler);</div><div class="line">document.onselectstart = null; //同时阻止选中</div></pre></td></tr></table></figure></p>
+<p>因为这一块代码比较多，就不贴文章里，大家可以直接链接里看就是了。<br><a href="https://note.youdao.com/" target="_blank" rel="external">查看拖动滚动条的效果</a></p>
+<h4 id="3、实现滚动条随内容实时更新"><a href="#3、实现滚动条随内容实时更新" class="headerlink" title="3、实现滚动条随内容实时更新"></a>3、实现滚动条随内容实时更新</h4><p>第二章讲的主要都是实现滚动条功能，这一章讲的是纠结😖我很久的功能。</p>
+<p>因为滚动条的高度并不是我们一开始能够确定的，它需要在dom内容渲染出来之后才能确定。<strong>而且有时候随着内容的变化，还需要实时改变滚动条的高度</strong>。再看了市面上的滚动条之后，发现基本都没有满足这一功能。</p>
+<p>事实上缺少了这一点，使用起来是缺少视觉交互的。举个例子，加入一个原来有滚动条的元素因为内容减少导致了滚动条小时，但是自定义滚动条因为没有检测到变化仍然存在，那就会给用户造成困扰。</p>
+<p>我不希望每次更新内容都要通过加一步回调函数来更新一下滚动条，而是希望它自己实时更新。在网上没有找到答案之后，最终去翻了element源码，研究了好久，总算找到了想要的答案。</p>
+<p>关键点就在于我能前面之前说的那一句话——<strong>如果我们改变元素的scrollTop，是会触发scroll事件。</strong></p>
+<p>大家想象一个情景，如果滚动条永远出现在最底部，比如下图<br><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/scroll-03.png" alt="image"></p>
+<p>那么只要我内容发生了一点变化，滚动条必然会变长或者变短。那么在滚动条长度变化时，scrollTop自然发生了改变（滚动条消失则scrollTop变为0），那么就会触发scroll的回调函数，那么我们就自动监测到了啊😊。</p>
+<p>在明白了这一点后，却又冒出来一个问题。正常情况下，滚动条不可能出现在最底部啊，那怎么办呢？</p>
+<p><code>element</code>选择了自己造一个置于底部的滚动条来满足自己需求。</p>
+<p><a href="https://jsfiddle.net/linzx/fedq7vva/" target="_blank" rel="external">做了个demo，查看效果点这里</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&lt;script&gt;</div><div class="line">    const ul = document.getElementById(&quot;ul&quot;);</div><div class="line">    const resizeTrigger = document.createElement(&quot;div&quot;);</div><div class="line">        resizeTrigger.className = &quot;resize-triggers&quot;;</div><div class="line">        resizeTrigger.innerHTML = &apos;&lt;div class=&quot;expand-trigger&quot;&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&apos;;</div><div class="line">        ul.appendChild(resizeTrigger);</div><div class="line">    	</div><div class="line">    const resetTrigger = function (element) &#123;</div><div class="line">        const trigger = element.__resizeTrigger__;</div><div class="line">        const expand = trigger.firstElementChild;</div><div class="line">        const expandChild = expand.firstElementChild;</div><div class="line">        expandChild.style.height = expand.offsetHeight + 1 + &apos;px&apos;;</div><div class="line">        expand.scrollTop = expand.scrollHeight;</div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">    ul.addEventListener(&quot;scroll&quot;,function()&#123;</div><div class="line">        resetTrigger(this);</div><div class="line">    &#125;,true)</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p><code>ul</code>是我们包裹内容的DOM元素。</p>
+<p>配合着css来看，第一段JS我们创建出了<code>resizeTrigger</code>这个div,并且我们将他的<code>height:100%</code>。这样子如果内容发生变化，<code>resizeTrigger</code>永远和父元素<code>ul</code>同时改变高度。<strong>这里设置成高度100%非常重要，这样子才能主动同步到内容的变化</strong>。</p>
+<p>注意到<code>resizeTrigger</code>里面还有有一个父子元素<code>expand</code>和<code>expandChild</code>。在第二段JS的<code>resetTrigger</code>函数中。然后设置<code>expandChild</code>的高度超过父元素<code>expand</code>的高度，促使<code>expand</code>产生滚动条。然后我们再将滚动条的<code>scrollTop</code>设置为最大,这样子滚动条就会出现在滚动区域<code>resizeTrigger</code>的最底部了。</p>
+<p><strong>现在我们做到了将滚动条设置在了最底部，所以只要内容发生了变化，那么滚动条的scrollTop必然也会发生变化</strong>。</p>
+<p>最后一段代码就是scroll的监听。当监听到<code>scrollTop</code>值发生变化时，触发相应的回调函数。</p>
+<p>所以这块代码最后的逻辑其实是这样的。内容改变 –&gt; <code>ul</code>高度改变–&gt; <code>resizeTrigger</code>高度改变 –&gt; <code>expand</code>滚动条的<code>scrollTop</code>发生变化 –&gt; 触发scroll的回调函数，在函数里面调整再次调整滚动条的高度，保证滚动条高度正确。</p>
+<p>通过这三段代码，我们也基本实现了自动监听内容变化来更新滚动条。</p>
+<p>简单画了个配图来帮助理解逻辑<br><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/scroll-1.png" alt="image"></p>
+<p><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/scroll-2.png" alt="image"></p>
+<p>通过两个小蓝框产生的滚动条来帮助监听内容变化</p>
+<h4 id="4、实现组件化，方便开发者使用"><a href="#4、实现组件化，方便开发者使用" class="headerlink" title="4、实现组件化，方便开发者使用"></a>4、实现组件化，方便开发者使用</h4><p>经过以上3大步基本上是可以实现一个自定义的滚动条的。上面的代码是面向原生js的。在我们的项目里面，实现第4点是通过封装成一个scrollbar的的组件，在项目里面进行使用。</p>
+<p>这一条要求因为不同框架展现方式都不一样，所以就不详细贴代码了因为自己项目用的是一个Vue框架，所以是个Vue组件，有需求可以自己去看。</p>
+<p><a href="http://note.youdao.com/" target="_blank" rel="external">查看scrollbar组件</a></p>
+<hr>
+<p>好了文章就到此结束了，在看人家源码的过程中也学到了许多。比如使用JSX来编写组件；scroll监听其实就是判断scrollTop；比如通过自己造滚动条的方法监听scrollTop来实现自动更新。最后通过写文章，对一些新的知识点理解还是加深了许多。</p>
 
       
     </div>
@@ -467,7 +531,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/随笔/" rel="tag"># 随笔</a>
+            <a href="/tags/技术文章/" rel="tag"># 技术文章</a>
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
           
         </div>
       
@@ -480,8 +546,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/11/23/《算法图解》读后感/" rel="next" title="">
-                <i class="fa fa-chevron-left"></i> 
+              <a href="/2018/01/29/《浪潮之巅》读后感/" rel="next" title="《浪潮之巅》读后感">
+                <i class="fa fa-chevron-left"></i> 《浪潮之巅》读后感
               </a>
             
           </div>
@@ -489,10 +555,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/13/一步步实现一个简单的router插件/" rel="prev" title="一步步实现一个简单的router插件">
-                一步步实现一个简单的router插件 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -545,8 +607,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/header.jpg"
@@ -608,6 +679,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、搭建好基本的样式框架"><span class="nav-number">1.</span> <span class="nav-text">1、搭建好基本的样式框架</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1计算出滚动条的宽度。"><span class="nav-number">1.1.</span> <span class="nav-text">1.1计算出滚动条的宽度。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2计算出滚动条的高度。"><span class="nav-number">1.2.</span> <span class="nav-text">1.2计算出滚动条的高度。</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、添加滚动条滑动功能"><span class="nav-number">2.</span> <span class="nav-text">2、添加滚动条滑动功能</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1滚轮滑动"><span class="nav-number">2.1.</span> <span class="nav-text">2.1滚轮滑动</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2点击滚动框，内容滚动条及内容移动到相应位置"><span class="nav-number">2.2.</span> <span class="nav-text">2.2点击滚动框，内容滚动条及内容移动到相应位置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3拖动滚动条，移动内容"><span class="nav-number">2.3.</span> <span class="nav-text">2.3拖动滚动条，移动内容</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、实现滚动条随内容实时更新"><span class="nav-number">3.</span> <span class="nav-text">3、实现滚动条随内容实时更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、实现组件化，方便开发者使用"><span class="nav-number">4.</span> <span class="nav-text">4、实现组件化，方便开发者使用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
