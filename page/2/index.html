@@ -855,7 +855,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  1,695
+                  1,990
                 </span>
               
 
@@ -871,7 +871,7 @@
                   <span class="post-meta-item-text">阅读时长</span>
                 
                 <span title="阅读时长">
-                  6
+                  8
                 </span>
               
             </div>
@@ -904,7 +904,8 @@
 <li>happypack多核构建项目</li>
 </ul>
 <p>不过经过自己的实践最后三点是对自己项目优化最大的。文章也主要对后面几点详细说明一下</p>
-<p>原来打包一个项目所需要的时间基本在35-40秒左右(第二次有缓存会稍微快一点)，但是偶尔来一次大姨妈，时间甚至要到50s左右，我也是醉了。不过大家可以期待一下经过下面这三步优化大概需要多久</p>
+<p>对了，我项目引用了vue全家桶一套,jquery以及两个第三方插件，element-ui,echarts，自己项目的组件大概有40个左右</p>
+<p>原来打包一个项目所需要的时间基本在35-40秒左右(第二次有缓存会稍微快一点)，但是偶尔来一次大姨妈，时间甚至要到50s左右，我也是醉了。不过大家可以期待一下经过下面这三步优化大概需要多久。</p>
 <h4 id="1-使用dllplugin预编译与引用"><a href="#1-使用dllplugin预编译与引用" class="headerlink" title="1.使用dllplugin预编译与引用"></a>1.使用dllplugin预编译与引用</h4><p>首先为什么要引用Dll？在网上浏览了一些文章后，我发现上除了加快构建速度以外，使用webpack的dll还有一个好处。</p>
 <p><strong>Dll打包以后是独立存在的，只要其包含的库没有增减、升级，hash也不会变化，因此线上的dll代码不需要随着版本发布频繁更新。</strong> 因为使用Dll打包的基本上都是独立库文件，这类文件有一个特性就是变化不大。当我们正常打包这些库文件到一个app.js里的时候，由于其他业务文件的改变，影响了缓存对构建的优化，导致每次都要重新去npm包里寻找相关文件。而使用了DLL之后，只要包含的库没有升级， 增减，就不需要重新打包。这样也提高了构建速度。</p>
 <p>那么如何使用Dll去优化项目呢<br>首先要建立一个dll的配置文件,引入项目所需要的第三方库。这类库的特点是不需要随着版本发布频繁更新，长期稳定。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">const webpack = require(&apos;webpack&apos;);</div><div class="line">const path = require(&apos;path&apos;);</div><div class="line"></div><div class="line">module.exports = &#123;</div><div class="line">  entry: &#123;</div><div class="line">    //你需要引入的第三方库文件</div><div class="line">    vendor: [&apos;vue&apos;,&apos;vuex&apos;,&apos;vue-router&apos;,&apos;element-ui&apos;,&apos;axios&apos;,&apos;echarts/lib/echarts&apos;,&apos;echarts/lib/chart/bar&apos;,&apos;echarts/lib/chart/line&apos;,&apos;echarts/lib/chart/pie&apos;,</div><div class="line">      &apos;echarts/lib/component/tooltip&apos;,&apos;echarts/lib/component/title&apos;,&apos;echarts/lib/component/legend&apos;,&apos;echarts/lib/component/dataZoom&apos;,&apos;echarts/lib/component/toolbox&apos;],</div><div class="line">  &#125;,</div><div class="line"></div><div class="line">  output: &#123;</div><div class="line">    path: path.join(__dirname, &apos;dist-[hash]&apos;),</div><div class="line">    filename: &apos;[name].js&apos;,</div><div class="line">    library: &apos;[name]&apos;,</div><div class="line">  &#125;,</div><div class="line"></div><div class="line">  plugins: [</div><div class="line">    new webpack.DllPlugin(&#123;</div><div class="line">      path: path.join(__dirname, &apos;dll&apos;, &apos;[name]-manifest.json&apos;),</div><div class="line">      filename: &apos;[name].js&apos;,</div><div class="line">      name: &apos;[name]&apos;,</div><div class="line">    &#125;),</div><div class="line">  ]</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
@@ -918,10 +919,16 @@
 <p>vue-cli配置文件中提示也有提到这一点，就是下面这段代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">resolve: &#123;</div><div class="line">    //自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名</div><div class="line">    extensions: [&apos;.js&apos;, &apos;.vue&apos;, &apos;.json&apos;],</div><div class="line">    //模块别名定义，方便后续直接引用别名，无须多写长长的地址</div><div class="line">    alias: &#123;</div><div class="line">      &apos;vue$&apos;: &apos;vue/dist/vue.esm.js&apos;,//就是这行代码，提供你直接引用文件</div><div class="line">      &apos;@&apos;: resolve(&apos;src&apos;),</div><div class="line">    &#125;</div><div class="line">  &#125;,</div></pre></td></tr></table></figure></p>
 <p>然后我将其他所有地方关于vue的引用都替换成了vue$之后，比如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// import &apos;vue&apos;;</div><div class="line">import &apos;vue/dist/vue.esm.js&apos;;</div></pre></td></tr></table></figure></p>
 <p>时间竟然到了12s，也是把我吓了一跳。。。</p>
-<p>然后我就把jquery，axios，vuex等等全部给替换掉了。。。大概优化到了9s-11s左右，美滋滋，O(∩_∩)O~~</p>
+<p>然后我就把jquery，axios，vuex等等全部给替换掉了。。。不过变化没有特别大，大概优化到了11s左右，美滋滋，O(∩_∩)O~~。如果有缓存的情况下，基本上大概在9s左右</p>
 <h4 id="4-webpack3升级"><a href="#4-webpack3升级" class="headerlink" title="4.webpack3升级"></a>4.webpack3升级</h4><p>本来是没第四点，刚刚看到公众号推出来一篇文章讲到升级到webpack3的一些新优点，比如<strong>Scope Hoisting</strong>(webpack2升级到webpack3基本上没有太大问题)。通过添加一个新的插件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//  2017-08-13配合最新升级的webpack3提供的新功能，可以使压缩的代码更小，运行更快</div><div class="line">...</div><div class="line">plugin : [</div><div class="line">    new webpack.optimize.ModuleConcatenationPlugin(),</div><div class="line">]</div></pre></td></tr></table></figure></p>
-<p>不过在添加这行代码之后，构建时间并没有太大变化，不过运行效率没试过，不知道新的效果怎么样</p>
-<p>好了基本上感觉就是以上这些效果对项目的优化最大，虽然没有到网上说的那种只要3~4秒时间那么变态，不过感觉基本8,9秒的时间也可以了。</p>
+<p>不过在添加这行代码之后，构建时间并没有太大变化。因为它的优点是提供js在浏览器中的运行速度。webpack2会把每个处理后的模块用一个函数包裹起来，导致浏览器中的JS执行效率降低，主要是因为闭包函数降低了JS引擎解析速度。</p>
+<blockquote>
+<p>不过在浏览器中国的实际效果感觉不出来太大差别</p>
+</blockquote>
+<p>然后还有一个是webpack3中所有的模块支持用ID进行标记，如果重复引用相同的模块</p>
+<h4 id="5-去除不必要的文件"><a href="#5-去除不必要的文件" class="headerlink" title="5.去除不必要的文件"></a>5.去除不必要的文件</h4><p>因为要引入代码高亮的highlight.js插件，webpack会引入里面有各个语言的js文件，但是我们项目只需要js,html,css。搜了一下发现网上已经有类似的解决方法了，ContextReplacementPlugin会根据你写的正则去匹配你需要的文件。</p>
+<p>而且自己记得webpack3的升级中有个新特性<code>tree shaking</code>就是可以从文件树中去除不必要的文件。</p>
+<p>好了基本上感觉就是以上这些效果对项目的优化最大，虽然没有到网上说的那种只要3~4秒时间那么变态，不过感觉基本9-12秒的时间也可以了。</p>
 
           
         
@@ -2323,7 +2330,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
+              <a href="/technology/index.html">
                 <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>
