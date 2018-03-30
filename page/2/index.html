@@ -299,280 +299,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/20/promise源码解析（译）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="linzx">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="linzx">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/20/promise源码解析（译）/" itemprop="url">promise源码解析（译）</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-20T23:47:44+08:00">
-                2017-08-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/javascript/" itemprop="url" rel="index">
-                    <span itemprop="name">javascript</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/08/20/promise源码解析（译）/" class="leancloud_visitors" data-flag-title="promise源码解析（译）">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计</span>
-                
-                <span title="字数统计">
-                  4,582
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长</span>
-                
-                <span title="阅读时长">
-                  18
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>最新项目中有用promise几个api，对代码结构看起来的确很爽。然后想着去网上找了几篇promise库源码解析的文章。但是看了几篇，感觉还是不能够很理解，然后看到一篇翻译文章有说道q.js库的作者有对promise实现的递进讲解，看了一下，还不错，</p>
-</blockquote>
-<p>Q.js作者源码分析：<a href="https://github.com/kriskowal/q/tree/v1/design" target="_blank" rel="external">Q.js作者promise递进讲解实现</a></p>
-<p><a href="http://div.io/topic/1351" target="_blank" rel="external">网上找的promise源码翻译</a>。文章有些地方翻译的很好，但是对比原文发现少了一些内容，所以读起来很不顺畅。所以自己根据原文也翻译了一遍。对了，本文适合用过promise的人阅读。如果你还没有接触过。可以右转<a href="http://es6.ruanyifeng.com/#docs/promise" target="_blank" rel="external">阮一峰的promise讲解</a></p>
-<hr>
-<h4 id="一、极简版异步回调"><a href="#一、极简版异步回调" class="headerlink" title="一、极简版异步回调"></a>一、极简版异步回调</h4><p>假如你正在写一个函数不立即返回值函数，需要等待几秒钟后才返回执行结果，你会怎么写呢？思考几秒钟。</p>
-<p>最简单的做法自然是写一个回调函数依靠定时器来返回值，比如下面这个<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var oneOneSecondLater = function (callback) &#123;</div><div class="line">    setTimeout(function () &#123;</div><div class="line">        callback(1);</div><div class="line">    &#125;, 1000);</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
-<p>这是一个很简单解决问题的方法，但是还有改进的地方，比如能够添加代码执行错误时给出提示。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var maybeOneOneSecondLater = function (callback, errback) &#123;</div><div class="line">    setTimeout(function () &#123;</div><div class="line">        //进行判断情况，是执行成功的回调，还是执行错误的回调</div><div class="line">        if (Math.random() &lt; .5) &#123;</div><div class="line">            callback(1);</div><div class="line">        &#125; else &#123;</div><div class="line">            errback(new Error(&quot;Can&apos;t provide one.&quot;));</div><div class="line">        &#125;</div><div class="line">    &#125;, 1000);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>一般的做法是提供一个能同时返回值并且能抛出错误的工具。上面这个例子则演示同时提供回调和错误处理。但是这种写法实在是太定制化了，并不好。</p>
-<h4 id="二、Promise基本雏形设计"><a href="#二、Promise基本雏形设计" class="headerlink" title="二、Promise基本雏形设计"></a>二、Promise基本雏形设计</h4><p>所以考虑到大多数的情况，代替最简单的返回值和抛出异常，我们更希望函数通常会返回一个对象用来表示最后执行成功或者失败的结果，而这个返回的对象就是<strong>promise</strong>。从名字上理解，promise表示承诺，那么最终这个<strong>promise</strong>（承诺）是要被<strong>resolve</strong>（履行，执行）掉的。</p>
-<p>接下去我们开始迭代设计promise。我们先设计一个具有“then”方法的promise模型，通过“then”方法，我们能注册回调函数并且延迟执行。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">var maybeOneOneSecondLater = function () &#123;</div><div class="line">    var callback;</div><div class="line">    setTimeout(function () &#123;</div><div class="line">        callback(1);</div><div class="line">    &#125;, 1000);</div><div class="line">    return &#123;</div><div class="line">        then: function (_callback) &#123;</div><div class="line">            callback = _callback;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">maybeOneOneSecondLater().then(callback1);</div></pre></td></tr></table></figure>
-<p>代码写好了。但是大家仔细观察发现该方案仍然还有两个缺点</p>
-<ul>
-<li>一是现在方案只能执行一个添加的回调函数。最好的做法是每一个通过then添加进来的回调都能被通知到然后顺序执行。</li>
-<li>二是如果这个回调函数是在promise创建好1s之后通过then添加进去，它将无法被调用。</li>
-</ul>
-<blockquote>
-<p><strong>敲黑板，注意注意，接下去开始慢慢搭建promise了。</strong></p>
-</blockquote>
-<p>正常情况下，我们希望可以接收任何数量的回调，且不管是否超时，仍然可以继续注册回调。为了实现这些，我们将创建一个包含两个功能的<strong>promise对象</strong>。</p>
-<p>我们暂时设计了一个defer对象，他的返回值一个包含两部分的对象（这个对象就是<strong>promise</strong>），一个用来注册观察者（就是”then方法添加回调），一个用来通知所有的观察者执行代码（就是resolve去执行之前添加的所有回调）。</p>
-<p>当<strong>promise</strong>没有被<strong>resolve</strong>之前，所有回调函数会存储在一个”pengding”的数组中。</p>
-<p>当<strong>promise</strong>被<strong>resolve</strong>之后，立即执行之前存储的所有回调函数，当回调函数全部执行完毕之后，我们将根据”pengding”来区分状态。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">let defer = () =&gt; &#123;</div><div class="line">    let pending = [],value;</div><div class="line">    return &#123;</div><div class="line">        resolve(_value)&#123;</div><div class="line">            value = _value</div><div class="line">            for(let i = 0;i &lt; pending.length; i++)&#123;</div><div class="line">                pending[i](value)</div><div class="line">            &#125;</div><div class="line">            pending = undefined;</div><div class="line">        &#125;,</div><div class="line">        then(_callback)&#123;</div><div class="line">            if(pending)&#123;</div><div class="line">                pending.push(_callback)</div><div class="line">            &#125;else&#123;</div><div class="line">                _callback();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">let oneOneSecondLater = () =&gt; &#123;</div><div class="line">    let result = defer();</div><div class="line">    setTimeout(()=&gt; &#123;</div><div class="line">        result.resolve(1);</div><div class="line">    &#125;, 1000);</div><div class="line">    return result;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">oneOneSecondLater().then(callback);</div></pre></td></tr></table></figure>
-<p>这开始的第一步很关键啊，因为此时我们已经可以做到</p>
-<ol>
-<li>可以任意时间添加任意多的回调;</li>
-<li>可以人为决定什么时候resolve;</li>
-<li>当promise被resolve之后，还可以添加回调，只不过此时立即就执行了</li>
-</ol>
-<p>但是还有一些问题，比如</p>
-<ol>
-<li>defer可以被resolve执行多次,我们并没有给出一个错误的提示。而且事实上为了避免恶意或者无意的不断去resolve，我们仅允许第一次调用可以通知回调并执行。</li>
-<li>添加回调只能通过defer.then添加，不能链式调用,即defer.then(callback).then(callback)</li>
-</ol>
-<p>那么接下来我们先修正第一个问题<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">let defer = () =&gt; &#123;</div><div class="line">    let pending = [],value</div><div class="line">    return &#123;</div><div class="line">        resolve(_value)&#123;</div><div class="line">            if(pending)&#123;</div><div class="line">                value = _value</div><div class="line">                for(let i = 0;i &lt; pending.length; i++)&#123;</div><div class="line">                    pending[i](value)</div><div class="line">                &#125;</div><div class="line">                pending = undefined;</div><div class="line">            &#125;else&#123;</div><div class="line">                throw new Error(&quot;A promise can only be resolved once.&quot;)</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line">        then(_callback)&#123;</div><div class="line">            if(pending)&#123;</div><div class="line">                pending.push(_callback)</div><div class="line">            &#125;else&#123;</div><div class="line">                _callback();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>好，现在我们已经保证不能重复defer.resolve()的问题了，那么我们还希望可以实现通过链式调用来添加回调。可是目前要只能通过defer().then(callback1),defer().then(callback2),defer().then(callback3)这种方式添加回调，这显然不是我们想要的方式。接下来我们将一步一步实现。</p>
-<h4 id="三、promise职责分离"><a href="#三、promise职责分离" class="headerlink" title="三、promise职责分离"></a>三、promise职责分离</h4><p>但是在实现链式回调之前，为了后期结构，我们希望对我们的promise进行职责区分，一个注册观察者，一个执行观察者。根据最少授权原则，我们希望如果授权给某人一个promise，这里只允许他增加观察者；如果授权给某人resolver，他应当仅仅能决定什么时候给出解决方案。因为大量实验表明任何任何不可避免的越权行为会导致后续的改动变得很难维护。（其实就是希望把添加回调的then功能移植到promise中，从defer.then转变成defer.promise.then，保证功能的纯粹性）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">let defer = () =&gt; &#123;</div><div class="line">    let pending = [],value;</div><div class="line">    return &#123;</div><div class="line">        resolve(_value)&#123;</div><div class="line">            if(pending)&#123;</div><div class="line">                value = _value</div><div class="line">                for(let i = 0;i &lt; pending.length; i++)&#123;</div><div class="line">                    pending[i](value)</div><div class="line">                &#125;</div><div class="line">                pending = undefined;</div><div class="line">            &#125;else&#123;</div><div class="line">                throw new Error(&quot;A promise can only be resolved once.&quot;)</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line">        promise: &#123;</div><div class="line">            then (callback) &#123;</div><div class="line">                if (pending) &#123;</div><div class="line">                    pending.push(callback);</div><div class="line">                &#125; else &#123;</div><div class="line">                    callback(value);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>当职责分离完之后，我们就可以接下去实现一步关键的改造</p>
-<h4 id="四、promise的链式调用"><a href="#四、promise的链式调用" class="headerlink" title="四、promise的链式调用"></a>四、promise的链式调用</h4><p>上文说道要实现链式回调，我们首先要能在下一个回调函数里接受上一个回调的值。依靠上一步的职责分离的基础，我们接下来要跨非常大的一步，就是使用旧的promise去驱动新的promise。我们希望通过promise组合的使用，来实现值的传递。</p>
-<p>举个例子，让你写一个相加的函数，接受两个回调函数返回的数字相加。大家可以考虑如何实现。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">var twoOneSecondLater = function (callback) &#123;</div><div class="line">    var a, b;</div><div class="line">    var consider = function () &#123;</div><div class="line">        if (a === undefined || b === undefined)return;</div><div class="line">        callback(a + b);</div><div class="line">    &#125;;</div><div class="line">    oneOneSecondLater(function (_a) &#123;</div><div class="line">        a = _a;</div><div class="line">        consider();</div><div class="line">    &#125;);</div><div class="line">    oneOneSecondLater(function (_b) &#123;</div><div class="line">        b = _b;</div><div class="line">        consider();</div><div class="line">    &#125;);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">twoOneSecondLater(function (c) &#123;</div><div class="line">    // c === 2</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<p>上面这个方法虽然做到了，但是这个方法是脆弱的，因为我们在执行相加函数时，需要额外的代码去判断相加的数字是否有效。</p>
-<p>于是我们希望用更少的代码去实现上面的需求，比如就像下面这样<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//上面的函数如果用更少的步骤来表达就是</div><div class="line">var a = oneOneSecondLater();</div><div class="line">var b = oneOneSecondLater();</div><div class="line">var c = a.then(function (a) &#123;</div><div class="line">    return b.then(function (b) &#123;</div><div class="line">        return a + b;</div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>上面这个例子其实想表达的就是实现callback返回值的传递，如callback1的返回值传给callback2，将callback2的返回值传给callback3。<br>为了实现上面例子的这种效果，我们要实现以下几点</p>
-<ul>
-<li>每个then方法后必须要返回一个promise</li>
-<li>每一个promise被resolve后，返回的必然是一个新的promise或者是一个执行过的值</li>
-<li>返回的promise最终可以带着回调的值被resolve掉（这句话有点难翻译，感觉就是promise.resolve(_value)）;</li>
-</ul>
-</blockquote>
-<p>我们实现一个函数可以将获得的值传给下一个回调使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">let ref = (value) =&gt; &#123;</div><div class="line">    return &#123;</div><div class="line">        then(callback)&#123;</div><div class="line">            callback(value);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>不过考虑到有时候返回的值不仅仅是一个值，而且还可能是一个promise函数，所以我们需要加个判断<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">let ref = (value) =&gt; &#123;</div><div class="line">    if(value &amp;&amp; typeof value.then === &quot;function&quot;)&#123;</div><div class="line">        return value;</div><div class="line">    &#125;</div><div class="line">    return &#123;</div><div class="line">        then(callback)&#123;</div><div class="line">            callback(value);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>这样子我们在使用中就不需要考虑传入的值是一个普通值还是一个promise了。</p>
-<p>接下来，为了能使then方法也能返回一个promise，我们来改造下then方法；我们强制将callback的返回值传入下一个promise并立即返回。<br>这个例子存储了回调的值，并在下一个回调中执行了。但是上面第三点没有实现，因为返回值可能是一个promise，那么我们继续改进一下方法</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">let ref = (value) =&gt; &#123;</div><div class="line">    if(value &amp;&amp; typeof value.then === &quot;function&quot;)&#123;</div><div class="line">        return value;</div><div class="line">    &#125;</div><div class="line">    return &#123;</div><div class="line">        then(callback)&#123;</div><div class="line">            return ref(callback(value));</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>通过这一步增强之后，基本上就可以做到获得上一个回调值并不断链式调用下去了。</p>
-<p>接下去我们考虑到一种比较复杂的情况，就是defer中存储的回调会在未来某个时间调用。于是我们需要在defer里面将回调进行一次封装，我们将回调中执行完后通过then方法去驱动下一个promise并传递一个返回值。</p>
-<p>此外，<strong>resolve</strong>方法应该能处理本身是一个promise的情况，resolve可以将值传递给promise。因为不管是ref还是defer都可以返回一个then方法。如果promise是ref类型的，将会通过then(callback)立即执行回调。如果是promise是defer类型的，callback暂时被存储起来，依靠下一个then(callback)调用才能执行；所以变成了callback可以监听一个新的promise以便能获取完全执行后的value。</p>
-<p>根据以上要求，得出了下面最终版的promise<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">let isPromise = (value) =&gt; &#123;</div><div class="line">    return value &amp;&amp; typeof value.then === &quot;function&quot;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">let ref = (value) =&gt; &#123;</div><div class="line">    if (value &amp;&amp; typeof value.then === &quot;function&quot;)</div><div class="line">        return value;</div><div class="line">    return &#123;</div><div class="line">        then (callback) &#123;</div><div class="line">            return ref(callback(value));</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">let defer = () =&gt; &#123;</div><div class="line">    let pending = [], value;</div><div class="line">    return &#123;</div><div class="line">        resolve: function (_value) &#123;</div><div class="line">            if (pending) &#123;</div><div class="line">                value = ref(_value); // values wrapped in a promise</div><div class="line">                for (let i = 0, ii = pending.length; i &lt; ii; i++) &#123;</div><div class="line">                    let callback = pending[i];</div><div class="line">                    value.then(callback); // then called instead</div><div class="line">                &#125;</div><div class="line">                pending = undefined;</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line">        promise: &#123;</div><div class="line">            then: function (_callback) &#123;</div><div class="line">                let result = defer();</div><div class="line">                // callback is wrapped so that its return</div><div class="line">                // value is captured and used to resolve the promise</div><div class="line">                // that &quot;then&quot; returns</div><div class="line">                let callback = function (value) &#123;</div><div class="line">                    result.resolve(_callback(value));</div><div class="line">                &#125;;</div><div class="line">                if (pending) &#123;</div><div class="line">                    pending.push(callback);</div><div class="line">                &#125; else &#123;</div><div class="line">                    value.then(callback);</div><div class="line">                &#125;</div><div class="line">                return result.promise;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">let a = defer();</div><div class="line">a.promise.then(function(value)&#123;console.log(value);return 2&#125;).then(function(value)&#123;console.log(value)&#125;);</div><div class="line">a.resolve(1);</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>将defer分为两个部分，一个是promise，一个是resolve</p>
-</blockquote>
-<p>到了这一步基本上的promise功能已经实现了，可以链式调用，可以在自己控制在未来某个时间resolve。接下去就是功能的增强和补足了。</p>
-<p>这一块回调基本上就写完了，看了很久原文的描述，对着代码理解作者想表达的意思。不过英语不太好，写的磕磕绊绊。╮(╯▽╰)╭，感觉还是有些地方写的不对。希望有人能够纠错出来。</p>
-<h4 id="五、提供错误的回调"><a href="#五、提供错误的回调" class="headerlink" title="五、提供错误的回调"></a>五、提供错误的回调</h4><p>为了实现错误消息的传递，我们还需要一个错误的回调函数(errback)。就像promise完全执行时调用callback一样，它会告知执行errback以及告诉我们拒绝的原因。</p>
-<p>实现一个类似于前面ref的函数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">let reject = (reason) =&gt; &#123;</div><div class="line">    return &#123;</div><div class="line">        then(callback,errback)&#123;</div><div class="line">            return ref(errback(reason);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>最简单的实现方法是当监听到返回值时，立即执行代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">reject(&quot;Meh.&quot;).then((value) =&gt; &#123;&#125;,(reason) =&gt; &#123;</div><div class="line">    throw new Error(reason);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>那么接下来我们改进原来promsie这个API，引入“errback”。</p>
-<p>为了将错误回调添加到代码中，defer需要添加一种新的容器来添加成功回调和错误回调。因此之前那个存储在数组(pending)中的只有一种待处理回调函数，我们需要重新设计一个同时包含成功回调和错误回调的数组([callback,errback]),根据then传入的参数决定调用哪个。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">var defer = function () &#123;</div><div class="line">    var pending = [], value;</div><div class="line">    return &#123;</div><div class="line">        resolve: function (_value) &#123;</div><div class="line">            if (pending) &#123;</div><div class="line">                value = ref(_value);</div><div class="line">                for (var i = 0, ii = pending.length; i &lt; ii; i++) &#123;</div><div class="line">                    // apply the pending arguments to &quot;then&quot;</div><div class="line">                    value.then.apply(value, pending[i]);</div><div class="line">                &#125;</div><div class="line">                pending = undefined;</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line">        promise: &#123;</div><div class="line">            then: function (_callback, _errback) &#123;</div><div class="line">                var result = defer();</div><div class="line">                var callback = function (value) &#123;</div><div class="line">                    result.resolve(_callback(value));</div><div class="line">                &#125;;</div><div class="line">                var errback = function (reason) &#123;</div><div class="line">                    result.resolve(_errback(reason));</div><div class="line">                &#125;;</div><div class="line">                if (pending) &#123;</div><div class="line">                    pending.push([callback, errback]);</div><div class="line">                &#125; else &#123;</div><div class="line">                    value.then(callback, errback);</div><div class="line">                &#125;</div><div class="line">                return result.promise;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">let ref = (value) =&gt; &#123;</div><div class="line">    if (value &amp;&amp; typeof value.then === &quot;function&quot;)</div><div class="line">        return value;</div><div class="line">    return &#123;</div><div class="line">        then: function (callback) &#123;</div><div class="line">            return ref(callback(value));</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">let reject = (reason) =&gt; &#123;</div><div class="line">    return &#123;</div><div class="line">        then: function (callback, errback) &#123;</div><div class="line">            return ref(errback(reason));</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
-<p>代码写完了，但是仍然还有地方可以改进。</p>
-<p>比如作者说到这一步有一个问题，就是如果按照上面这么写，那么所有的then函数就必须提供错误回调函数(_errback)，如果不提供就会出错。所以最简单的解决方法是提供一个默认的回调函数。甚至文中还说，如果仅仅是对错误回调有需要，那么忽略不写成功回调(_callback)也是可以的。所以为了满足需求，我们为_callback和_errback都提供一个默认的回调函数。（好吧，其实我就是觉得这是一个好的库的容错处理）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">var defer = function () &#123;</div><div class="line">    ...</div><div class="line">    return&#123;</div><div class="line">        ...</div><div class="line">        promise : &#123;</div><div class="line">             then: function (_callback, _errback) &#123;</div><div class="line">                var result = defer();</div><div class="line">                // 提供一个默认的成功回调和错误回调</div><div class="line">                _callback = _callback || function (value) &#123;</div><div class="line">                    // 默认执行</div><div class="line">                    return value;</div><div class="line">                &#125;;</div><div class="line">                _errback = _errback || function (reason) &#123;</div><div class="line">                    // 默认拒绝</div><div class="line">                    return reject(reason);</div><div class="line">                &#125;;</div><div class="line">                var callback = function (value) &#123;</div><div class="line">                    result.resolve(_callback(value));</div><div class="line">                &#125;;</div><div class="line">                var errback = function (reason) &#123;</div><div class="line">                    result.resolve(_errback(reason));</div><div class="line">                &#125;;</div><div class="line">                if (pending) &#123;</div><div class="line">                    pending.push([callback, errback]);</div><div class="line">                &#125; else &#123;</div><div class="line">                    value.then(callback, errback);</div><div class="line">                &#125;</div><div class="line">                return result.promise;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>好了，现在我们已经实现了接收构造或者隐含的错误回调<a href="https://github.com/kriskowal/q/blob/v1/design/q6.js" target="_blank" rel="external">这一步的完成版</a></p>
-<h4 id="六、安全性和稳定性"><a href="#六、安全性和稳定性" class="headerlink" title="六、安全性和稳定性"></a>六、安全性和稳定性</h4><p>我们还有需要需要提高的地方就是要保证callbacks和errbacks在未来他们被调用的时候，应该是和注册时的顺序是保持一致的。这将显著降低异步编程中流程控制出错可能性。文中举了一个有趣的小例子.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var blah = function () &#123;</div><div class="line">    var result = foob().then(function () &#123;</div><div class="line">        return barf();</div><div class="line">    &#125;);</div><div class="line">    var barf = function () &#123;</div><div class="line">        return 10;</div><div class="line">    &#125;;</div><div class="line">    return result;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
-<p>上面这个函数在执行后会出现两种情况，一是抛出一个异常，二是顺利执行并返回了值10。而决定是哪个结果的是foob()是否在正确顺序里。因为我们希望哪怕回调在未来被延迟执行了，它能够执行成功。</p>
-<p>下面添加了一个enqueue方法，我的理解就是依靠setTimeout的异步将所有回调按照顺序添加到任务队列中，保证按照顺序执行代码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line">let enqueue = (callback) =&gt; &#123;</div><div class="line">    setTimeout(callback,1)</div><div class="line">&#125;</div><div class="line">let enqueue = (callback) =&gt; &#123;</div><div class="line">    //process.nextTick(callback); // NodeJS</div><div class="line">    setTimeout(callback, 1); // Naïve browser solution</div><div class="line">&#125;;</div><div class="line"></div><div class="line">let defer = function () &#123;</div><div class="line">    let pending = [], value;</div><div class="line">    return &#123;</div><div class="line">        resolve: function (_value) &#123;</div><div class="line">            if (pending) &#123;</div><div class="line">                value = ref(_value);</div><div class="line">                for (let i = 0, ii = pending.length; i &lt; ii; i++) &#123;</div><div class="line">                    enqueue(function () &#123;</div><div class="line">                        value.then.apply(value, pending[i]);</div><div class="line">                    &#125;);</div><div class="line">                &#125;</div><div class="line">                pending = undefined;</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line">        promise: &#123;</div><div class="line">            then: function (_callback, _errback) &#123;</div><div class="line">                let result = defer();</div><div class="line">                _callback = _callback || function (value) &#123;</div><div class="line">                    return value;</div><div class="line">                &#125;;</div><div class="line">                _errback = _errback || function (reason) &#123;</div><div class="line">                    return reject(reason);</div><div class="line">                &#125;;</div><div class="line">                let callback = function (value) &#123;</div><div class="line">                    result.resolve(_callback(value));</div><div class="line">                &#125;;</div><div class="line">                let errback = function (reason) &#123;</div><div class="line">                    result.resolve(_errback(reason));</div><div class="line">                &#125;;</div><div class="line">                if (pending) &#123;</div><div class="line">                    pending.push([callback, errback]);</div><div class="line">                &#125; else &#123;</div><div class="line">                    // XXX</div><div class="line">                    enqueue(function () &#123;</div><div class="line">                        value.then(callback, errback);</div><div class="line">                    &#125;);</div><div class="line">                &#125;</div><div class="line">                return result.promise;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">let ref = function (value) &#123;</div><div class="line">    if (value &amp;&amp; value.then)</div><div class="line">        return value;</div><div class="line">    return &#123;</div><div class="line">        then: function (callback) &#123;</div><div class="line">            let result = defer();</div><div class="line">            // XXX</div><div class="line">            enqueue(function () &#123;</div><div class="line">                result.resolve(callback(value));</div><div class="line">            &#125;);</div><div class="line">            return result.promise;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">let reject = function (reason) &#123;</div><div class="line">    return &#123;</div><div class="line">        then: function (callback, errback) &#123;</div><div class="line">            var result = defer();</div><div class="line">            // XXX</div><div class="line">            enqueue(function () &#123;</div><div class="line">                result.resolve(errback(reason));</div><div class="line">            &#125;);</div><div class="line">            return result.promise;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
-<p>虽然将需要的回调依照次序添加到了队列中</p>
-<p>作者有考虑到一些新的问题，比如</p>
-<ul>
-<li>callback或者errback必须以同样的顺序被调用</li>
-<li>callback或者errback可能会被同时调用</li>
-<li>callback或者errback可能会被调用多次</li>
-</ul>
-<p>于是我们需要找个机会then的回调函数，为了保证当回调函数中程序出错时，可以转入到报错函数中。(其实又是一个库的容错处理，保证代码出错时不中断程序的执行)。</p>
-<p>用when方法封装下promise以此阻止错误发生，确保不会有哪些突发性的错误，包括哪些非必需的事件流控制，并且也能使callback和errback各自保持独立。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">var when = function (value, _callback, _errback) &#123;</div><div class="line">    var result = defer();</div><div class="line">    var done;</div><div class="line"></div><div class="line">    _callback = _callback || function (value) &#123;</div><div class="line">        return value;</div><div class="line">    &#125;;</div><div class="line">    _errback = _errback || function (reason) &#123;</div><div class="line">        return reject(reason);</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    var callback = function (value) &#123;</div><div class="line">        try &#123;</div><div class="line">            return _callback(value);</div><div class="line">        &#125; catch (reason) &#123;</div><div class="line">            return reject(reason);</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">    var errback = function (reason) &#123;</div><div class="line">        try &#123;</div><div class="line">            return _errback(reason);</div><div class="line">        &#125; catch (reason) &#123;</div><div class="line">            return reject(reason);</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    enqueue(function () &#123;</div><div class="line">        ref(value).then(function (value) &#123;</div><div class="line">            if (done)</div><div class="line">                return;</div><div class="line">            done = true;</div><div class="line">            result.resolve(ref(value).then(callback, errback));</div><div class="line">        &#125;, function (reason) &#123;</div><div class="line">            if (done)</div><div class="line">                return;</div><div class="line">            done = true;</div><div class="line">            result.resolve(errback(reason));</div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    return result.promise;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p><a href="https://github.com/kriskowal/q/blob/v1/design/q7.js" target="_blank" rel="external">这一步的完整版</a></p>
-<h4 id="六、消息传递"><a href="#六、消息传递" class="headerlink" title="六、消息传递"></a>六、消息传递</h4><p>现在这一步来看，promise已经成为了一个具有接受消息功能的类了。Deferred promise根据获得的消息来执行对应的回调函数，返回对应的值。当你接收到完全成功执行的值，则在then中执行成功的回调函数返回msg；获得错误的值则在then中执行错误回调函数，返回错误的原因</p>
-<p>因此我们基本可以认为promise这个类可以接受任何的值，包括”then/when”这些信息。这对于一些非立即执行函数的监听非常有用。举个例子，当你发了一个网络请求，等待返回值才能执行函数。我们等待这个请求的往返的过程中浪费了许多时间，而promise仿佛在电脑中另外开了一个线程进行监听这些返回值，然后执行对应的回调函数(这个例子是自己理解举的，非原文，如有不对，欢迎改正)。</p>
-<blockquote>
-<p>翻到这里有点崩溃了，捂下脑子，接下去感觉有点头疼了，以后再补吧,因为基本形态的promise已经出来。接下去是另外一种需求的promise了</p>
-</blockquote>
-<p>接下来我们要包装一种新型的promise，这套promise基于一些能发送任意消息的方法之上，可以满足 “get”, “put”, “post”能发送相应的消息，并且能根据返回结果中执行相应的promise。</p>
-<hr>
-<p>第一次尝试翻译，真的是个体力活，花了快2天的时间，整个人都是炸的。不过所幸是比以前明白了一些恭喜。<br>原文大概讲解了基本的promise构成，但是现在还是有许多方法并没有分析，接下去我按照自己的想法去实现以下promise.all方法。如果写的不好，欢迎大家指正，帮我进步一下，谢谢。（手动捂脸）</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/14/16.生活中的经济学原理-----站在巨人的肩膀/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1318,6 +1044,214 @@
 <p>本章主要想讲述的其实也是这种思维模式的重要性。我们一生中会做出很多选择，你自己有时候也不知道自己做的选择是否正确，就像自己最近感情上做出的选择，你放弃了很多的同时，也会有相应许多的得到的，也许再过了一段时间之后，你会后悔或者遗憾当时你做的选择，但是这就是你在当时情境下自己做的最好的决定。<strong>很多事情有两个选项给你选已经是很幸福的事情了。</strong></p>
 <p>经济学在生活中的很多表现其实也就是帮我们做出取舍。看电影，吃饭，睡觉等许多事情不仅仅是由事情本身所决定的，更多会受到周围工作，场景，同事等因素影响。经济学擅长将各个因素抽象化，图表化在心中列出来。自己在思考问题时，可以明确，精致，有效的掌握每一个环节，从而归纳出有意义的结果。也许也会在思考对比的过程中，想出更好的替代方案。</p>
 <p>这篇看完后其实没有太多可以分析，但是细细思考，最重要的早已在生活中潜移默化的影响了我们。以后在做每个决定时，独立全面的思考决定所带来的利弊，也许几年后在后悔自己sb的举动，但是至少你曾经细致的去想过每个选项，在你当时的情境下做出最好的选择。并且如果你真的当你思考全面当作出后，也不要再纠结了。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/29/手写Vue组件踩坑与心得/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="linzx">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/29/手写Vue组件踩坑与心得/" itemprop="url">手写Vue组件踩坑与心得</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-29T13:47:44+08:00">
+                2017-07-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/07/29/手写Vue组件踩坑与心得/" class="leancloud_visitors" data-flag-title="手写Vue组件踩坑与心得">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  2,432
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。</p>
+</blockquote>
+<p>事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。</p>
+<p>自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西</p>
+<h4 id="1、子组件不允许修改父组件数据"><a href="#1、子组件不允许修改父组件数据" class="headerlink" title="1、子组件不允许修改父组件数据"></a>1、子组件不允许修改父组件数据</h4><p>之前在写angular的父子组件传递数据，子组件可以修改父组件传递进来的数据。不过在Vue中子组件不允许修改父组件穿进来的值，以vue举例来说<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&lt;!--父组件HTML内容--&gt;</div><div class="line">&lt;children-component :value=&quot;data&quot;&gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    props : [&quot;value&quot;],</div><div class="line">    created : &#123;</div><div class="line">        this.value = [5,6,7,8];</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>此举会引发一个非常常见的报错，<br><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/error1.png" alt="image"></p>
+<p>那么解决方法是什么呢，那就要看你需求了。比如传进来的是一个渲染列表，我需要的只是修改渲染的数据，那么可以emit出去，然后在父组件重新赋值，通过双向绑定，触发子组件的再次渲染。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">&lt;!--父组件HTML内容--&gt;</div><div class="line">&lt;children-component :value=&quot;data&quot; @changeProp=&quot;changeData&quot;&gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    methods : &#123;</div><div class="line">        changeData(value)&#123;</div><div class="line">            this.data = value;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    props : [&quot;value&quot;],</div><div class="line">    created : &#123;</div><div class="line">        this.$emit(&quot;changeProp&quot;,[5,6,7,8])</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>例子写的比较简单，其实原理就是emit一个数据到父组件上去，然后在父组件中接受到这个传递上来的新值，将data赋予新值，然后重新传递到了子组件，起到一个变向修改子组件的效果。</p>
+<hr>
+<p>被人提醒到一个方法是用.sync，这个方法也是可以的。之前一直以为是被废弃就没用，才发现它其实是在的。看了一下<a href="https://cn.vuejs.org/v2/guide/components.html#sync-修饰符" target="_blank" rel="external">.synv文档</a>，发现这其实是一个语法糖的形式展现出来。如文档所示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;!--日常使用语法糖形态--&gt;</div><div class="line">&lt;comp :foo.sync=&quot;bar&quot;&gt;&lt;/comp&gt;</div><div class="line">&lt;!--↓↓↓↓↓真实形态↓↓↓↓↓↓--&gt;</div><div class="line">&lt;comp :foo=&quot;bar&quot; @update:foo=&quot;val =&gt; bar = val&quot;&gt;&lt;/comp&gt;</div><div class="line">&lt;!--子组件js代码--&gt;</div><div class="line">this.$emit(&apos;update:foo&apos;, newValue)</div></pre></td></tr></table></figure></p>
+<p>个人感觉Vue框架其实还是不赞同直接修改数据，但是它帮你定义了一个update事件，让你在子组件可以直接显式调用，不需要自己去定义事件这么麻烦了。大家还是把自定义事件用在一些事件上吧。</p>
+<h4 id="2-Vue给每个组件提供了一个默认的父子传递事件v-model。"><a href="#2-Vue给每个组件提供了一个默认的父子传递事件v-model。" class="headerlink" title="2.Vue给每个组件提供了一个默认的父子传递事件v-model。"></a>2.Vue给每个组件提供了一个默认的父子传递事件v-model。</h4><p>但是你每次父子组件传递数据时，都要父子处定义一个事件是很麻烦的，vue则为每个组件提供了一个默认v-model的语法糖。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&lt;!--父组件HTML内容--&gt;</div><div class="line">&lt;children-component v-mode=&quot;data&quot; &gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    watch : &#123;</div><div class="line">        //可以在此处监听子组件传递上来的数据</div><div class="line">        data(n,o)&#123;</div><div class="line">            console.log(n,o);   //[5,6,7,8],[1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line"></div><div class="line">export default(&#123;</div><div class="line">    &lt;!--大家注意我下面这行代码是打了注释的，说明我在子组件没有定义任何属性--&gt;</div><div class="line">    //  props : [&quot;value&quot;]</div><div class="line">    &lt;!--并且我接下去直接在代码中使用了this.value(一个完全没有定义过的value)。--&gt;</div><div class="line">    created : &#123;</div><div class="line">        console.log(this.value);</div><div class="line">        this.$emit(&quot;input&quot;,[5,6,7,8]);  //当我想改变传进来值的时候</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>因为之前一直使用ng-model来用于表单组件的传递，所以开始对于v-mode也是这个印象，不过后面看了element-ui的源码才发现我想简单了，然后网上搜了一下对于这个语法糖的解释。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//注意，该组件不是表单组件</div><div class="line">&lt;children-component :value=&quot;data&quot; @input=&quot;data = arguments[0]&quot;&gt;&lt;/children-component&gt;</div></pre></td></tr></table></figure></p>
+<p>看了这行代码大家心里估计也能明白的差不多了，其实Vue只是帮我们把父组件上的两段声明合二为一了，同时再帮我们在子组件处直接省略了定义。语法糖说到底就是帮我们省力的嘛。</p>
+<h4 id="3-保留属性key"><a href="#3-保留属性key" class="headerlink" title="3.保留属性key"></a>3.保留属性key</h4><p>因为在父子组件传递数据的时候，我们会通过在父组件写属性名将属性传递进去，理论上你可以写任何一个属性名<strong>a</strong>,<strong>value</strong>,<strong>list</strong>,<strong>data</strong>，但是有几个关键字已经被Vue内部保留了,比如下面的<strong>key</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;children-component :key=&quot;data&quot; :value=&quot;list&quot;&gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4],</div><div class="line">            list : [1,2,4,5]</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    //  props : [&quot;value&quot;,&quot;key&quot;]</div><div class="line">    created : &#123;</div><div class="line">        console.log(this.value);</div><div class="line">        console.log(this.key);</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/vue-key.png" alt="image"><br>当然如果我不在props里面写入key这个属性的话，是不会报错的。</p>
+<p>然后想起项目中在写下拉框组件时，如果你对自己以前写的option组件进行repeat的时候，key会作为一个关键字进行标记，不传key的话，vue会给出黄色提醒，不是报错，比如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;demo-select :optionList=&quot;optionList&quot;&gt;</div><div class="line">    &lt;demo-option v-for=&quot;option in optionList&quot; :key=&quot;option.value&quot; :value=&quot;option.value&quot;&gt;&#123;&#123;option.label&#125;&#125;&lt;/demo-option&gt;</div><div class="line">&lt;/demo-select&gt;</div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            optionList : [&#123;label:1,value:1&#125;,&#123;label:2,value:2&#125;,&#123;label:3,value:3&#125;],</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    //  props : [&quot;value&quot;,&quot;key&quot;]</div><div class="line">    created : &#123;</div><div class="line">        console.log(this.value);</div><div class="line">        console.log(this.key);</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/vue-key-info.png" alt="image"><br>如果我在对需要repeat的子组件中没有添加:key这个属性的话，则会给出上面的提醒。原因呢，<a href="https://cn.vuejs.org/v2/guide/list.html#key" target="_blank" rel="external">文档里面也有述说</a>,作为每个VNODE唯一标识的id，用于diff对比时更高的效率。不过这是另一个话题了。</p>
+<p>好了回到开头，总结性话语就是不要写key传递属性。不过不知道还有没有什么其他的属性我还没有碰到的</p>
+<h4 id="4-使用-emit和-on需要对应同一个组件"><a href="#4-使用-emit和-on需要对应同一个组件" class="headerlink" title="4.使用$emit和$on需要对应同一个组件"></a>4.使用$emit和$on需要对应同一个组件</h4><p>如果一个UI组件内部还分了好几层(3层左右)，且有不止一个事件或者属性需要传递，那么单纯的<code>props</code>和<code>@+事件</code>传递就没有那么方便了。这时候我们会选择$emit,$broadcast和$on。基本使用用法就不介绍了，见官方文档。主要讲其中的一个坑。如果同一个事件$emit,$broadcast和$on不是由同一个组件调用的话，那么传递的值是接收不到的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;parent-component&gt;</div><div class="line">    &lt;children-component&gt;&lt;/children-component&gt;</div><div class="line">&lt;/parent-component&gt;</div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    mounted()&#123;</div><div class="line">        this.$on(&quot;change&quot;,function(value)&#123;console.log(&quot;接收到了子组件传递上来的信息&quot; + value)&#125;);   </div><div class="line">        //此处this指向的父组件</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    mounted()&#123;</div><div class="line">        this.$emit(&quot;change&quot;,11111);  //此处this指向的子组件</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>在上面这一段代码，子组件通过$emit传递一个值上去，但是他是通过调自己（非父组件）用$emit方法。而父组件也是调用自身的$on方法，那么这个$on方法是接收不到传递上来的值的。因为两个组件的this分别指是自己，不是同一个。</p>
+<p>如果我们把子组件进行修改一下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">&lt;parent-component&gt;</div><div class="line">    &lt;children-component&gt;&lt;/children-component&gt;</div><div class="line">&lt;/parent-component&gt;</div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    mounted()&#123;</div><div class="line">        //此处this指向的父组件</div><div class="line">        this.$on(&quot;change&quot;,function(value)&#123;console.log(&quot;接收到了子组件传递上来的信息&quot; + value)&#125;);   </div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    computed()&#123;</div><div class="line">        rootParent()&#123;</div><div class="line">            return this.$parent;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    mounted()&#123;</div><div class="line">        this.rootParent.$emit(&quot;change&quot;,11111);  //获取到是同一个组件之后进行调用</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>这样子就可以成功传递了。但是如果组件内部有好几层的话，直接通过this.$parent.$parent去获取上层父组件比较麻烦。我们希望可以做到不管组件有几层，我都可以直接一步直接获取到父组件进行调用$emit或者$broadcast。那么我们需要单独封装一个方法写在一个文件里面，然后使用的时候进行Mixins合并就好了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">//Emitter.js 文件</div><div class="line">export default &#123;</div><div class="line">  methods: &#123;</div><div class="line">    //三个属性分别是父组件名，事件名，传递值</div><div class="line">    dispatch(componentName, eventName, params) &#123;</div><div class="line">      var parent = this.$parent || this.$root;</div><div class="line">      var name = parent.$options.componentName;</div><div class="line"></div><div class="line">      while (parent &amp;&amp; (!name || name !== componentName)) &#123;</div><div class="line">        parent = parent.$parent;</div><div class="line"></div><div class="line">        if (parent) &#123;</div><div class="line">          name = parent.$options.componentName;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">      if (parent) &#123;</div><div class="line">        parent.$emit.apply(parent, [eventName].concat(params));</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    broadcast(componentName, eventName, params) &#123;</div><div class="line">      broadcast.call(this, componentName, eventName, params);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">//然后在引用文件进行引入并且调用</div><div class="line"></div><div class="line">import Emitter from &quot;Emitter.js&quot;</div><div class="line">export default &#123;</div><div class="line">    mixins: [Emitter],</div><div class="line">    mounted()&#123;</div><div class="line">        this.dispatch(&apos;parentComponent&apos;,&quot;change&quot;,1111)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="5-全局一次性引用写好的组件"><a href="#5-全局一次性引用写好的组件" class="headerlink" title="5.全局一次性引用写好的组件"></a>5.全局一次性引用写好的组件</h4><p>假如我们写好了一些组件，接下去肯定还要引入和使用吧。但是你写了这么多组件，在每个地方一个个引用想要的是一件很麻烦的事情。我们最好是在一个初始的地方一次性全部引入，然后在用的地方直接使用</p>
+<blockquote>
+<p>(当然全部引入的话，无可避免的会引入和打包不需要的东西，不过这是公共组件库的烦恼，我们自己写的肯定会全部用到)。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// 在文件开头初始引入所有的组件文件</div><div class="line">import b from &quot;./components/common/b.vue&quot;</div><div class="line">import c from &quot;./components/common/c.vue&quot;</div><div class="line"></div><div class="line">const components = [b,c];</div><div class="line"></div><div class="line">const install = function (Vue, opts = &#123;&#125;) &#123;</div><div class="line">	components.map(component =&gt; &#123;</div><div class="line">		Vue.component(component.name, component);</div><div class="line">	&#125;);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">export default install</div></pre></td></tr></table></figure>
+<p>然后直接在启动的main.js文件里面引入就好<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">import ui from &quot;install.js&quot;</div><div class="line">Vue.use(ui);</div></pre></td></tr></table></figure></p>
+<p>然后你就可以随意在任何一个组件里面直接调用了，比自己之前在每个组件里重复调用要方便一点。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;b v-model=&quot;data1&quot;&gt;&lt;/b&gt;</div><div class="line">&lt;c v-model=&quot;data2&quot;&gt;&lt;/c&gt;</div></pre></td></tr></table></figure></p>
+<p>好了，暂时到这里，都是自己的踩得坑和心得，希望对大家有所帮助吧，接下去还有的话再补充好了。</p>
 
           
         
@@ -2330,7 +2264,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
+              <a href="/technology/index.html">
                 <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>

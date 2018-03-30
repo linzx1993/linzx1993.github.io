@@ -74,7 +74,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="《解释的工具-生活中的经济学原理》,books," />
+  <meta name="keywords" content="技术文章,javascript," />
 
 
 
@@ -90,18 +90,22 @@
 
 
 
-<meta name="description" content="《解释的工具-生活中的经济学原理》—–第十五章-以管窥天？工作也慢慢不忙了，生活也慢慢恢复原样了，回到了原来的轨道上面去了。人们的在思考与做每一个决定都是有他的利弊，当下做出的选择。比起做决定，更大的收货是你在做决定时的思维模式。不管你最后的结果怎么样，当你在面对各种现象和问题时，有自己的认知和思索方式，便是你独有的财富。 本章主要想讲述的其实也是这种思维模式的重要性。我们一生中会做出很多选择，你">
-<meta name="keywords" content="《解释的工具-生活中的经济学原理》,books">
+<meta name="description" content="记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。  事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。 自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西 1、子组件不允许修改父组件数据之前在写angular的父子组件传递">
+<meta name="keywords" content="技术文章,javascript">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第十五章-以管窥天">
-<meta property="og:url" content="http://yoursite.com/2017/08/07/15.生活中的经济学原理-----以管窥天？/index.html">
+<meta property="og:title" content="手写Vue组件踩坑与心得">
+<meta property="og:url" content="http://yoursite.com/2017/07/29/手写Vue组件踩坑与心得/index.html">
 <meta property="og:site_name" content="linzx">
-<meta property="og:description" content="《解释的工具-生活中的经济学原理》—–第十五章-以管窥天？工作也慢慢不忙了，生活也慢慢恢复原样了，回到了原来的轨道上面去了。人们的在思考与做每一个决定都是有他的利弊，当下做出的选择。比起做决定，更大的收货是你在做决定时的思维模式。不管你最后的结果怎么样，当你在面对各种现象和问题时，有自己的认知和思索方式，便是你独有的财富。 本章主要想讲述的其实也是这种思维模式的重要性。我们一生中会做出很多选择，你">
+<meta property="og:description" content="记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。  事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。 自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西 1、子组件不允许修改父组件数据之前在写angular的父子组件传递">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-08-07T05:22:53.141Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/error1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/vue-key.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/vue-key-info.png">
+<meta property="og:updated_time" content="2018-03-08T13:45:18.490Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第十五章-以管窥天">
-<meta name="twitter:description" content="《解释的工具-生活中的经济学原理》—–第十五章-以管窥天？工作也慢慢不忙了，生活也慢慢恢复原样了，回到了原来的轨道上面去了。人们的在思考与做每一个决定都是有他的利弊，当下做出的选择。比起做决定，更大的收货是你在做决定时的思维模式。不管你最后的结果怎么样，当你在面对各种现象和问题时，有自己的认知和思索方式，便是你独有的财富。 本章主要想讲述的其实也是这种思维模式的重要性。我们一生中会做出很多选择，你">
+<meta name="twitter:title" content="手写Vue组件踩坑与心得">
+<meta name="twitter:description" content="记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。  事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。 自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西 1、子组件不允许修改父组件数据之前在写angular的父子组件传递">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/error1.png">
 
 
 
@@ -129,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/08/07/15.生活中的经济学原理-----以管窥天？/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/07/29/手写Vue组件踩坑与心得/"/>
 
 
 
 
 
-  <title>第十五章-以管窥天 | linzx</title>
+  <title>手写Vue组件踩坑与心得 | linzx</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -299,7 +303,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/07/15.生活中的经济学原理-----以管窥天？/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/29/手写Vue组件踩坑与心得/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="linzx">
@@ -316,7 +320,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">第十五章-以管窥天</h2>
+          <h2 class="post-title" itemprop="name headline">手写Vue组件踩坑与心得</h2>
         
 
         <div class="post-meta">
@@ -328,8 +332,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-07T13:47:44+08:00">
-                2017-08-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-29T13:47:44+08:00">
+                2017-07-29
               </time>
             
 
@@ -351,8 +355,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/《解释的工具-生活中的经济学原理》/" itemprop="url" rel="index">
-                    <span itemprop="name">《解释的工具-生活中的经济学原理》</span>
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
                   </a>
                 </span>
 
@@ -368,7 +372,7 @@
 
           
           
-             <span id="/2017/08/07/15.生活中的经济学原理-----以管窥天？/" class="leancloud_visitors" data-flag-title="第十五章-以管窥天">
+             <span id="/2017/07/29/手写Vue组件踩坑与心得/" class="leancloud_visitors" data-flag-title="手写Vue组件踩坑与心得">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -393,7 +397,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  582
+                  2,432
                 </span>
               
 
@@ -409,7 +413,7 @@
                   <span class="post-meta-item-text">阅读时长</span>
                 
                 <span title="阅读时长">
-                  2
+                  10
                 </span>
               
             </div>
@@ -427,10 +431,39 @@
       
 
       
-        <h4 id="《解释的工具-生活中的经济学原理》"><a href="#《解释的工具-生活中的经济学原理》" class="headerlink" title="《解释的工具-生活中的经济学原理》"></a>《解释的工具-生活中的经济学原理》</h4><h6 id="—–第十五章-以管窥天？"><a href="#—–第十五章-以管窥天？" class="headerlink" title="—–第十五章-以管窥天？"></a>—–第十五章-以管窥天？</h6><p>工作也慢慢不忙了，生活也慢慢恢复原样了，回到了原来的轨道上面去了。人们的在思考与做每一个决定都是有他的利弊，当下做出的选择。比起做决定，更大的收货是你在做决定时的思维模式。不管你最后的结果怎么样，当你在面对各种现象和问题时，有自己的认知和思索方式，便是你独有的财富。</p>
-<p>本章主要想讲述的其实也是这种思维模式的重要性。我们一生中会做出很多选择，你自己有时候也不知道自己做的选择是否正确，就像自己最近感情上做出的选择，你放弃了很多的同时，也会有相应许多的得到的，也许再过了一段时间之后，你会后悔或者遗憾当时你做的选择，但是这就是你在当时情境下自己做的最好的决定。<strong>很多事情有两个选项给你选已经是很幸福的事情了。</strong></p>
-<p>经济学在生活中的很多表现其实也就是帮我们做出取舍。看电影，吃饭，睡觉等许多事情不仅仅是由事情本身所决定的，更多会受到周围工作，场景，同事等因素影响。经济学擅长将各个因素抽象化，图表化在心中列出来。自己在思考问题时，可以明确，精致，有效的掌握每一个环节，从而归纳出有意义的结果。也许也会在思考对比的过程中，想出更好的替代方案。</p>
-<p>这篇看完后其实没有太多可以分析，但是细细思考，最重要的早已在生活中潜移默化的影响了我们。以后在做每个决定时，独立全面的思考决定所带来的利弊，也许几年后在后悔自己sb的举动，但是至少你曾经细致的去想过每个选项，在你当时的情境下做出最好的选择。并且如果你真的当你思考全面当作出后，也不要再纠结了。</p>
+        <blockquote>
+<p>记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。</p>
+</blockquote>
+<p>事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。</p>
+<p>自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西</p>
+<h4 id="1、子组件不允许修改父组件数据"><a href="#1、子组件不允许修改父组件数据" class="headerlink" title="1、子组件不允许修改父组件数据"></a>1、子组件不允许修改父组件数据</h4><p>之前在写angular的父子组件传递数据，子组件可以修改父组件传递进来的数据。不过在Vue中子组件不允许修改父组件穿进来的值，以vue举例来说<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&lt;!--父组件HTML内容--&gt;</div><div class="line">&lt;children-component :value=&quot;data&quot;&gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    props : [&quot;value&quot;],</div><div class="line">    created : &#123;</div><div class="line">        this.value = [5,6,7,8];</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>此举会引发一个非常常见的报错，<br><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/error1.png" alt="image"></p>
+<p>那么解决方法是什么呢，那就要看你需求了。比如传进来的是一个渲染列表，我需要的只是修改渲染的数据，那么可以emit出去，然后在父组件重新赋值，通过双向绑定，触发子组件的再次渲染。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">&lt;!--父组件HTML内容--&gt;</div><div class="line">&lt;children-component :value=&quot;data&quot; @changeProp=&quot;changeData&quot;&gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    methods : &#123;</div><div class="line">        changeData(value)&#123;</div><div class="line">            this.data = value;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    props : [&quot;value&quot;],</div><div class="line">    created : &#123;</div><div class="line">        this.$emit(&quot;changeProp&quot;,[5,6,7,8])</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>例子写的比较简单，其实原理就是emit一个数据到父组件上去，然后在父组件中接受到这个传递上来的新值，将data赋予新值，然后重新传递到了子组件，起到一个变向修改子组件的效果。</p>
+<hr>
+<p>被人提醒到一个方法是用.sync，这个方法也是可以的。之前一直以为是被废弃就没用，才发现它其实是在的。看了一下<a href="https://cn.vuejs.org/v2/guide/components.html#sync-修饰符" target="_blank" rel="external">.synv文档</a>，发现这其实是一个语法糖的形式展现出来。如文档所示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;!--日常使用语法糖形态--&gt;</div><div class="line">&lt;comp :foo.sync=&quot;bar&quot;&gt;&lt;/comp&gt;</div><div class="line">&lt;!--↓↓↓↓↓真实形态↓↓↓↓↓↓--&gt;</div><div class="line">&lt;comp :foo=&quot;bar&quot; @update:foo=&quot;val =&gt; bar = val&quot;&gt;&lt;/comp&gt;</div><div class="line">&lt;!--子组件js代码--&gt;</div><div class="line">this.$emit(&apos;update:foo&apos;, newValue)</div></pre></td></tr></table></figure></p>
+<p>个人感觉Vue框架其实还是不赞同直接修改数据，但是它帮你定义了一个update事件，让你在子组件可以直接显式调用，不需要自己去定义事件这么麻烦了。大家还是把自定义事件用在一些事件上吧。</p>
+<h4 id="2-Vue给每个组件提供了一个默认的父子传递事件v-model。"><a href="#2-Vue给每个组件提供了一个默认的父子传递事件v-model。" class="headerlink" title="2.Vue给每个组件提供了一个默认的父子传递事件v-model。"></a>2.Vue给每个组件提供了一个默认的父子传递事件v-model。</h4><p>但是你每次父子组件传递数据时，都要父子处定义一个事件是很麻烦的，vue则为每个组件提供了一个默认v-model的语法糖。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&lt;!--父组件HTML内容--&gt;</div><div class="line">&lt;children-component v-mode=&quot;data&quot; &gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    watch : &#123;</div><div class="line">        //可以在此处监听子组件传递上来的数据</div><div class="line">        data(n,o)&#123;</div><div class="line">            console.log(n,o);   //[5,6,7,8],[1,2,3,4]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line"></div><div class="line">export default(&#123;</div><div class="line">    &lt;!--大家注意我下面这行代码是打了注释的，说明我在子组件没有定义任何属性--&gt;</div><div class="line">    //  props : [&quot;value&quot;]</div><div class="line">    &lt;!--并且我接下去直接在代码中使用了this.value(一个完全没有定义过的value)。--&gt;</div><div class="line">    created : &#123;</div><div class="line">        console.log(this.value);</div><div class="line">        this.$emit(&quot;input&quot;,[5,6,7,8]);  //当我想改变传进来值的时候</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>因为之前一直使用ng-model来用于表单组件的传递，所以开始对于v-mode也是这个印象，不过后面看了element-ui的源码才发现我想简单了，然后网上搜了一下对于这个语法糖的解释。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//注意，该组件不是表单组件</div><div class="line">&lt;children-component :value=&quot;data&quot; @input=&quot;data = arguments[0]&quot;&gt;&lt;/children-component&gt;</div></pre></td></tr></table></figure></p>
+<p>看了这行代码大家心里估计也能明白的差不多了，其实Vue只是帮我们把父组件上的两段声明合二为一了，同时再帮我们在子组件处直接省略了定义。语法糖说到底就是帮我们省力的嘛。</p>
+<h4 id="3-保留属性key"><a href="#3-保留属性key" class="headerlink" title="3.保留属性key"></a>3.保留属性key</h4><p>因为在父子组件传递数据的时候，我们会通过在父组件写属性名将属性传递进去，理论上你可以写任何一个属性名<strong>a</strong>,<strong>value</strong>,<strong>list</strong>,<strong>data</strong>，但是有几个关键字已经被Vue内部保留了,比如下面的<strong>key</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;children-component :key=&quot;data&quot; :value=&quot;list&quot;&gt;&lt;/children-component&gt;</div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            data : [1,2,3,4],</div><div class="line">            list : [1,2,4,5]</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    //  props : [&quot;value&quot;,&quot;key&quot;]</div><div class="line">    created : &#123;</div><div class="line">        console.log(this.value);</div><div class="line">        console.log(this.key);</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/vue-key.png" alt="image"><br>当然如果我不在props里面写入key这个属性的话，是不会报错的。</p>
+<p>然后想起项目中在写下拉框组件时，如果你对自己以前写的option组件进行repeat的时候，key会作为一个关键字进行标记，不传key的话，vue会给出黄色提醒，不是报错，比如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;demo-select :optionList=&quot;optionList&quot;&gt;</div><div class="line">    &lt;demo-option v-for=&quot;option in optionList&quot; :key=&quot;option.value&quot; :value=&quot;option.value&quot;&gt;&#123;&#123;option.label&#125;&#125;&lt;/demo-option&gt;</div><div class="line">&lt;/demo-select&gt;</div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    data()&#123;</div><div class="line">        return &#123;</div><div class="line">            optionList : [&#123;label:1,value:1&#125;,&#123;label:2,value:2&#125;,&#123;label:3,value:3&#125;],</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    //  props : [&quot;value&quot;,&quot;key&quot;]</div><div class="line">    created : &#123;</div><div class="line">        console.log(this.value);</div><div class="line">        console.log(this.key);</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p><img src="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/vue-key-info.png" alt="image"><br>如果我在对需要repeat的子组件中没有添加:key这个属性的话，则会给出上面的提醒。原因呢，<a href="https://cn.vuejs.org/v2/guide/list.html#key" target="_blank" rel="external">文档里面也有述说</a>,作为每个VNODE唯一标识的id，用于diff对比时更高的效率。不过这是另一个话题了。</p>
+<p>好了回到开头，总结性话语就是不要写key传递属性。不过不知道还有没有什么其他的属性我还没有碰到的</p>
+<h4 id="4-使用-emit和-on需要对应同一个组件"><a href="#4-使用-emit和-on需要对应同一个组件" class="headerlink" title="4.使用$emit和$on需要对应同一个组件"></a>4.使用$emit和$on需要对应同一个组件</h4><p>如果一个UI组件内部还分了好几层(3层左右)，且有不止一个事件或者属性需要传递，那么单纯的<code>props</code>和<code>@+事件</code>传递就没有那么方便了。这时候我们会选择$emit,$broadcast和$on。基本使用用法就不介绍了，见官方文档。主要讲其中的一个坑。如果同一个事件$emit,$broadcast和$on不是由同一个组件调用的话，那么传递的值是接收不到的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;parent-component&gt;</div><div class="line">    &lt;children-component&gt;&lt;/children-component&gt;</div><div class="line">&lt;/parent-component&gt;</div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    mounted()&#123;</div><div class="line">        this.$on(&quot;change&quot;,function(value)&#123;console.log(&quot;接收到了子组件传递上来的信息&quot; + value)&#125;);   </div><div class="line">        //此处this指向的父组件</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    mounted()&#123;</div><div class="line">        this.$emit(&quot;change&quot;,11111);  //此处this指向的子组件</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>在上面这一段代码，子组件通过$emit传递一个值上去，但是他是通过调自己（非父组件）用$emit方法。而父组件也是调用自身的$on方法，那么这个$on方法是接收不到传递上来的值的。因为两个组件的this分别指是自己，不是同一个。</p>
+<p>如果我们把子组件进行修改一下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">&lt;parent-component&gt;</div><div class="line">    &lt;children-component&gt;&lt;/children-component&gt;</div><div class="line">&lt;/parent-component&gt;</div><div class="line"></div><div class="line">&lt;!--父组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    mounted()&#123;</div><div class="line">        //此处this指向的父组件</div><div class="line">        this.$on(&quot;change&quot;,function(value)&#123;console.log(&quot;接收到了子组件传递上来的信息&quot; + value)&#125;);   </div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">&lt;!--子组件的js内容--&gt;</div><div class="line">export default(&#123;</div><div class="line">    computed()&#123;</div><div class="line">        rootParent()&#123;</div><div class="line">            return this.$parent;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    mounted()&#123;</div><div class="line">        this.rootParent.$emit(&quot;change&quot;,11111);  //获取到是同一个组件之后进行调用</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>这样子就可以成功传递了。但是如果组件内部有好几层的话，直接通过this.$parent.$parent去获取上层父组件比较麻烦。我们希望可以做到不管组件有几层，我都可以直接一步直接获取到父组件进行调用$emit或者$broadcast。那么我们需要单独封装一个方法写在一个文件里面，然后使用的时候进行Mixins合并就好了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">//Emitter.js 文件</div><div class="line">export default &#123;</div><div class="line">  methods: &#123;</div><div class="line">    //三个属性分别是父组件名，事件名，传递值</div><div class="line">    dispatch(componentName, eventName, params) &#123;</div><div class="line">      var parent = this.$parent || this.$root;</div><div class="line">      var name = parent.$options.componentName;</div><div class="line"></div><div class="line">      while (parent &amp;&amp; (!name || name !== componentName)) &#123;</div><div class="line">        parent = parent.$parent;</div><div class="line"></div><div class="line">        if (parent) &#123;</div><div class="line">          name = parent.$options.componentName;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">      if (parent) &#123;</div><div class="line">        parent.$emit.apply(parent, [eventName].concat(params));</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    broadcast(componentName, eventName, params) &#123;</div><div class="line">      broadcast.call(this, componentName, eventName, params);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">//然后在引用文件进行引入并且调用</div><div class="line"></div><div class="line">import Emitter from &quot;Emitter.js&quot;</div><div class="line">export default &#123;</div><div class="line">    mixins: [Emitter],</div><div class="line">    mounted()&#123;</div><div class="line">        this.dispatch(&apos;parentComponent&apos;,&quot;change&quot;,1111)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="5-全局一次性引用写好的组件"><a href="#5-全局一次性引用写好的组件" class="headerlink" title="5.全局一次性引用写好的组件"></a>5.全局一次性引用写好的组件</h4><p>假如我们写好了一些组件，接下去肯定还要引入和使用吧。但是你写了这么多组件，在每个地方一个个引用想要的是一件很麻烦的事情。我们最好是在一个初始的地方一次性全部引入，然后在用的地方直接使用</p>
+<blockquote>
+<p>(当然全部引入的话，无可避免的会引入和打包不需要的东西，不过这是公共组件库的烦恼，我们自己写的肯定会全部用到)。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// 在文件开头初始引入所有的组件文件</div><div class="line">import b from &quot;./components/common/b.vue&quot;</div><div class="line">import c from &quot;./components/common/c.vue&quot;</div><div class="line"></div><div class="line">const components = [b,c];</div><div class="line"></div><div class="line">const install = function (Vue, opts = &#123;&#125;) &#123;</div><div class="line">	components.map(component =&gt; &#123;</div><div class="line">		Vue.component(component.name, component);</div><div class="line">	&#125;);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">export default install</div></pre></td></tr></table></figure>
+<p>然后直接在启动的main.js文件里面引入就好<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">import ui from &quot;install.js&quot;</div><div class="line">Vue.use(ui);</div></pre></td></tr></table></figure></p>
+<p>然后你就可以随意在任何一个组件里面直接调用了，比自己之前在每个组件里重复调用要方便一点。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;b v-model=&quot;data1&quot;&gt;&lt;/b&gt;</div><div class="line">&lt;c v-model=&quot;data2&quot;&gt;&lt;/c&gt;</div></pre></td></tr></table></figure></p>
+<p>好了，暂时到这里，都是自己的踩得坑和心得，希望对大家有所帮助吧，接下去还有的话再补充好了。</p>
 
       
     </div>
@@ -460,9 +493,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/《解释的工具-生活中的经济学原理》/" rel="tag"># 《解释的工具-生活中的经济学原理》</a>
+            <a href="/tags/技术文章/" rel="tag"># 技术文章</a>
           
-            <a href="/tags/books/" rel="tag"># books</a>
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
           
         </div>
       
@@ -475,8 +508,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/07/29/手写Vue组件踩坑与心得/" rel="next" title="手写Vue组件踩坑与心得">
-                <i class="fa fa-chevron-left"></i> 手写Vue组件踩坑与心得
+              <a href="/2017/07/27/14.生活中的经济学原理-----司法女神的举止/" rel="next" title="第十四章-司法女神的举止">
+                <i class="fa fa-chevron-left"></i> 第十四章-司法女神的举止
               </a>
             
           </div>
@@ -485,8 +518,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/08/12/重温vue双向绑定原理/" rel="prev" title="重温vue双向绑定原理">
-                重温vue双向绑定原理 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/08/07/15.生活中的经济学原理-----以管窥天？/" rel="prev" title="第十五章-以管窥天">
+                第十五章-以管窥天 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -622,7 +655,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#《解释的工具-生活中的经济学原理》"><span class="nav-number">1.</span> <span class="nav-text">《解释的工具-生活中的经济学原理》</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#—–第十五章-以管窥天？"><span class="nav-number">1.0.1.</span> <span class="nav-text">—–第十五章-以管窥天？</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、子组件不允许修改父组件数据"><span class="nav-number">1.</span> <span class="nav-text">1、子组件不允许修改父组件数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Vue给每个组件提供了一个默认的父子传递事件v-model。"><span class="nav-number">2.</span> <span class="nav-text">2.Vue给每个组件提供了一个默认的父子传递事件v-model。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-保留属性key"><span class="nav-number">3.</span> <span class="nav-text">3.保留属性key</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-使用-emit和-on需要对应同一个组件"><span class="nav-number">4.</span> <span class="nav-text">4.使用$emit和$on需要对应同一个组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-全局一次性引用写好的组件"><span class="nav-number">5.</span> <span class="nav-text">5.全局一次性引用写好的组件</span></a></li></ol></div>
             
 
           </div>
