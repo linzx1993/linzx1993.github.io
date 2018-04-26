@@ -299,7 +299,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/17/eventEmitter的实现/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/26/eventEmitter的实现/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="linzx">
@@ -318,7 +318,7 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/04/17/eventEmitter的实现/" itemprop="url">未命名</a></h2>
+                <a class="post-title-link" href="/2018/04/26/eventEmitter的实现/" itemprop="url">eventEmitter的实现</a></h2>
         
 
         <div class="post-meta">
@@ -330,8 +330,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-17T12:54:44+08:00">
-                2018-04-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-26T13:47:44+08:00">
+                2018-04-26
               </time>
             
 
@@ -341,6 +341,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -348,7 +370,7 @@
 
           
           
-             <span id="/2018/04/17/eventEmitter的实现/" class="leancloud_visitors" data-flag-title="">
+             <span id="/2018/04/26/eventEmitter的实现/" class="leancloud_visitors" data-flag-title="eventEmitter的实现">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -373,7 +395,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  513
+                  2,157
                 </span>
               
 
@@ -389,7 +411,7 @@
                   <span class="post-meta-item-text">阅读时长</span>
                 
                 <span title="阅读时长">
-                  2
+                  9
                 </span>
               
             </div>
@@ -410,19 +432,28 @@
         
           
             <blockquote>
-<p>其实看源码可以学到的东西都很多，最直接的就是知道怎么实现一个功能。此外呢？其实此外是是更多的。比如编码习惯，比如防御性代码怎么写，比如结尾处理代码怎么写，比如有些函数对象选择的方式，仔细深思他们为什么这么做，都是有作者自己的思考在内。甚至有些原生API的特殊实现比原生效率还快。这些都是看源码的乐趣所在。</p>
+<p>半个月前看到一篇文章实现一个简单版的eventEmitter，看完之后心血来潮自己写了一个，然后翻了一个eventEmitter的库，看完源码之后又觉得意犹未尽，忽然想到可以尝试实现vue中emitter。于是，故事就这么开始了。</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// About 1.5x faster than the two-arg version of Array#splice().</div><div class="line">	function spliceOne(list, index) &#123;</div><div class="line">		for (var i = index, k = i + 1, n = list.length; k &lt; n; i += 1, k += 1)</div><div class="line">			list[i] = list[k];</div><div class="line">		list.pop();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">//经过测试，在数据长度是5的情况下，快个1倍，0.004和0.008</div><div class="line">//经过测试，在数据长度是50的情况下，快个20%，0.004和0.006</div><div class="line">//经过测试，在数据长度是500的情况下，快个20%，0.0055和0.009</div></pre></td></tr></table></figure>
-<h3 id="1、整体架构"><a href="#1、整体架构" class="headerlink" title="1、整体架构"></a>1、整体架构</h3><p>看源码第一步先看下整个模块的整体架构，大略浏览了一遍之后。虽然代码只有400多行，但还是能看到作者清晰的分为了几个模块。</p>
+<h2 id="1、实现一个eventEmiiter"><a href="#1、实现一个eventEmiiter" class="headerlink" title="1、实现一个eventEmiiter"></a>1、实现一个eventEmiiter</h2><p>一开始自己先按照想法写了一个，然后找了一个库的源码仔细对比了下。发现有很多地方可以改进。比如</p>
+<ul>
+<li>自己为了节省代码行数，单个事件和多个事件都用list去存储。其实作为库，节约的十几行代码和提供性能比起来，还是后者更重要</li>
+<li>没有考虑emit几个参数的情况，不同情况的处理更能提高性能</li>
+<li>没有考虑限制一个类型可以绑定的最大事件数。因为如果数目一多话，容易造成内存泄露.</li>
+<li>防错性代码的缺失</li>
+<li>缺少一些一步到位的函数,比如<code>removeAllListeners</code></li>
+</ul>
+<p>接下去分析一个网上完整库的结构。</p>
+<h3 id="1-1、整体架构"><a href="#1-1、整体架构" class="headerlink" title="1.1、整体架构"></a>1.1、整体架构</h3><p>整个库代码只有400多行，大略浏览了一遍之后，还是能看到作者清晰的分为了几个模块。</p>
 <ol>
-<li>_events模块</li>
+<li>_events，_maxListeners等初始化的属性</li>
 <li>addEventListener模块</li>
-<li>emit模块</li>
 <li>removeEventListener模块</li>
+<li>emit模块</li>
 </ol>
 <p>然后每个模块下面，又有几个具体的函数</p>
 <ol>
-<li><p>EventEmitter类</p>
+<li><p>EventEmitter初始属性</p>
 <ul>
 <li>_events</li>
 <li>_maxListeners setMaxListeners getMaxListeners</li>
@@ -435,6 +466,7 @@
 <li>prependListener</li>
 <li>once</li>
 <li>prependOnceListener</li>
+<li>on</li>
 </ul>
 </li>
 <li><p>emit模块</p>
@@ -451,10 +483,39 @@
 <li>removeAllListeners</li>
 </ul>
 </li>
+<li><p>工具函数</p>
+<ul>
+<li>spliceOne</li>
+<li>objectCreatePolyfill</li>
+<li>objectKeysPolyfill</li>
+<li>functionBindPolyfill</li>
+</ul>
+</li>
 </ol>
-<p>基本上可以说覆盖了一个的 <a href="http://www.runoob.com/nodejs/nodejs-event.html" target="_blank" rel="external">eventEmitter</a> 所有内容了。接下去我们就按照模块顺序一步步去实现一个类。</p>
-<p><a href="https://github.com/Gozala/events/blob/master/events.js" target="_blank" rel="external">大家也可以直接看源码，应该还是能看的比较清楚的</a>。</p>
-<h3 id="2、初始化一个EventEmitter的类"><a href="#2、初始化一个EventEmitter的类" class="headerlink" title="2、初始化一个EventEmitter的类"></a>2、初始化一个EventEmitter的类</h3><p>代码中有很多的细节刻录可以参考。比如emit专门分出了4种模式，本可以完全用<code>emitMany</code>来覆盖<code>emitOne,emitTwo,emitThree</code>三种方法，但是为了更好地提升性能，只有才参数大于4个的时候，才去使用数组方法。</p>
+<p>基本上可以说覆盖了一个的<code>eventEmitter</code>所有功能了。接下去我们就按照模块顺序一步步去实现一个类。</p>
+<h3 id="1-2、初始化一个EventEmitter的类"><a href="#1-2、初始化一个EventEmitter的类" class="headerlink" title="1.2、初始化一个EventEmitter的类"></a>1.2、初始化一个EventEmitter的类</h3><p>初始化的时候先设置好所有需要的属性，具体的值等到在需要使用的时候才去赋值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">class EventEmitter &#123;</div><div class="line">	constructor () &#123;</div><div class="line">		this._events = undefined</div><div class="line">		this.defaultMaxListeners = 10</div><div class="line">		this._maxListeners = this._maxListeners || this.defaultMaxListeners</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><a href="https://github.com/Gozala/events/blob/master/events.js" target="_blank" rel="external">不想看我啰嗦的，也可以直接看源码</a>。按照我上面的分析，整个源码结构还是非常清晰的。或者可以直接跳去第二章模仿vue的emitter</p>
+<p>代码中有很多的细节刻录可以参考。比如emit专门分出了4种模式，本可以完全用<code>emitMany</code>来覆盖<code>emitOne,emitTwo,emitThree</code>三种方法，但是为了更好地提升性能，只有才参数大于4个的时候，才去使用数组方法。</p>
+<h2 id="2、简单实现vue中的EventEmitter"><a href="#2、简单实现vue中的EventEmitter" class="headerlink" title="2、简单实现vue中的EventEmitter"></a>2、简单实现vue中的EventEmitter</h2><p>在看完这个东西之后，还是需要找个场景来再来实地验证一下。</p>
+<p>现在有很多文章都是讲究vue的双向绑定怎么实现的，但是vue在编译HTML时，还有一部分绑定函数的实现。</p>
+<p>典型例子：我们会为每个表单组件专门实现一个change函数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;el-select v-model=&quot;value&quot; @change=&quot;&quot;change&gt;&lt;/el-select&gt;</div></pre></td></tr></table></figure></p>
+<p>虽然没有看过vue的源码，但是依靠我们自己写的eventEmitter也可以实现这个场景。</p>
+<p>原来现实准备通过attribute这个方法来获取DOM所有的属性，以为会返回所有所有属性的键值对，没想到返回的竟然是一个NamedNodeMap对象。在这个对象里分两部分，两部分的值都相同只是键不同，一部分的键名以0开始依次增加排列，另一部分的键名则是以属性名来命名的。总之使用起来非常别扭，万般无奈之下，只能跑去vue源码看下尤大是怎么实现的了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">var attribute = /^\s*([^\s&quot;&apos;&lt;&gt;\/=]+)(?:\s*(=)\s*(?:&quot;([^&quot;]*)&quot;+|&apos;([^&apos;]*)&apos;+|([^\s&quot;&apos;=&lt;&gt;`]+)))?/;</div><div class="line">var onRE = /^@|^v-on:/;</div><div class="line">var dirRE = /^v-|^@|^:/;</div><div class="line"></div><div class="line">var match = &#123;</div><div class="line">        tagName: start[1],</div><div class="line">        attrs: [],</div><div class="line">        start: index</div><div class="line">      &#125;;</div><div class="line">while (!(end = html.match(startTagClose)) &amp;&amp; (attr = html.match(attribute))) &#123;</div><div class="line">advance(attr[0].length);</div><div class="line">match.attrs.push(attr);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>vue先定义了一个attr的正则表达式，每次都会传进来一个html模板。然后通过该正则去match出所有的属性，生成一个属性Array。然后会将这个属性数组最后传入到一个<code>createASTElement</code>函数里面进行生成一棵AST树。然后再后续方法对属性进行判断，比如是<code>v-for</code>还是<code>style</code>等等，来执行对应的方法。</p>
+<p>再获取到属性之后，通过正则判断出是否为事件，如果是事件的话，去执行一个<code>addHandle</code>的方法，将事件绑定在对用的<code>el</code>元素上。比像一些表单的<code>change</code>事件，vue.js就是通过addHandle直接在源码里加好了。</p>
+<p>整个流程基本上是看懂了，但是我实在是没能力模仿出整个流程，只能先写个简易版的了。毕竟我一开始的初衷只是想把一个eventEmitter的模块是实现在具体的例子上</p>
+<p>我们先开始写一段template模板和一个自定义的vue对象<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">	&lt;div id=&quot;app&quot; @click=&quot;test&quot; @change=&quot;test2&quot;&gt;test内容&lt;/div&gt;</div><div class="line">&lt;/&gt;</div><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line">var vue = &#123;</div><div class="line">    methods: &#123;</div><div class="line">        test()&#123;alert(123)&#125;,</div><div class="line">        test2()&#123;console.log(456)&#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure></p>
+<p>接下来第一步是将<code>template</code>里面的html编译出所有的属性。在vue的源码里面经过了好几步最后形成一棵AST树，我们这里就不到这一步了。抽取出源码中提取属性的那一段代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">var attribute = /^\s*([^\s&quot;&apos;&lt;&gt;\/=]+)(?:\s*(=)\s*(?:&quot;([^&quot;]*)&quot;+|&apos;([^&apos;]*)&apos;+|([^\s&quot;&apos;=&lt;&gt;`]+)))?/;</div><div class="line">var ncname = &apos;[a-zA-Z_][\\w\\-\\.]*&apos;;</div><div class="line">const qnameCapture = `((?:$&#123;ncname&#125;\\:)?$&#123;ncname&#125;)`</div><div class="line">const startTagOpen = new RegExp(`^&lt;$&#123;qnameCapture&#125;`)</div><div class="line">var startTagClose = /^\s*(\/?)&gt;/;</div><div class="line">var onRE = /^@|^v-on:/;</div><div class="line"></div><div class="line">function compiler(html)&#123;</div><div class="line">    html = trim(html)</div><div class="line">    let index = html.match(startTagOpen)[0].length</div><div class="line">    html = html.substring(index)</div><div class="line">    const match = &#123;</div><div class="line">        attrs: [],</div><div class="line">        attrList: []</div><div class="line">    &#125;</div><div class="line">    let end, attr;</div><div class="line">    //编译完整个html标签</div><div class="line">    //如果多层dom，有循环，测试就不搞那么复杂了</div><div class="line">    while (!(end = html.match(startTagClose)) &amp;&amp; (attr = html.match(attribute))) &#123;</div><div class="line">    	match.attrs.push(attr)</div><div class="line">    	index = attr.length</div><div class="line">    	html = html.substring(attr[0].length)</div><div class="line">    &#125;</div><div class="line">    let l = match.attrs.length</div><div class="line">    for (var i = 0; i &lt; l; i++) &#123;</div><div class="line">    	var args = match.attrs[i];</div><div class="line">    	// hackish work around FF bug https://bugzilla.mozilla.org/show_bug.cgi?id=369778</div><div class="line">    	if (args[0].indexOf(&apos;&quot;&quot;&apos;) === -1) &#123;</div><div class="line">            if (args[3] === &apos;&apos;) &#123; delete args[3]; &#125;</div><div class="line">            if (args[4] === &apos;&apos;) &#123; delete args[4]; &#125;</div><div class="line">            if (args[5] === &apos;&apos;) &#123; delete args[5]; &#125;</div><div class="line">    	&#125;</div><div class="line">    	var value = args[3] || args[4] || args[5] || &apos;&apos;;</div><div class="line">    	match.attrList[i] = &#123;</div><div class="line">    		name: args[1],</div><div class="line">    		value: value</div><div class="line">    	&#125;;</div><div class="line">    &#125;</div><div class="line">    return match</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编译完成后我们已经获取到了属性，并且<code>key-value的map</code>形式存储起来，接下来我们就要利用之前写好的<code>eventEmitter</code>来实现事件的绑定和发送了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">let eventEmitter = new EventEmitter()</div><div class="line"></div><div class="line">function processAttrs(match)&#123;</div><div class="line">    let attrList = match.attrList, l = attrList.length</div><div class="line">    let name, value</div><div class="line">    for(let i = 0; i &lt; l; i ++)&#123;</div><div class="line">    	name = attrList[i].name</div><div class="line">    	value = attrList[i].value</div><div class="line">    	if(onRE.test(name))&#123;</div><div class="line">            name = name.replace(onRE, &apos;&apos;);</div><div class="line">            addHandle(vue, name, value, false);</div><div class="line">    	&#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function addHandle(target, name, value, prepend)&#123;</div><div class="line">    let handler = target.methods[value]</div><div class="line">    eventEmitter.addListener(name, handler, prepend)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>基本上整个流程就已经走通了，每次进入页面我们只需要一个启动编译HTML的操作就行了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//vue中</div><div class="line">function createComplierHTML(html)&#123;</div><div class="line">	const match = compiler(html)</div><div class="line">	</div><div class="line">	processAttrs(match)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>如果想尝试触发我们之前绑定的事件，在vue中是子组件向父组件触发。这里就不搞父子组件这么难了。我们可以直接调用<code>emit</code>来进行验证<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">eventEmitter.emit(&quot;click&quot;)</div></pre></td></tr></table></figure></p>
+<hr>
+<p>文章结束了，日常总结一下吧。实现整个eventEmitter的代码其实并不复杂，尤其在源码非常简洁的情况下，基本上认真看个十几分钟就能明白整个轮廓。没有仔细看vue中的实是怎么样的，不过中心轮廓应该是不变的。</p>
+<p>后面看vue提取属性还是花了更多的时间，原来还以为可以自己通过attribute属性来实现的，没想到最后还是参考了vue，再看的途中，也明白了vue编译html的整个过程，以及每个过程实现了哪些内容。</p>
+<p>其实看源码可以学到的东西都很多，最直接的就是知道怎么实现一个功能。此外呢？其实此外是是更多的。比如编码习惯，比如防御性代码怎么写，比如结尾处理代码怎么写，比如有些函数对象选择的方式，仔细深思他们为什么这么做，都是有作者自己的思考在内。甚至有些原生API的特殊实现比原生效率还快。这些都是看源码的乐趣所在。</p>
+<p>总体来说还是获益良多。以前看文章都是怎么实现双向绑定，现在也可以小吹一下，自己还知道怎么实现一个简易的eventEmitter了</p>
 
           
         
@@ -2760,7 +2821,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/technology/index.html">
+              <a href="/《解释的工具-生活中的经济学原理》/index.html">
                 <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>
