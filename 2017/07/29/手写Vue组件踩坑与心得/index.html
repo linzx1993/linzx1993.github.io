@@ -93,7 +93,7 @@
 <meta name="description" content="记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。  事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。 自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西 1、子组件不允许修改父组件数据之前在写angular的父子组件传递">
 <meta name="keywords" content="技术文章,javascript">
 <meta property="og:type" content="article">
-<meta property="og:title" content="手写Vue组件踩坑与心得">
+<meta property="og:title" content="js中数组的原生方法">
 <meta property="og:url" content="http://yoursite.com/2017/07/29/手写Vue组件踩坑与心得/index.html">
 <meta property="og:site_name" content="linzx">
 <meta property="og:description" content="记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。  事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。 自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西 1、子组件不允许修改父组件数据之前在写angular的父子组件传递">
@@ -101,9 +101,9 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/error1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/vue-key.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/vue-key-info.png">
-<meta property="og:updated_time" content="2018-03-08T13:45:18.490Z">
+<meta property="og:updated_time" content="2018-05-03T09:05:21.877Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="手写Vue组件踩坑与心得">
+<meta name="twitter:title" content="js中数组的原生方法">
 <meta name="twitter:description" content="记得以前看过一句话，说市面上任何的UI库都无法满足一个产品的所有需求。  事实上的确如此，产品需求总是千奇百怪。正如我公司现在的产品，引用的是elemen-ui的库，但是无法级联多选，下拉多选的展现形式不对，穿梭框无法上下移动等各种需求逼迫我们只能自己去写组件实现了。 自己手写实现了两个组件之后，先写一篇记录一些坑和学会的新东西 1、子组件不允许修改父组件数据之前在写angular的父子组件传递">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/linzx1993/linzx1993.github.io/master/images/error1.png">
 
@@ -139,7 +139,7 @@
 
 
 
-  <title>手写Vue组件踩坑与心得 | linzx</title>
+  <title>js中数组的原生方法 | linzx</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -320,7 +320,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">手写Vue组件踩坑与心得</h2>
+          <h2 class="post-title" itemprop="name headline">js中数组的原生方法</h2>
         
 
         <div class="post-meta">
@@ -372,7 +372,7 @@
 
           
           
-             <span id="/2017/07/29/手写Vue组件踩坑与心得/" class="leancloud_visitors" data-flag-title="手写Vue组件踩坑与心得">
+             <span id="/2017/07/29/手写Vue组件踩坑与心得/" class="leancloud_visitors" data-flag-title="js中数组的原生方法">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -397,7 +397,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  2,432
+                  2,870
                 </span>
               
 
@@ -413,7 +413,7 @@
                   <span class="post-meta-item-text">阅读时长</span>
                 
                 <span title="阅读时长">
-                  10
+                  11
                 </span>
               
             </div>
@@ -463,7 +463,17 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// 在文件开头初始引入所有的组件文件</div><div class="line">import b from &quot;./components/common/b.vue&quot;</div><div class="line">import c from &quot;./components/common/c.vue&quot;</div><div class="line"></div><div class="line">const components = [b,c];</div><div class="line"></div><div class="line">const install = function (Vue, opts = &#123;&#125;) &#123;</div><div class="line">	components.map(component =&gt; &#123;</div><div class="line">		Vue.component(component.name, component);</div><div class="line">	&#125;);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">export default install</div></pre></td></tr></table></figure>
 <p>然后直接在启动的main.js文件里面引入就好<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">import ui from &quot;install.js&quot;</div><div class="line">Vue.use(ui);</div></pre></td></tr></table></figure></p>
 <p>然后你就可以随意在任何一个组件里面直接调用了，比自己之前在每个组件里重复调用要方便一点。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;b v-model=&quot;data1&quot;&gt;&lt;/b&gt;</div><div class="line">&lt;c v-model=&quot;data2&quot;&gt;&lt;/c&gt;</div></pre></td></tr></table></figure></p>
-<p>好了，暂时到这里，都是自己的踩得坑和心得，希望对大家有所帮助吧，接下去还有的话再补充好了。</p>
+<h4 id="6-vue的异步组件"><a href="#6-vue的异步组件" class="headerlink" title="6.vue的异步组件"></a>6.vue的异步组件</h4><p>因为一般后台页面都是spa，这样子我们打包的时候就会有一个问题，所有的vue文件都会被打包到一个文件，形成一个特别大的js文件。这对于一个追求性能的页面肯定是不好，vue也为这种情况提供了解决措施</p>
+<blockquote>
+<p>利用webpack对代码进行分割是懒加载的前提，懒加载就是异步调用组件，需要时候才下载。</p>
+</blockquote>
+<p>既然异步，最直接想到就是<code>Promise</code>了，我们可以使用import方式调用，只是调用方法有所区别而已。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//同步</div><div class="line">import a from &apos;a.vue&apos;</div><div class="line"></div><div class="line">//异步</div><div class="line">import(&apos;a.vue&apos;).then(a =&gt; console.log(a))</div></pre></td></tr></table></figure></p>
+<p>通过第二种import引入的方式返回的是一个promise对象，然后再配合webpack会将其切分为一个单独的文件，在进入页面的时候才进行加载。</p>
+<p>比如有a，b两个页面，有一个c组件只有b页面需要，我们可以在b页面这么引入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import(&apos;c.vue&apos;)</div></pre></td></tr></table></figure></p>
+<p>这样子c组件不会被打包到一个公共文件中，而是作为一个独立的<code>c.js</code>文件存在于项目中，只有在进入<code>b页面</code>时，才会去加载<code>c组件</code></p>
+<p>在业务场景中，需要团队实现划分好哪些组件需要异步加载的。</p>
+<p>加入如果异步组件一多，也会形成很多文件，我们可以依靠<code>webpack</code>的<code>命名chunk</code>,将一些异步组件放在同一个文件中。一个特殊的注释语法来提供 chunk name (需要 Webpack &gt; 2.4)。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">const Foo = () =&gt; import(/* webpackChunkName: &quot;group-foo&quot; */ &apos;./Foo.vue&apos;)</div><div class="line">const Bar = () =&gt; import(/* webpackChunkName: &quot;group-foo&quot; */ &apos;./Bar.vue&apos;)</div><div class="line">const Baz = () =&gt; import(/* webpackChunkName: &quot;group-foo&quot; */ &apos;./Baz.vue&apos;)</div></pre></td></tr></table></figure></p>
+<p>好了，暂时到这里，都是自己的踩得坑和心得，希望对大家有所帮助吧，接下去还有的话会不断补充</p>
 
       
     </div>
@@ -619,7 +629,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/technology/index.html">
+              <a href="/tags/index.html">
                 <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>
@@ -655,7 +665,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、子组件不允许修改父组件数据"><span class="nav-number">1.</span> <span class="nav-text">1、子组件不允许修改父组件数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Vue给每个组件提供了一个默认的父子传递事件v-model。"><span class="nav-number">2.</span> <span class="nav-text">2.Vue给每个组件提供了一个默认的父子传递事件v-model。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-保留属性key"><span class="nav-number">3.</span> <span class="nav-text">3.保留属性key</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-使用-emit和-on需要对应同一个组件"><span class="nav-number">4.</span> <span class="nav-text">4.使用$emit和$on需要对应同一个组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-全局一次性引用写好的组件"><span class="nav-number">5.</span> <span class="nav-text">5.全局一次性引用写好的组件</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、子组件不允许修改父组件数据"><span class="nav-number">1.</span> <span class="nav-text">1、子组件不允许修改父组件数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Vue给每个组件提供了一个默认的父子传递事件v-model。"><span class="nav-number">2.</span> <span class="nav-text">2.Vue给每个组件提供了一个默认的父子传递事件v-model。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-保留属性key"><span class="nav-number">3.</span> <span class="nav-text">3.保留属性key</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-使用-emit和-on需要对应同一个组件"><span class="nav-number">4.</span> <span class="nav-text">4.使用$emit和$on需要对应同一个组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-全局一次性引用写好的组件"><span class="nav-number">5.</span> <span class="nav-text">5.全局一次性引用写好的组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-vue的异步组件"><span class="nav-number">6.</span> <span class="nav-text">6.vue的异步组件</span></a></li></ol></div>
             
 
           </div>
