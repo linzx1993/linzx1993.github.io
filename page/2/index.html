@@ -299,6 +299,209 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/24/理解jquery的深拷贝源码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="linzx">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/24/理解jquery的深拷贝源码/" itemprop="url">理解jquery的深拷贝</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-24T23:47:44+08:00">
+                2017-08-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/08/24/理解jquery的深拷贝源码/" class="leancloud_visitors" data-flag-title="理解jquery的深拷贝">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,855
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>好像自从使用框架之后，对jquery的依赖越来越低了，其好像已经慢慢作为一个工具库的存在了。新项目商量之下，为了减小文件大小，干脆直接不用jquer2，对于一些需要的工具函数直接从jquery提取到一个自己写的工具文件tool.js中。在提取的过程中，也慢慢理解了jquery一些工具函数的源码</p>
+</blockquote>
+<p>深拷贝和浅拷贝的使用场景不同，并没有好坏之分，像对一些基本数据类型，直接可以使用浅拷贝对处理数据。但是对于基本引用类型如嵌套对象，数组（包含着对象的数组），那么就需要使用到深拷贝了。</p>
+<blockquote>
+<p>不想看前面深浅拷贝对比的，可以直接拉到第二章看jquery源码实现</p>
+</blockquote>
+<hr>
+<h4 id="1-浅拷贝解析"><a href="#1-浅拷贝解析" class="headerlink" title="1.浅拷贝解析"></a>1.浅拷贝解析</h4><p>原生js也有一些提供拷贝的函数，比如数组的Array.slice(0),Array.concat()，对象的Object.create(),Object.assign()等等，但是都是浅拷贝，遇到二维数组，嵌套对象就通通失败了（以前不懂的时候，真的被坑的不要不要的啊）。</p>
+<p>比如下面这个例子，都是在只有基本数据类型的情况下，使用浅拷贝就可以了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">let arr = [1,2,34,5,67,8,9];</div><div class="line">let cloneArr = arr.slice(4);</div><div class="line">console.log(cloneArr);  //  [67, 8, 9]</div><div class="line"></div><div class="line">cloneArr[0] = 100;  //  修改cloneArr</div><div class="line">console.log(arr);   //  [1,2,34,5,67,8,9],修改cloneArr不影响原数组arr</div><div class="line"></div><div class="line">----------------</div><div class="line"></div><div class="line">let obj = &#123;a : 1,b : 2,c : 3,&#125;;</div><div class="line">let cloneObj = Object.assign(&#123;&#125;,obj);// 将拷贝的属性值拷贝到目标对象，然后返回目标对象</div><div class="line">console.log(cloneObj); //   cloneObj = &#123;a : 1,b : 2,c : 3,&#125;;</div><div class="line"></div><div class="line">cloneObj.a = 444;   //修改对象</div><div class="line">console.log(obj);   //  obj = &#123;a : 1,b : 2,c : 3,&#125;; 修改拷贝对象不影响源对象</div></pre></td></tr></table></figure></p>
+<p>但是如果以上例子将基本数据类型换成引用类型Object和Array呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">let arr = [1,2,&#123;a : 3&#125;,&#123;b : 4&#125;,5];</div><div class="line">let cloneArr = arr.slice(2);</div><div class="line">console.log(cloneArr);  //  [&#123;a : 3&#125;,&#123;b : 4&#125;,5];</div><div class="line"></div><div class="line">cloneArr[0].a = 100;  //  修改cloneArr</div><div class="line">console.log(arr);   //  [1,2,&#123;a : 100&#125;,&#123;b : 4&#125;,5],修改cloneArr影响原数组arr</div><div class="line"></div><div class="line">----------------</div><div class="line"></div><div class="line">let obj = &#123;a : &#123;aa : 1&#125;,b : &#123;bb : 2&#125;,c : 3,&#125;;</div><div class="line">let cloneObj = Object.assign(&#123;&#125;,obj);// 将拷贝的属性值拷贝到目标对象，然后返回目标对象</div><div class="line">console.log(cloneObj); //   cloneObj = &#123;a : &#123;aa : 1&#125;,b : &#123;bb : 2&#125;,c : 3,&#125;;</div><div class="line"></div><div class="line">cloneObj.a.aa = 100;   //修改对象</div><div class="line">console.log(obj);   //  obj = &#123;a : &#123;aa : 100&#125;,b : &#123;bb : 2&#125;,c : 3,&#125;; 修改拷贝对象影响到了源对象</div></pre></td></tr></table></figure>
+<p>为什么会这样子，原因其实也不复杂。js内存分为栈内存和堆内存。所有的基本数据类型都是存储在栈内存中，而引用类型则是存储在堆内存中，提供了一个地址放在了栈内存中。当我们要获取引用类型的值时，先从栈内存获得地址，再根据地址去堆内存中获得值。因此也叫按引用访问。</p>
+<blockquote>
+<p>(去网上浅拷贝了一张图片，因为拷贝了一个图片地址)<br><img src="http://img.blog.csdn.net/20141212220233511?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGRkMTk5MTA1MDU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="去网上浅拷贝了一张图片，拷贝了一个图片地址"></p>
+</blockquote>
+<p>而我们上面例子中，每个数组和对象每个属性存储的引用类型obj其实是个地址，我们只是简单的拷贝了属性值，其实就是拷贝了一个地址。所以我们在新对象里进行修改时，由于是通过同一个地址修改了值。因为和原对象共用了一个地址，所以自然就修改了原对象的值了。</p>
+<h4 id="2-深拷贝解析"><a href="#2-深拷贝解析" class="headerlink" title="2.深拷贝解析"></a>2.深拷贝解析</h4><p>前面解析了浅拷贝。因为我们项目对大型数据处理占据了大头，其中不可避免的会经常用到深拷贝这块。那么深拷贝是怎么实现的。</p>
+<p>其实也很简单，就是根据地址找到你堆内存中的值，不断递归深入拷贝下去，直到为基本数据类型为止，接下去就贴上深拷贝代码。</p>
+<p>在讲jquey前，还有一个很暴力的方式<strong>JSON.parse()和JSON.stringify()</strong>;缺点是</p>
+<ul>
+<li>数据不能包含函数。</li>
+<li>如果某个对象属性值为null，会形成一个对象的闭环<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">let obj = &#123;</div><div class="line">    a: 1,</div><div class="line">    b: 2,</div><div class="line">	c: [1,2,3],</div><div class="line">    d: function() &#123; </div><div class="line">        console.log(&quot;asdfghj&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line">let result1 = JSON.stringify(target);</div><div class="line">console.log(result1); //    输出结果为&quot;&#123;&quot;a&quot;:1,&quot;b&quot;:2,&quot;c&quot;:[1,2,3]&#125;&quot;，函数直接没了</div><div class="line"></div><div class="line">const obj = &#123;</div><div class="line">  foo: &#123;</div><div class="line">    name: &apos;foo&apos;,</div><div class="line">    bar: &#123;</div><div class="line">      name: &apos;bar&apos;</div><div class="line">      baz: &#123;</div><div class="line">        name: &apos;baz&apos;,</div><div class="line">        aChild: null // 待会将指向obj.bar</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">obj.foo.bar.baz.aChild = obj.foo // foo-&gt;bar-&gt;baz-&gt;aChild-&gt;foo形成环</div><div class="line">JSON.stringify(obj) // =&gt; TypeError: Converting circular personucture to JSON</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>好了，最后贴上jquery深拷贝的代码和自己一些理解的注释<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line">$.fn.extend = function () &#123;</div><div class="line">    //jquery喜欢在初始定义好所有的变量</div><div class="line">    let options,//  被拷贝的对象</div><div class="line">    	name,// 遍历时的属性</div><div class="line">    	src,// 返回对象本身的属性值</div><div class="line">    	copy,// 需要拷贝的内容</div><div class="line">    	copyIsArray,//  判断是否为数组</div><div class="line">    	clone,// 返回拷贝的内容</div><div class="line">    	target = arguments[0] || &#123;&#125;,</div><div class="line">    	i = 1,</div><div class="line">    	length = arguments.length,</div><div class="line">    	deep = false;// 默认为浅拷贝</div><div class="line">    	</div><div class="line">    //target 是传入的第一个参数,表示是否要深递归</div><div class="line">    if(typeof target === &apos;boolean&apos;)&#123;</div><div class="line">    	deep = target;</div><div class="line">    	//既然为boolean，则此处初始化target为第二个参数或者空对象</div><div class="line">    	target = arguments[i] || &#123;&#125;;</div><div class="line">    	// 如果传了类型为 boolean 的第一个参数，i 则从 2 开始</div><div class="line">    	i ++</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //如果传入的第一个参数不是对象或者其他，初始化为一个空对象</div><div class="line">    if(typeof target !== &apos;object&apos; &amp;&amp; $.isFunction(target))&#123;</div><div class="line">    	target = &#123;&#125;;</div><div class="line">    &#125;</div><div class="line">    //如果只传入了一个参数，表示是jquery静态方法，直接返回自身</div><div class="line">    if(i === length)&#123;</div><div class="line">    	target = this;</div><div class="line">    	i --;</div><div class="line">    &#125;</div><div class="line">    for(; i &lt; length; i ++)&#123;</div><div class="line">    	if((options = arguments[i]) !== null )&#123;</div><div class="line">            for( name in options)&#123;</div><div class="line">            	src = target[name];//获得源对象的值</div><div class="line">            	copy = options[name];//获得要拷贝对象的值</div><div class="line">            	//说是为了避免无限循环，例如 extend(true, target, &#123;&apos;target&apos;:target&#125;);</div><div class="line">            	if(target === copy) continue;</div><div class="line">            	//如果是数据正确，且是一个纯粹的对象（纯粹的对象指的是 通过 &quot;&#123;&#125;&quot; 或者 &quot;new Object&quot; 创建的）或者是一个数组的话</div><div class="line">            	if(deep &amp;&amp; copy &amp;&amp; ($.isPlainObject(copy) || (copyIsArray = Array.isArray(copy))))&#123;</div><div class="line">                    //如果是一个数组的话</div><div class="line">                    if(copyIsArray)&#123;</div><div class="line">                        copyIsArray = false;</div><div class="line">                        clone = src &amp;&amp; Array.isArray(src) ? src : [];//判断源对象是不是数组，如果不是，直接变为空数组，拷贝属性高优先原则</div><div class="line">                    &#125; else &#123;</div><div class="line">                        clone = src &amp;&amp; $.isPlainObject(src) ? src : &#123;&#125;;//判断原对象属性是否有值，如果有的话，直接返回原值，否则新建一个空对象</div><div class="line">                    &#125;</div><div class="line">                    //继续深拷贝下去</div><div class="line">                    target[name] = $.extend(deep,clone,copy);</div><div class="line">            	&#125;else if(copy !== undefined)&#123;</div><div class="line">                    //如果不为空，则不是需要深拷贝的数据和对象，而是string,data,boolean等等，可以直接赋值</div><div class="line">                    target[name] = copy;</div><div class="line">            	&#125;</div><div class="line">            &#125;</div><div class="line">    	&#125;</div><div class="line">    &#125;</div><div class="line">    // 返回新的拷贝完的对象</div><div class="line">    return target;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在看上段代码中，又发现了几个好方法在业务中会用到的，可以让代码更严谨<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">//判断数据类型</div><div class="line">//判断是否为纯正的数据对象</div><div class="line">isPlainObject: function( obj ) &#123;</div><div class="line">    //如果数据不正确，不是对象类型，或者是dom对象，window对象，则直接返回false</div><div class="line">    if ( !obj || jQuery.type(obj) !== &quot;object&quot; || obj.nodeType || jQuery.isWindow( obj ) ) &#123;</div><div class="line">    	return false;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //这段代码是为了兼容IE89存在的，查看是否有constructor属性，如果没有必然是数据对象</div><div class="line">    try &#123;</div><div class="line">    	if ( obj.constructor &amp;&amp;</div><div class="line">            !core_hasOwn.call(obj, &quot;constructor&quot;) &amp;&amp;</div><div class="line">            !core_hasOwn.call(obj.constructor.prototype, &quot;isPrototypeOf&quot;) ) &#123;</div><div class="line">            return false;</div><div class="line">    	&#125;</div><div class="line">    &#125; catch ( e ) &#123;</div><div class="line">    	return false;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //对象中key的顺序会将自身属性排在最前面遍历，如果最后一个还是自身属性，则必然所有属性都是自己的  </div><div class="line">    var key;</div><div class="line">    for ( key in obj ) &#123;&#125;</div><div class="line">    </div><div class="line">    return key === undefined || core_hasOwn.call( obj, key );</div><div class="line">&#125;,</div></pre></td></tr></table></figure></p>
+<p>以上基本就是jquery.extend代码的解析了。extend是jquery中一个极其重要的方法，jquery本身就用它扩展了许多静态方法和实例方法</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/20/promise源码解析（译）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2080,186 +2283,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/01/9.生活中的经济学原理-----政治过程的基本元素/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="linzx">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="linzx">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/01/9.生活中的经济学原理-----政治过程的基本元素/" itemprop="url">第九章-政治过程的基本元素</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-01T13:47:44+08:00">
-                2017-06-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/《解释的工具-生活中的经济学原理》/" itemprop="url" rel="index">
-                    <span itemprop="name">《解释的工具-生活中的经济学原理》</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/06/01/9.生活中的经济学原理-----政治过程的基本元素/" class="leancloud_visitors" data-flag-title="第九章-政治过程的基本元素">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计</span>
-                
-                <span title="字数统计">
-                  742
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长</span>
-                
-                <span title="阅读时长">
-                  2
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="《解释的工具-生活中的经济学原理》"><a href="#《解释的工具-生活中的经济学原理》" class="headerlink" title="《解释的工具-生活中的经济学原理》"></a>《解释的工具-生活中的经济学原理》</h4><h6 id="—–第九章-政治过程的基本元素"><a href="#—–第九章-政治过程的基本元素" class="headerlink" title="—–第九章-政治过程的基本元素"></a>—–第九章-政治过程的基本元素</h6><p>作者以台湾民主投票的政治环境为基础进行阐述一些不为人知的“尴尬点”，当我想带入其中的时候，才发现中国完全不是这样的。说实话，这一章真的是完全不符合国情，真要代入其中，真的是满满对国家的吐槽。不过第二个故事中隐含的“城市化”思想，感觉和自己的生活更切合一点吧。</p>
-<p><em>大家在观看球赛时，一个观众为了看的更清楚而站了起来，刚开始他当然获得了一览无余的快乐；但是当大家逐渐都站了起来，视野和原先都没什么两样了。</em></p>
-<p>这个“站起来”的故事，第一想法就是“城市化”。随着“城市化”的政策执行，越来越多好的资源会逐渐往中心城市集中，人们为了获得好的资源，也会逐渐地，慢慢地迁往城市。可是随着人数的增多，城市的资源也越来越稀缺，人们则不得已付出比原来环境更多的努力，比如双职工，加班，双份工作等等，一切为了享受更好的资源。最终随着某个临界点，教育医疗资源的有限，房价的增高，导致一部分人们即时付出了比原先环境更多的努力，却获得和以前一样的资源。那么这时候，你还能退出去吗，你还能离开这个城市嘛？<strong>有时候，我们好不容易摸清了一点端倪，却不知道如何挣脱自己造成的困境。</strong></p>
-<p>事实上，我们身边许多事情也隐含着一模一样的道理。高峰时期的塞车，孩子的补习班和艺术班，生活中的走后门，送红包。这些行为耗费了我们许多的心力，资源，时间，实际上获得却比想象的少很多。即使大家知道这样，却也没有人愿意首先“坐下来”(当然做的更好也是一条路，可是除非你永远领先，不然最终结果还是会一模一样)。</p>
-<p>我有时候也在和身边朋友说：“我还回的去吗？”。我的职业决定了我回去毫无发展前景，只能继续走公务员这条父母眼中的光明大道。杭州作为一个大城市，寄托了我个人所有的希望，因为我知道这是一个我付出多少就能给我多少的城市，这是一个我不需要依靠一些东西可以公平竞争的城市。即使他还有许多的不完美，可以我感觉我已经“坐不下来了”。<strong>因为我知道，我如果坐回去，我就永远只能坐在那里了。</strong></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2309,7 +2332,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2330,7 +2353,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/technology/index.html">
+              <a href="/tags/index.html">
                 <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>
