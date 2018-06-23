@@ -1,0 +1,1447 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="技术文章,javascript," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="记得4月新出webpack4，上个月刚好没什么事情，用webpack4又重新去搭了一遍自己的项目。在搭项目的途中，忽然对webpack模块化之后的代码起了兴趣，于是想搞清楚我们引入的文件到底是怎么运行的。  1、基本版——单入口引入一个js文件所谓的基本版，就是我只引入了一个test.js,代码只有一行var a = 1。打包之后，发现生成的文件main.js并没有多少代码，只有90行不到。 截">
+<meta name="keywords" content="技术文章,javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次对webpack打包后的代码的失败探究">
+<meta property="og:url" content="http://yoursite.com/2018/06/14/记一次对webpack打包后的代码的失败探究/index.html">
+<meta property="og:site_name" content="linzx">
+<meta property="og:description" content="记得4月新出webpack4，上个月刚好没什么事情，用webpack4又重新去搭了一遍自己的项目。在搭项目的途中，忽然对webpack模块化之后的代码起了兴趣，于是想搞清楚我们引入的文件到底是怎么运行的。  1、基本版——单入口引入一个js文件所谓的基本版，就是我只引入了一个test.js,代码只有一行var a = 1。打包之后，发现生成的文件main.js并没有多少代码，只有90行不到。 截">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-06-23T07:29:24.199Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="记一次对webpack打包后的代码的失败探究">
+<meta name="twitter:description" content="记得4月新出webpack4，上个月刚好没什么事情，用webpack4又重新去搭了一遍自己的项目。在搭项目的途中，忽然对webpack模块化之后的代码起了兴趣，于是想搞清楚我们引入的文件到底是怎么运行的。  1、基本版——单入口引入一个js文件所谓的基本版，就是我只引入了一个test.js,代码只有一行var a = 1。打包之后，发现生成的文件main.js并没有多少代码，只有90行不到。 截">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/14/记一次对webpack打包后的代码的失败探究/"/>
+
+
+
+
+
+  <title>记一次对webpack打包后的代码的失败探究 | linzx</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?93e1e7523d9fccc42d9201ace7ca982a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">linzx</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/14/记一次对webpack打包后的代码的失败探究/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="linzx">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">记一次对webpack打包后的代码的失败探究</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-14T13:47:44+08:00">
+                2018-06-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/06/14/记一次对webpack打包后的代码的失败探究/" class="leancloud_visitors" data-flag-title="记一次对webpack打包后的代码的失败探究">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  3,704
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  15
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>记得4月新出webpack4，上个月刚好没什么事情，用webpack4又重新去搭了一遍自己的项目。在搭项目的途中，忽然对webpack模块化之后的代码起了兴趣，于是想搞清楚我们引入的文件到底是怎么运行的。</p>
+</blockquote>
+<h3 id="1、基本版——单入口引入一个js文件"><a href="#1、基本版——单入口引入一个js文件" class="headerlink" title="1、基本版——单入口引入一个js文件"></a>1、基本版——单入口引入一个js文件</h3><p>所谓的基本版，就是我只引入了一个<code>test.js</code>,代码只有一行<code>var a = 1</code>。打包之后，发现生成的文件<code>main.js</code>并没有多少代码，只有90行不到。</p>
+<p>截取出真正执行的代码就更加少了，只有下面4行。我们接下去就从这几行代码中看下打包出来的文件的执行流程是怎么样的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">modules</span>) </span>&#123;</div><div class="line">    <span class="comment">//新建一个对象，记录导入了哪些模块</span></div><div class="line">    <span class="keyword">var</span> installedModules = &#123;&#125;;</div><div class="line">    </div><div class="line">    <span class="comment">// The require function 核心执行方法</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__webpack_require__</span>(<span class="params">moduleId</span>)</span>&#123;<span class="comment">/*内容暂时省略*/</span>&#125;</div><div class="line">    </div><div class="line">    <span class="comment">// expose the modules object (__webpack_modules__) 记录传入的modules作为私有属性</span></div><div class="line">    __webpack_require__.m = modules;</div><div class="line">    </div><div class="line">    <span class="comment">// expose the module cache 缓存对象，记录了导入哪些模块</span></div><div class="line">    __webpack_require__.c = installedModules;</div><div class="line">    </div><div class="line">    </div><div class="line">    <span class="comment">// Load entry module and return exports 默认将传入的数组第一个元素作为参数传入,这个s应该是start的意思了</span></div><div class="line">    <span class="keyword">return</span> __webpack_require__(__webpack_require__.s = <span class="number">0</span>);</div><div class="line">&#125;)([(<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line"><span class="comment">/* 0 */</span></div><div class="line">    <span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"><span class="comment">/***/</span> &#125;)</div><div class="line"><span class="comment">/******/</span> ])</div></pre></td></tr></table></figure>
+<p>首先很明显，整个文件是个<strong>自执行函数</strong>。传入了一个数组参数<code>modules</code>。</p>
+<p>这个自执行函数内部一开始新建了一个对象<code>installedModules</code>，用来记录打包了哪些模块。</p>
+<p>然后新建了函数<code>__webpack_require__</code>，可以说整个自执行函数最核心的就是<code>__webpack_require__</code>。<code>__webpack_require__</code>有许多私有属性，其中就有刚刚新建的<code>installedModules</code>。</p>
+<p>最后自执行函数<code>return</code>了<code>__webpack_require__</code>，并传入了一个参数<code>0</code>。因为<code>__webpack_require__</code>的传参变量名称叫做<code>moduleId</code>,那么传参传进来的也就是<em>模块id*</em>。所以我大胆猜测这个<code>0</code>可能是某个模块的id。</p>
+<p>这时候我瞄到下面有一行注释<code>/* 0 */</code>。可以发现webpack会在每一个模块导入的时候，会在打包模块的顶部写上一个id的注释。那么刚才那个<code>0</code>就能解释了，就是我们引入的那个模块，由于是第一个模块，所以它的id是0。</p>
+<p>那么当传入了<code>moduleId</code>之后，<code>__webpack_require__</code>内部发生了什么？</p>
+<h4 id="webpack-require解析"><a href="#webpack-require解析" class="headerlink" title="webpack_require解析"></a><strong>webpack_require</strong>解析</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">__webpack_require__</span>(<span class="params">moduleId</span>) </span>&#123;</div><div class="line">    <span class="comment">// Check if module is in cache </span></div><div class="line">    <span class="comment">// 检查缓存对象中是否有这个id，判断是否首次引入</span></div><div class="line">    <span class="keyword">if</span>(installedModules[moduleId]) &#123;</div><div class="line">        <span class="keyword">return</span> installedModules[moduleId].exports;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// Create a new module (and put it into the cache) 添加到.c缓存里面</span></div><div class="line">    <span class="keyword">var</span> <span class="built_in">module</span> = installedModules[moduleId] = &#123;</div><div class="line">    	i: moduleId,</div><div class="line">    	l: <span class="literal">false</span>,</div><div class="line">    	exports: &#123;&#125;</div><div class="line">    &#125;;</div><div class="line">    <span class="comment">// Execute the module function 执行通过moduleId获取到的函数</span></div><div class="line">    modules[moduleId].call(<span class="built_in">module</span>.exports, <span class="built_in">module</span>, <span class="built_in">module</span>.exports, __webpack_require__);</div><div class="line">    <span class="comment">// Flag the module as loaded</span></div><div class="line">    <span class="comment">// 表示module对象里面的模块加载了</span></div><div class="line">    <span class="built_in">module</span>.l = <span class="literal">true</span>;</div><div class="line">    <span class="comment">// Return the exports of the module</span></div><div class="line">    <span class="keyword">return</span> <span class="built_in">module</span>.exports;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>首先通过<code>moduleId</code>判断这个模块是否引入过。如果已经引入过的话，则直接返回。否则<code>installedModules</code>去记录下这次引入。这样子如果别的文件也要引入这个模块的话，避免去重复执行相同的代码。</p>
+<p>然后通过<code>modules[moduleId].call</code>去执行了引入的JS文件。</p>
+<p>看完这个函数之后，大家可以发现其实<code>webpack</code>打包之后的文件并没有什么很复杂的内容嘛。当然这很大一部分原因是因为我们的场景太简单了，那么接下来就增加一点复杂性。</p>
+<h3 id="2、升级版——单入口引入多个文件"><a href="#2、升级版——单入口引入多个文件" class="headerlink" title="2、升级版——单入口引入多个文件"></a>2、升级版——单入口引入多个文件</h3><p>接下来我修改一下webpack入口，单个入口同时下引入三个个文件<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">entry: [path.resolve(__dirname, <span class="string">'../src/test.js'</span>),path.resolve(__dirname, <span class="string">'../src/test2.js'</span>),path.resolve(__dirname, <span class="string">'../src/test3.js'</span>)],</div></pre></td></tr></table></figure></p>
+<p>三个文件的内容分别为<code>var a = 1</code>,<code>var b = 2</code>,<code>var c = 3</code>。接下来我们可以看看打包之后的代码</p>
+<p>打包之后的文件<code>main.js</code>核心内容并没有发生变化，和上面一模一样。但是这个自执行函数传入的参数却发生了变化。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">modules</span>) </span>&#123;</div><div class="line">    <span class="comment">/*这部分内容省略，和前面一模一样*/</span></div><div class="line">&#125;)([</div><div class="line"><span class="comment">/* 0 */</span></div><div class="line"><span class="comment">/***/</span> (<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line">        __webpack_require__(<span class="number">1</span>);</div><div class="line">        __webpack_require__(<span class="number">2</span>);</div><div class="line">        <span class="built_in">module</span>.exports = __webpack_require__(<span class="number">3</span>);</div><div class="line"><span class="comment">/***/</span> &#125;),</div><div class="line"><span class="comment">/* 1 */</span></div><div class="line"><span class="comment">/***/</span> (<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"><span class="comment">/***/</span> &#125;),</div><div class="line"><span class="comment">/* 2 */</span></div><div class="line"><span class="comment">/***/</span> (<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> b = <span class="number">2</span>;</div><div class="line"><span class="comment">/***/</span> &#125;)</div><div class="line"><span class="comment">/* 3 */</span></div><div class="line"><span class="comment">/***/</span> (<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> c = <span class="number">3</span>;</div><div class="line"><span class="comment">/***/</span> &#125;)</div><div class="line"><span class="comment">/******/</span> ]);</div></pre></td></tr></table></figure></p>
+<p>前面说过，自执行函数默认将传入的参数数组的第一个元素传入<code>__webpack_require__</code>执行代码。</p>
+<p>我们可以看一下传入第一个参数的内容，在上一章中是我们引入的文件内容<code>var a = 1</code>，但是这里却不是了。而是按模块引入顺序执行函数<code>__webpack_require__(1)</code>,<code>__webpack_require__(2)</code>,<code>__webpack_require__(3)</code>,通过<code>__webpack_require__</code>函数去执行了我们引入的代码。</p>
+<blockquote>
+<p>大家可以先想一下这里的1,2,3是怎么来的，为什么可以函数调用的时候，直接传参1,2,3</p>
+<p>不过到这里还不明白，module.exports到底起了什么作用，如果起作用，为什么又只取最后一个呢？</p>
+</blockquote>
+<h3 id="3-升级版——多入口，多文件引入方式"><a href="#3-升级版——多入口，多文件引入方式" class="headerlink" title="3.升级版——多入口，多文件引入方式"></a>3.升级版——多入口，多文件引入方式</h3><p>因为好奇如果多入口多文件是怎么样的，接下去我又将入口改了一下，变成了下面这样<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">entry: &#123;</div><div class="line">    index1: [path.resolve(__dirname, <span class="string">'../src/test1.js'</span>)],</div><div class="line">    index2: [path.resolve(__dirname, <span class="string">'../src/test2.js'</span>),path.resolve(__dirname, <span class="string">'../src/test3.js'</span>)],</div><div class="line">&#125;,</div></pre></td></tr></table></figure></p>
+<p>打包生成了<code>index1.js</code>和<code>index2.js</code>。发现<code>index1.js</code>和第一章讲的一样，<code>index2.js</code>和第二个文件一样。并没有什么让我很意外的东西。</p>
+<h3 id="4、进阶版——引入公共模块"><a href="#4、进阶版——引入公共模块" class="headerlink" title="4、进阶版——引入公共模块"></a>4、进阶版——引入公共模块</h3><p>在前面的打包文件中，我们发现每个模块id似乎是和引入顺序有关的。而在我们日常开发环境中，必然会引入各种公共文件，那么webpack会怎么处理这些id呢</p>
+<p>于是我们在配置文件中新增了<code>webpack.optimize.SplitChunksPlugin</code>插件。</p>
+<blockquote>
+<p>在<code>webpack2和3版本</code>中是<code>webpack.optimize.CommonsChunkPlugin</code>插件。但是在<code>webpack4</code>进行了一次优化改进，想要了解的可以看一下这篇文章<a href="https://blog.csdn.net/qq_35534823/article/details/79406995" target="_blank" rel="external">webpack4:代码分割CommonChunkPlugin的寿终正寝</a>。所以这里的代码将是使用<code>webpack4</code>打包出来的。</p>
+</blockquote>
+<p>然后修改一下配置文件中的入口，我们开了两个入口，并且两个入口都引入了<code>test3.js</code>这个文件<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">entry: &#123;</div><div class="line">        index1: [path.resolve(__dirname, <span class="string">'../src/test.js'</span>),path.resolve(__dirname, <span class="string">'../src/test3.js'</span>)],</div><div class="line">        index2: [path.resolve(__dirname, <span class="string">'../src/test2.js'</span>),path.resolve(__dirname, <span class="string">'../src/test3.js'</span>)],</div><div class="line">    &#125;,</div></pre></td></tr></table></figure></p>
+<p>可以看到，打包后生成了3个文件。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"scripts/bundle.4474bdd2169853ce33a7.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"scripts/index1.4474bdd2169853ce33a7.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"scripts/index2.4474bdd2169853ce33a7.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>首先<code>bundle.js</code>（文件名自己定义的）很明显是一个公共文件，里面应该有我们提取<code>test3.js</code>出来的内容。打开文件后，发现里面的代码并不多，只有下面几行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">(window[&quot;webpackJsonp&quot;] = window[&quot;webpackJsonp&quot;] || []).push([[2],&#123;</div><div class="line">/***/ 2:</div><div class="line">/***/ (function(module, exports, __webpack_require__) &#123;</div><div class="line">var c = 1;</div><div class="line">/***/ &#125;)</div><div class="line">&#125;]);</div></pre></td></tr></table></figure></p>
+<p>单纯看文件内容，我们大概能推测出几点：</p>
+<ul>
+<li>window全局环境下有一个名为<code>webpackJsonp</code>的数组</li>
+<li>数组的第一个元素仍然是数组，记录了数字<code>2</code>,应该是这个模块的id</li>
+<li>数组第二个元素是一个记录了形式为<code>{模块id：模块内容}</code>的对象。</li>
+<li>对象中的<code>模块内容</code>就是我们<code>test3.js</code>，被一个匿名函数包裹</li>
+</ul>
+<blockquote>
+<p>在<code>webpack2</code>中，采用的是<code>{文件路径：模块内容}</code>的对象形式。不过在升级到webpack3中优化采用了数字形式，为了方便提取公共模块。</p>
+</blockquote>
+<p>注意到一点，这个文件中的<code>2</code>并不像之前一样作为注释的形式存在了,而是作为属性名。但是它为什么直接就将这个<strong>模块id</strong>命名为<code>2</code>呢,目前来看，应该是这个模块是第二个引入的。带着这个想法，我接下去看了打包出来的<code>index1.js</code>文件</p>
+<p>截取出了真正执行并且有用的代码出来。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// index1.js</span></div><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">modules</span>) </span>&#123; <span class="comment">// webpackBootstrap</span></div><div class="line">    <span class="comment">// install a JSONP callback for chunk loading</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">webpackJsonpCallback</span>(<span class="params"></span>)</span>&#123;</div><div class="line">        <span class="comment">/*暂时省略内容*/</span></div><div class="line">        <span class="keyword">return</span> checkDeferredModules</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">checkDeferredModules</span>(<span class="params"></span>)</span>&#123;<span class="comment">/*暂时省略内容*/</span>&#125;</div><div class="line">    </div><div class="line">    <span class="comment">// The module cache</span></div><div class="line">    <span class="keyword">var</span> installedModules = &#123;&#125;;</div><div class="line">    </div><div class="line">    <span class="comment">// object to store loaded and loading chunks</span></div><div class="line">    <span class="comment">// undefined = chunk not loaded, null = chunk preloaded/prefetched</span></div><div class="line">    <span class="comment">// Promise = chunk loading, 0 = chunk loaded</span></div><div class="line">    <span class="keyword">var</span> installedChunks = &#123;</div><div class="line">    	<span class="number">0</span>: <span class="number">0</span></div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">    <span class="keyword">var</span> deferredModules = [];   <span class="comment">//</span></div><div class="line">    </div><div class="line">    <span class="keyword">var</span> jsonpArray = <span class="built_in">window</span>[<span class="string">"webpackJsonp"</span>] = <span class="built_in">window</span>[<span class="string">"webpackJsonp"</span>] || [];</div><div class="line">    <span class="keyword">var</span> oldJsonpFunction = jsonpArray.push.bind(jsonpArray);</div><div class="line">    jsonpArray.push = webpackJsonpCallback;</div><div class="line">    jsonpArray = jsonpArray.slice();</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; jsonpArray.length; i++)&#123; </div><div class="line">        webpackJsonpCallback(jsonpArray[i]);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> parentJsonpFunction = oldJsonpFunction;</div><div class="line">    </div><div class="line">    </div><div class="line">    <span class="comment">// add entry module to deferred list</span></div><div class="line">    deferredModules.push([<span class="number">0</span>,<span class="number">2</span>]);</div><div class="line">    <span class="comment">// run deferred modules when ready</span></div><div class="line">    <span class="keyword">return</span> checkDeferredModules();</div><div class="line">    </div><div class="line">&#125;)([</div><div class="line"><span class="comment">/* 0 */</span></div><div class="line"><span class="comment">/***/</span> (<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line">    __webpack_require__(<span class="number">1</span>);</div><div class="line">    <span class="built_in">module</span>.exports = __webpack_require__(<span class="number">2</span>);</div><div class="line">    <span class="comment">/***/</span> &#125;),</div><div class="line">    <span class="comment">/* 1 */</span></div><div class="line">    <span class="comment">/***/</span> (<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line">    <span class="comment">/***/</span> &#125;)</div><div class="line"><span class="comment">/******/</span> ]);</div></pre></td></tr></table></figure></p>
+<p>在引入<code>webpack.optimize.SplitChunksPlugin</code>之后，核心代码在原来基础上新增了两个函数<code>webpackJsonpCallback</code>和<code>checkDeferredModules</code>。然后在原来的<code>installedModules</code>基础上，多了一个<code>installedModules</code>，用来记录了模块的运行状态；一个<code>deferredModules</code>,暂时不知道干嘛，看名字像是存储待执行的模块，等到后面用到时再看。</p>
+<p>此外，还有这个自执行函数最后一行代码调用形式不再像之前一样。之前是通过调用<code>__webpack_require__(0)</code>，现在则变成了<code>checkDeferredModules</code>。那么我们便顺着它现在的调用顺序再去分析一下现在的代码。</p>
+<p>在分析了不同之后，接下来就按照运行顺序来查看代码，首先能看到一个熟悉的变量名字<code>webpackJsonp</code>。没错，就是刚才<code>bundle.js</code>中暴露到全局的那个数组。由于在html中先引入了<code>bundle.js</code>文件，所以我们可以直接从全局变量中获取到这个数组。</p>
+<p>前面已经简单分析过<code>window[&quot;webpackJsonp&quot;]</code>了，就不细究了。接下来这个数组进行了一次for循环,将数组中的每一个元素传参给了方法<code>webpackJsonpCallback</code>。而在这里的演示中，传入就是我们<code>bundle.js</code>中一个包含模块信息的数组<code>[[2],{2:fn}}]</code>。</p>
+<p>接下来就看<code>webpackJsonpCallback</code>如何处理传进来的参数了</p>
+<h4 id="webpackJsonpCallback简析"><a href="#webpackJsonpCallback简析" class="headerlink" title="webpackJsonpCallback简析"></a>webpackJsonpCallback简析</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/******/</span> 	<span class="function"><span class="keyword">function</span> <span class="title">webpackJsonpCallback</span>(<span class="params">data</span>) </span>&#123;</div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">var</span> chunkIds = data[<span class="number">0</span>]; <span class="comment">// 模块id</span></div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">var</span> moreModules = data[<span class="number">1</span>];  <span class="comment">// 提取出来的公共模块，也就是文件内容</span></div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">var</span> executeModules = data[<span class="number">2</span>];   <span class="comment">// 需要执行的模块，但演示中没有</span></div><div class="line"><span class="comment">/******/</span> 		<span class="comment">// add "moreModules" to the modules object,</span></div><div class="line"><span class="comment">/******/</span> 		<span class="comment">// then flag all "chunkIds" as loaded and fire callback</span></div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">var</span> moduleId, chunkId, i = <span class="number">0</span>, resolves = [];</div><div class="line"><span class="comment">/******/</span></div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">for</span>(;i &lt; chunkIds.length; i++) &#123;</div><div class="line"><span class="comment">/******/</span> 			chunkId = chunkIds[i];</div><div class="line"><span class="comment">/******/</span> 			<span class="keyword">if</span>(installedChunks[chunkId]) &#123;</div><div class="line"><span class="comment">/******/</span> 				resolves.push(installedChunks[chunkId][<span class="number">0</span>]);</div><div class="line"><span class="comment">/******/</span> 			&#125;</div><div class="line"><span class="comment">/******/</span> 			installedChunks[chunkId] = <span class="number">0</span>;</div><div class="line"><span class="comment">/******/</span> 		&#125;</div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">for</span>(moduleId <span class="keyword">in</span> moreModules) &#123;</div><div class="line"><span class="comment">/******/</span> 			<span class="keyword">if</span>(<span class="built_in">Object</span>.prototype.hasOwnProperty.call(moreModules, moduleId)) &#123;</div><div class="line"><span class="comment">/******/</span> 				modules[moduleId] = moreModules[moduleId];</div><div class="line"><span class="comment">/******/</span> 			&#125;</div><div class="line"><span class="comment">/******/</span> 		&#125;</div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">if</span>(parentJsonpFunction) parentJsonpFunction(data);</div><div class="line"><span class="comment">/******/</span></div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">while</span>(resolves.length) &#123;</div><div class="line"><span class="comment">/******/</span> 			resolves.shift()();</div><div class="line"><span class="comment">/******/</span> 		&#125;</div><div class="line"><span class="comment">/******/</span></div><div class="line"><span class="comment">/******/</span> 		<span class="comment">// add entry modules from loaded chunk to deferred list</span></div><div class="line"><span class="comment">/******/</span> 		deferredModules.push.apply(deferredModules, executeModules || []);</div><div class="line"><span class="comment">/******/</span></div><div class="line"><span class="comment">/******/</span> 		<span class="comment">// run deferred modules when all chunks ready</span></div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">return</span> checkDeferredModules();</div><div class="line"><span class="comment">/******/</span> 	&#125;;</div></pre></td></tr></table></figure>
+<p>这个函数中主要干了两件事情，分别是在那两个for循环中。</p>
+<p>一是在<code>installedChunks</code>对象记录引入的公共模块id，并且将这个模块标为已经导入的状态<code>0</code>。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">installedChunks[chunkId] = <span class="number">0</span>;</div></pre></td></tr></table></figure></p>
+<p>然后在另一个for循环中，设置传参数组<code>modules</code>的数据。我们公共模块的id是<code>2</code>,那么便设置<code>modules</code>数组中索引为<code>2</code>的位置为引入的公共模块函数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">modules[moduleId] = moreModules[moduleId];</div><div class="line">//这段代码在我们的例子中等同于 modules[2] = (function()&#123;/*test3.js公共模块中的代码*/&#125;)</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>其实当看到这段代码时，心里就有个疑问了。因为<code>index1.js</code>中设置<code>modulesp[2]</code>这个操作并不是一个push操作，如果说数组索引为2的位置已经有内容了呢？暂时保留着心中的疑问，继续走下去。心中隐隐感觉到这个打包后的代码其实并不是一个独立的产物了。</p>
+</blockquote>
+<p>我们知道modules是传进来的一个数组参数，在第二个章节中可以看到，我们会在最后执行函数<code>__webpack_require__(0)</code>，然后依顺序去执行所有引入模块。</p>
+<p>不过这次却和以前不一样了，可以看到<code>webpackJsonpCallback</code>最后返回的代码是<code>checkDeferredModules</code>。前面也说了整个自执行函数最后返回的函数也是<code>checkDeferredModules</code>，可以说它替代了<code>__webpack_require__(0)</code>。接下去就去看看<code>checkDeferredModules</code>发生了什么</p>
+<h4 id="checkDeferredModules简析"><a href="#checkDeferredModules简析" class="headerlink" title="checkDeferredModules简析"></a>checkDeferredModules简析</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/******/</span> 	<span class="function"><span class="keyword">function</span> <span class="title">checkDeferredModules</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">var</span> result;</div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; deferredModules.length; i++) &#123;</div><div class="line"><span class="comment">/******/</span> 			<span class="keyword">var</span> deferredModule = deferredModules[i];</div><div class="line"><span class="comment">/******/</span> 			<span class="keyword">var</span> fulfilled = <span class="literal">true</span>;</div><div class="line"><span class="comment">/******/</span> 			<span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">1</span>; j &lt; deferredModule.length; j++) &#123;</div><div class="line"><span class="comment">/******/</span> 				<span class="keyword">var</span> depId = deferredModule[j];</div><div class="line"><span class="comment">/******/</span> 				<span class="keyword">if</span>(installedChunks[depId] !== <span class="number">0</span>) fulfilled = <span class="literal">false</span>;</div><div class="line"><span class="comment">/******/</span> 			&#125;</div><div class="line"><span class="comment">/******/</span> 			<span class="keyword">if</span>(fulfilled) &#123;</div><div class="line"><span class="comment">/******/</span> 				deferredModules.splice(i--, <span class="number">1</span>);</div><div class="line"><span class="comment">/******/</span> 				result = __webpack_require__(__webpack_require__.s = deferredModule[<span class="number">0</span>]);</div><div class="line"><span class="comment">/******/</span> 			&#125;</div><div class="line"><span class="comment">/******/</span> 		&#125;</div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">return</span> result;</div><div class="line"><span class="comment">/******/</span> 	&#125;</div></pre></td></tr></table></figure>
+<p>这个函数关键点似乎是在<code>deferredModules</code>,但是我们刚才<code>webpackJsonpCallback</code>唯一涉及到这个的只有这么一句，并且<code>executeModules</code>其实是没有内容的，所以可以说是空数组。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">deferredModules.push.apply(deferredModules, executeModules || []);</div></pre></td></tr></table></figure></p>
+<p>既然没有内容，那么<code>webpackJsonpCallback</code>就只能结束函数了。回到主线程，发现下面马上是两句代码，得，又绕回来了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// add entry module to deferred list</div><div class="line">deferredModules.push([0,2]);</div><div class="line">// run deferred modules when ready</div><div class="line">return checkDeferredModules();</div></pre></td></tr></table></figure></p>
+<p>不过现在就有<code>deferredModules</code>这个数组终于有内容了，一次for循环下来，最后去执行我们模块的代码仍然是这一句<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">result = __webpack_require__(__webpack_require__.s = deferredModule[<span class="number">0</span>]);</div></pre></td></tr></table></figure></p>
+<p>很熟悉，有木有，最后还是回到了<code>__webpack_require__</code>,然后就是熟悉的流程了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">__webpack_require__(1);</div><div class="line">module.exports = __webpack_require__(2);</div></pre></td></tr></table></figure></p>
+<p>但是当我看到这个内容竟然有这行代码时<code>__webpack_require__(2);</code>还是有点崩溃的。为什么？因为它<strong>代码</strong>明确直接执行了<code>__webpack_require__(2)</code>。但是<code>2</code>这个模块id是通过在全局属性<code>webpackJsonp</code>获得的，<strong>代码</strong>不应该明确知道的啊。</p>
+<p>我原来以为的运行过程是，每个js文件通过全局变量<code>webpackJsonp</code>获得到公共模块id，然后push到自执行函数传参数组<code>modules</code>。那么等到真正执行的时候，会按照for循环依次执行数组内的每个函数。它不会知道有<code>1,2</code>这种明确的id的。</p>
+<blockquote>
+<p>为什么我会这么想呢？因为我一开始认为每个js文件都是独立的，想交互只能通过全局变量来。既然是独立的，我自然不知道公共模块id是<code>2</code>事实上，<code>webpackJsonp</code>的确是验证了我的想法。</p>
+</blockquote>
+<p>可惜结果跟我想象的完全不一样，在<code>index1.js</code>直接指定执行哪些模块。这只能说明一个事情，其实<code>webpack</code>内部已经将所有的代码顺序都确定好了，而不是在js文件中通过代码来确定的。事实上，当我去查看<code>index2.js</code>文件时，更加确定了我的想法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">/******/ (function(modules) &#123;/*内容和index1.js一样*/&#125;)</div><div class="line">/************************************************************************/</div><div class="line">/******/ ([</div><div class="line">/* 0 */,</div><div class="line">/* 1 */,</div><div class="line">/* 2 */,</div><div class="line">/* 3 */</div><div class="line">/***/ (function(module, exports, __webpack_require__) &#123;</div><div class="line">    __webpack_require__(4);</div><div class="line">    module.exports = __webpack_require__(2);</div><div class="line">/***/ &#125;),</div><div class="line">/* 4 */</div><div class="line">/***/ (function(module, exports, __webpack_require__) &#123;</div><div class="line">    var b = 2;</div><div class="line">/***/ &#125;)</div><div class="line">/******/ ]);</div><div class="line">//# sourceMappingURL=index2.19eeab4e90ee99ee1ce4.js.map</div></pre></td></tr></table></figure></p>
+<p>仔细查看自执行函数的传参数组，发现它的第<code>0,1,2</code>位都是undefined。我们知道这几个数字其实就是每个模块本身的Id。而这几个id恰恰就是<code>index1.js</code>和<code>bundle.js</code>中的模块。理论上来说在浏览器下运行，<code>index2.js</code>应该无法得知的，但是事实却完全相反。</p>
+<p>走到这一步，我对webpack打包后的代码也没有特别大的欲望了，webpack内部实现才是更重要的了。好了，不说了，我先去看了，等我搞明白了，再回来写续集。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术文章/" rel="tag"># 技术文章</a>
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/13/vue源码解析/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/header.jpg"
+               alt="linzx" />
+          <p class="site-author-name" itemprop="name">linzx</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、基本版——单入口引入一个js文件"><span class="nav-number">1.</span> <span class="nav-text">1、基本版——单入口引入一个js文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#webpack-require解析"><span class="nav-number">1.1.</span> <span class="nav-text">webpack_require解析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、升级版——单入口引入多个文件"><span class="nav-number">2.</span> <span class="nav-text">2、升级版——单入口引入多个文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-升级版——多入口，多文件引入方式"><span class="nav-number">3.</span> <span class="nav-text">3.升级版——多入口，多文件引入方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、进阶版——引入公共模块"><span class="nav-number">4.</span> <span class="nav-text">4、进阶版——引入公共模块</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#webpackJsonpCallback简析"><span class="nav-number">4.1.</span> <span class="nav-text">webpackJsonpCallback简析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#checkDeferredModules简析"><span class="nav-number">4.2.</span> <span class="nav-text">checkDeferredModules简析</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+    <div id="music163player">
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=406238&auto=0&height=66"></iframe>
+        </iframe>
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linzx</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (search_path.endsWith("json")) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("l3F7nF9MmsyTnvM5rI1g7V9s-gzGzoHsz", "TyY2L80HJkN4VjXnTqdDxuWw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  <div class="bg_content">
+      <canvas id="canvas"></canvas>
+  </div>
+  <script>
+  'use strict';
+
+      var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+      function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+      function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+      function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+      var Circle = function () {
+         function Circle(x, y) {
+              _classCallCheck(this, Circle);
+
+              this.x = x;
+              this.y = y;
+              this.r = Math.random() * 10;
+              this._mx = Math.random();
+              this._my = Math.random();
+          }
+
+         _createClass(Circle, [{
+              key: 'drawCircle',
+              value: function drawCircle(ctx) {
+                  ctx.beginPath();
+                  //arc() 方法使用一个中心点和半径，为一个画布的当前子路径添加一条弧。
+                  ctx.arc(this.x, this.y, this.r, 0, 360);
+                  ctx.closePath();
+                  ctx.fillStyle = 'rgba(204, 204, 204, 0.3)';
+                  ctx.fill();
+              }
+          }, {
+              key: 'drawLine',
+              value: function drawLine(ctx, _circle) {
+                  var dx = this.x - _circle.x;
+                  var dy = this.y - _circle.y;
+                  var d = Math.sqrt(dx * dx + dy * dy);
+                  if (d < 150) {
+                      ctx.beginPath();
+
+                      ctx.moveTo(this.x, this.y); //起始点
+                      ctx.lineTo(_circle.x, _circle.y); //终点
+                      ctx.closePath();
+                      ctx.strokeStyle = 'rgba(204, 204, 204, 0.3)';
+                      ctx.stroke();
+                  }
+              }
+
+
+          }, {
+              key: 'move',
+              value: function move(w, h) {
+                  this._mx = this.x < w && this.x > 0 ? this._mx : -this._mx;
+                  this._my = this.y < h && this.y > 0 ? this._my : -this._my;
+                  this.x += this._mx / 2;
+                  this.y += this._my / 2;
+              }
+          }]);
+
+          return Circle;
+      }();
+
+
+
+      var currentCirle = function (_Circle) {
+          _inherits(currentCirle, _Circle);
+
+          function currentCirle(x, y) {
+              _classCallCheck(this, currentCirle);
+
+              return _possibleConstructorReturn(this, (currentCirle.__proto__ || Object.getPrototypeOf(currentCirle)).call(this, x, y));
+          }
+
+          _createClass(currentCirle, [{
+              key: 'drawCircle',
+              value: function drawCircle(ctx) {
+                  ctx.beginPath();
+
+                  //this.r = (this.r < 14 && this.r > 1) ? this.r + (Math.random() * 2 - 1) : 2;
+                  this.r = 8;
+                  ctx.arc(this.x, this.y, this.r, 0, 360);
+                  ctx.closePath();
+                  //ctx.fillStyle = 'rgba(0,0,0,' + (parseInt(Math.random() * 100) / 100) + ')'
+                  ctx.fillStyle = 'rgba(255, 77, 54, 0.6)';
+                  ctx.fill();
+              }
+          }]);
+
+          return currentCirle;
+      }(Circle);
+
+
+      window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
+      var canvas = document.getElementById('canvas');
+      var ctx = canvas.getContext('2d');
+      var w = canvas.width = canvas.offsetWidth;
+      var h = canvas.height = canvas.offsetHeight;
+      var circles = [];
+      var current_circle = new currentCirle(0, 0);
+
+      var draw = function draw() {
+          ctx.clearRect(0, 0, w, h);
+          for (var i = 0; i < circles.length; i++) {
+              circles[i].move(w, h);
+              circles[i].drawCircle(ctx);
+              for (var j = i + 1; j < circles.length; j++) {
+                  circles[i].drawLine(ctx, circles[j]);
+              }
+          }
+          if (current_circle.x) {
+              current_circle.drawCircle(ctx);
+              for (var k = 1; k < circles.length; k++) {
+                  current_circle.drawLine(ctx, circles[k]);
+              }
+          }
+          requestAnimationFrame(draw);
+      };
+
+      var init = function init(num) {
+          for (var i = 0; i < num; i++) {
+              circles.push(new Circle(Math.random() * w, Math.random() * h));
+          }
+          draw();
+      };
+      window.addEventListener('load', init(60));
+      window.onmousemove = function (e) {
+          e = e || window.event;
+          current_circle.x = e.clientX;
+          current_circle.y = e.clientY;
+      };
+      window.onmouseout = function () {
+          current_circle.x = null;
+          current_circle.y = null;
+      };
+  </script>
+</body>
+</html>

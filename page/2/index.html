@@ -299,6 +299,417 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/Javascripts数组原生方法集合/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="linzx">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/03/Javascripts数组原生方法集合/" itemprop="url">js中数组的原生方法</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T23:47:44+08:00">
+                2017-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/09/03/Javascripts数组原生方法集合/" class="leancloud_visitors" data-flag-title="js中数组的原生方法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  7,515
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  30
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>数组应该是我们在写程序中应用到最多的数据结构了，相比于无序的对象，有序的数组帮我们在处理数据时，实在是帮了太多的忙了。今天刚好看到一篇Array.include的文章，忽然发现经过几个ES3,ES5,ES6,ES7几个版本的更迭，发现在代码中用到了好多数组的方法，所以准备全部列出来，也是给自己加深印象</p>
+</blockquote>
+<h2 id="1-ES3中的数组方法"><a href="#1-ES3中的数组方法" class="headerlink" title="1 ES3中的数组方法"></a>1 ES3中的数组方法</h2><ul>
+<li>ES3兼容现在所有主流浏览器</li>
+</ul>
+<p>ES3中的方法毫无疑问大家已经烂熟在心了，不过中间有些细节可以回顾加深一下记忆，比如是否修改原数组返回新数组，执行方法之后的返回值是什么，某些参数的意义是否搞混等等。熟悉的的可以直接快速浏览或者跳过。</p>
+<h3 id="1-1-join-方法"><a href="#1-1-join-方法" class="headerlink" title="1.1 join()方法"></a>1.1 join()方法</h3><p>Array.join()方法是将一个数组里面的所有元素转换成字符串，然后再将他们连接起来<strong>返回一个新数组</strong>。可以传入一个可选的字符串来分隔结果字符串中的所有元素。如果没有指定分隔字符串，就默认使用逗号分隔。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let a  = [1,2,3,4,5,6,7];</div><div class="line">let b = a.join();    // b = &quot;1,2,3,4,5,6,7&quot;;</div><div class="line">let c = a.a.join(&quot; &quot;);    // b = &quot;1 2 3 4 5 6 7&quot;;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>方法Array.join()恰好与String.split()相反，后者是通过将一个字符串分隔成几个元素来创建数组</p>
+</blockquote>
+<h3 id="1-2-reverse-方法"><a href="#1-2-reverse-方法" class="headerlink" title="1.2 reverse()方法"></a>1.2 reverse()方法</h3><p>Array.reverse()方法将颠倒数组中元素的顺序并返回一个颠倒后的数组。<strong>它在原数组上执行这一操作，所以说并不是创建了一个新数组</strong>，而是在已存在的数组中对元素进行重排。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a  = [1,2,3,4,5,6,7];</div><div class="line">a.reverse();    // a =  [7,6,5,4,3,2,1]</div></pre></td></tr></table></figure></p>
+<h3 id="1-3-sort-方法"><a href="#1-3-sort-方法" class="headerlink" title="1.3 sort()方法"></a>1.3 sort()方法</h3><p>Array.sort()是在<strong>原数组上进行排序</strong>,返回排序后的数组。如果调用方法时不传入参数，那么它将按照字母顺序对数组元素进行排序，说得更精确点，是按照字符编码的顺序进行排序。要实现这一点，首先应把数组的元素都转换成字符串（如有必要），以便进行比较。</p>
+<p>如果数组中有未定义的元素，这些元素将放在数组的末尾<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let a  = [1,12,23,14,,undefined,null,NaN,56,6,7,&quot;a&quot;,&#123;&#125;,[]];</div><div class="line">a.sort();    //[[], 1, 12, 14, 23, 56, 6, 7, &quot;NaN&quot;, &#123;&#125;, &quot;a&quot;, null,undefined,undefined × 1]  </div><div class="line">//返回的NaN已经是一个字符串，说明在比较过程中将其转化成了字符串进行比较</div></pre></td></tr></table></figure></p>
+<p>仔细看可以发现，上面顺序并没有按照数字大小进行排序。如果想按照其他标准进行排序，就需要提供比较函数。该函数比较前后两个值，然后返回一个用于说明这两个值的相对顺序的数字。比较函数应该具有两个参数 a 和 b，其返回值如下：</p>
+<ul>
+<li>若 a 小于 b，在排序后的数组中 a 应该出现在 b 之前，则返回一个小于 0 的值。</li>
+<li>若 a 等于 b，则返回 0。</li>
+<li>若 a 大于 b，在排序后的数组中 a 应该出现在 b 之后，则返回一个大于 0 的值。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a  = [1,12,23,14,,undefined,null,NaN,56,6,7,&quot;a&quot;,&#123;&#125;,[]];</div><div class="line">a.sort((a,b) =&gt; &#123;return a - b&#125;);   //[null, Array(0), NaN, Object, 1, 6, 7, 12, 14, 23, 56, &quot;a&quot;,undefined, undefined × 1]</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="1-4-concat-方法"><a href="#1-4-concat-方法" class="headerlink" title="1.4 concat()方法"></a>1.4 concat()方法</h3><p>Array.concat() 方法用于连接两个或多个参数（数组，字符串等），<strong>该方法不会改变现有的数组，而会返回连接多个参数的一个新数组</strong>。如果传入的参数是数组，那么它将被展开，将元素添加到返回的数组中。但要注意，<strong>concat并不能递归的展开一个元素为数组的参数。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3];</div><div class="line">let b = a.concat(4,5,[6,7,[9,10]]);  // b = [1,2,3,4,5,6,7,[9,10]]];</div></pre></td></tr></table></figure>
+<h3 id="1-5-slice-方法"><a href="#1-5-slice-方法" class="headerlink" title="1.5 slice()方法"></a>1.5 slice()方法</h3><p>Array.slice() 方法可从已有的数组中返回指定的一个片段(slice)，或者说是子数组。<strong>它是从原数组中截取了一个片段，并返回到了一个新数组</strong>。</p>
+<p>Array.slice(a,b) 它有两个参数a,b</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td><strong>必选</strong>。规定从何处开始选取。如果是负数，那么它规定从数组尾部开始算起的位置。也就是说，-1 指最后一个元素，-2 指倒数第二个元素，以此类推。</td>
+</tr>
+<tr>
+<td>b</td>
+<td><strong>可选</strong>。规定从何处结束选取。该参数是数组片断结束处的数组下标。如果没有指定该参数，那么切分的数组包含从 start 到数组结束的所有元素。如果这个参数是负数，那么它规定的是从数组尾部开始算起的元素。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3,4,5,7,8];</div><div class="line">let b = a.slice(3);     //  [4, 5, 7, 8]</div><div class="line">let c = a.slice(3,5);   //  [4, 5]</div><div class="line">let d = a.slice(-5,-2); //  [3, 4, 5]</div><div class="line">let d = a.slice(2,1);   //  []</div></pre></td></tr></table></figure>
+<p>请注意，该方法并不会修改数组，而是返回一个新的子数组。如果想删除数组中的一段元素，应该使用下面这个方法 Array.splice()。</p>
+<h3 id="1-6-splice-方法"><a href="#1-6-splice-方法" class="headerlink" title="1.6 splice()方法"></a>1.6 splice()方法</h3><p>Array.splice() 方法从数组中添加/删除元素，然后<strong>返回被删除的元素</strong>。<strong>它在原数组上修改数组</strong>，并不像slice和concat那样创建新数组。注意，虽然splice和slice名字非常相似，但是执行的却是完全不同的操作。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>index</td>
+<td><strong>必选,整数</strong>。规定添加/删除项目的位置，使用负数可从数组结尾处倒着寻找位置。</td>
+</tr>
+<tr>
+<td>howmany</td>
+<td><strong>可选,整数</strong>。要删除的元素数量。如果设置为 0，则不会删除元素。如果没有选择，则默认从index开始到数组结束的所有元素</td>
+</tr>
+<tr>
+<td>item1, …, itemX</td>
+<td><strong>可选</strong>。向数组添加新的元素。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3,4,5,7,8];</div><div class="line">let b = a.splice(3);     // a = [1,2,3]  b = [4, 5, 7, 8]</div><div class="line">-----------------------------------------------------------</div><div class="line">let c = [1,2,3,4,5,7,8]; </div><div class="line">let d = c.splice(3,5); // c = [1,2]   d = [3,4,5,7,8]</div><div class="line">-----------------------------------------------------------</div><div class="line">let e = [1,2,3,4,5,7,8]; </div><div class="line">let f = e.splice(3,2,111,222,[1,2]); // e = [1, 2, 3, 111, 222,[1,2], 7, 8]   f = [4,5]</div></pre></td></tr></table></figure>
+<p>大家要记住<strong>slice()和splice()两个方法第二个参数代表的意义是不一样的</strong>。虽然这很基础，可是有时候还是会弄混。</p>
+<h3 id="1-7-push-和pop-方法"><a href="#1-7-push-和pop-方法" class="headerlink" title="1.7 push()和pop()方法"></a>1.7 push()和pop()方法</h3><p>Array.push() 方法可向数组的末尾添加一个或多个元素，并<strong>返回新的长度</strong>。</p>
+<p>Array.pop()方法用于删除并<strong>返回数组的最后一个元素</strong>。如果数组已经为空，则 pop() 不改变数组，并返回 undefined 值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3,4,5];</div><div class="line">let b = a.pop(); //a = [1,2,3,4]    b = 5</div><div class="line">let c =  a.push(1,3,5); // a = [1,2,3,4,1,3,5]  c = 7</div></pre></td></tr></table></figure></p>
+<p>上面两个方法都是直接对原数组进行操作。通过上面两个方法可以实现一个先进后出的栈。</p>
+<h3 id="1-8-unshift和shift-方法"><a href="#1-8-unshift和shift-方法" class="headerlink" title="1.8 unshift和shift()方法"></a>1.8 unshift和shift()方法</h3><p>unshift，shift()的方法行为和push()，pop()非常相似，只不过他们是对数组的头部元素进行插入和删除。</p>
+<p>Array.unshift() 方法可向数组的头部添加一个或多个元素，并<strong>返回新的长度</strong>。</p>
+<p>Array.shift()方法用于删除并<strong>返回数组的第一个元素</strong>。如果数组已经为空，则 pop() 不改变数组，并返回 undefined 值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3,4,5];</div><div class="line">let b = a.shift(); //a = [2,3,4,5]    b = 1</div><div class="line">let c =  a.unshift(1,3,5); // a = [1,3,5,2,3,45]  c = 7</div></pre></td></tr></table></figure></p>
+<h3 id="1-9-toString-和toLocaleString-方法"><a href="#1-9-toString-和toLocaleString-方法" class="headerlink" title="1.9 toString()和toLocaleString()方法"></a>1.9 toString()和toLocaleString()方法</h3><p>和所有javascript的对象一样，数组也有toString()方法，这个方法可以将数组的每一个元素转化成字符串(如果必要的话，就调用元素的toString()方法)，然后输出字符串的列表，字符串之间用逗号隔开。(用我的话来理解，其实就是遍历数组元素调用每个元素自身的toString()方法，然后用逗号连接)</p>
+<p>toString()的返回值和没有参数的join()方法返回的字符串相同<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = let e = [1,undefined,null,Boolean,&#123;&#125;,[],function()&#123;console.log(1);&#125;];</div><div class="line">let b = a.toString();   // b = &quot;1,,,function Boolean() &#123; [native code] &#125;,[object Object],,function ()&#123;console.log(1);&#125;&quot;</div></pre></td></tr></table></figure></p>
+<p>注意，输出的结果中，返回的数组值周围没有括号。</p>
+<p>toLocaleString方法是toString()方法的<strong>本地化版本</strong>。它是使用地区特定的分隔符把生成的字符串连接起来，形成一个字符串。</p>
+<p>虽然是两个方法，但是一般元素两个方法的输出结果却基本是一样的，去网上找了相关文章，发现只有两种情况比较有区分，一个是时间，一个是4位数字以上的数字,举例如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">let a = 1111;</div><div class="line">let b = a.toLocaleString();   // b = &quot;1,111&quot;</div><div class="line">let c = a.toString();   // c = &quot;1111&quot;;</div><div class="line">-------------------------------------------------------</div><div class="line">let date = new Date();</div><div class="line">let d = date.toString();    // d = &quot;Sun Sep 03 2017 21:52:18 GMT+0800 (中国标准时间)&quot;</div><div class="line">let e = date.toLocaleString();  //e = &quot;2017/9/3 下午9:52:18&quot;</div></pre></td></tr></table></figure></p>
+<p>好吧，这个api和数组关系不大。。。主要还是和数组中元素自身有关。啊哈哈，尴尬。</p>
+<h3 id="1-10-valueOf"><a href="#1-10-valueOf" class="headerlink" title="1.10 valueOf()"></a>1.10 valueOf()</h3><p>Array.valueOf()方法在日常中用的比较少，该方法继承与Object。javascript中许多内置对象都针对自身重写了该方法，数组Array.valueOf()直接返回自身。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let a = [1,&quot;1&quot;,&#123;&#125;,[]];</div><div class="line">let b = a.valueOf();</div><div class="line">a === b; // true</div></pre></td></tr></table></figure></p>
+<hr>
+<blockquote>
+<p>好啦，关于ES3的方法就不详细描述了，我相信大家基本上都已经完全是烂熟于心的那种，唯一可能需要加强记忆的就是一些参数含义，返回数据这些了。</p>
+</blockquote>
+<hr>
+<h2 id="2-ES5中的数组方法"><a href="#2-ES5中的数组方法" class="headerlink" title="2 ES5中的数组方法"></a>2 ES5中的数组方法</h2><ol>
+<li>ES5中的数组方法在各大浏览器的兼容性</li>
+</ol>
+<ul>
+<li>Opera 11+</li>
+<li>Firefox 3.6+</li>
+<li>Safari 5+</li>
+<li>Chrome 8+</li>
+<li>Internet Explorer 9+</li>
+</ul>
+<p>2.Array在ES5新增的方法中接受两个参数，第一个参数都是function类型，必选，默认有传参，这些参数分别是：</p>
+<ul>
+<li>currentValue : 数组当前项的值</li>
+<li>index : 数组当前项的索引</li>
+<li>array : 数组对象本身</li>
+</ul>
+<p>第二个参数是当执行回调函数时指向的this(参考对象)，不提供默认为window，严格模式下为undefined。</p>
+<p>以forEach举例</p>
+<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">array.forEach(callback, thisArg)</div><div class="line"></div><div class="line">array.forEach(callback(currentValue, index, array)&#123;</div><div class="line">    //do something</div><div class="line">&#125;, thisArg)</div></pre></td></tr></table></figure></p>
+<p><strong>例子：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//demo,注意this指向</div><div class="line">//我这个demo没有用箭头函数来测试</div><div class="line">let a = [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;];</div><div class="line"></div><div class="line">a.forEach(function(currentValue, index, array)&#123;</div><div class="line">    this.info(currentValue, index, array);</div><div class="line">&#125;,&#123;info:function(value,index,array)&#123;</div><div class="line">    console.log(`当前值$&#123;value&#125;，下标$&#123;index&#125;,数组$&#123;array&#125;`)&#125;</div><div class="line">&#125;);</div><div class="line">function info(value,index,array)&#123;</div><div class="line">    console.log(`外放方法 ： 当前值$&#123;value&#125;，下标$&#123;index&#125;,数组$&#123;array&#125;`)&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 当前值a,下标0,数组a,b,c</div><div class="line">// 当前值b,下标1,数组a,b,c</div><div class="line">// 当前值c,下标2,数组a,b,c</div></pre></td></tr></table></figure></p>
+<p>3.ES5中的所有关于遍历的方法按升序为数组中含有效值的每一项执行一次callback函数，那些<strong>已删除（使用delete方法等情况）或者未初始化的项</strong>将被跳过（但不包括那些值为 undefined 的项）（例如在稀疏数组上）。</p>
+<p><strong>例子：数组哪些项被跳过了</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">function logArrayElements(element, index, array) &#123;</div><div class="line">    console.log(`a[$&#123;index&#125;] = $&#123;element&#125;`);</div><div class="line">&#125;</div><div class="line">let xxx;  //定义未赋值</div><div class="line">let a = [1,2,&quot;&quot;, ,undefined,xxx,3];</div><div class="line">delete a[1];  // 移除 2</div><div class="line">a.forEach(logArrayElements);</div><div class="line"></div><div class="line">// a[0] = 1</div><div class="line">// 注意索引1被跳过了，因为在数组的这个位置没有项 被删除了</div><div class="line">// a[2] = &quot;&quot;</div><div class="line">// 注意索引3被跳过了，因为在数组的这个位置没有项,可以理解成没有被初始化</div><div class="line">// a[4] = undefined</div><div class="line">// a[5] = undefined</div><div class="line">// a[6] = 3</div></pre></td></tr></table></figure></p>
+<p>好了，上面3点基本上是ES5中所有方法的共性，下面就不重复述说了。开始正文解析每个方法的不同了</p>
+<hr>
+<h3 id="2-1-forEach"><a href="#2-1-forEach" class="headerlink" title="2.1 forEach()"></a>2.1 forEach()</h3><p>Array.forEach() 为每个数组元素执行callback函数；不像map() 或者reduce() ，<strong>它总是返回 undefined值</strong>，并且不可链式调用。典型用例是在一个链的最后执行副作用。</p>
+<blockquote>
+<p>注意： 没有办法中止或者跳出 forEach 循环，除了抛出一个异常。如果你需要跳出函数，推荐使用Array.some。如果可以，新方法 find() 或者findIndex() 也可被用于真值测试的提早终止。</p>
+</blockquote>
+<p><strong>如果数组在迭代时被修改了</strong></p>
+<p>下面的例子输出”one”, “two”, “three”。当到达包含值”two”的项时，整个数组添加了一个项在第一位，这导致所有的元素下移一个位置。此时在下次执行回调中，因为元素 “two”符合条件，结果一直增加元素，直到遍历次数完毕。forEach()不会在迭代之前创建数组的副本。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">let a = [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;];</div><div class="line">let b = a.forEach((value,index,arr) =&gt; &#123;</div><div class="line">  if (value === &quot;two&quot;) &#123;</div><div class="line">    a.unshift(&quot;zero&quot;);</div><div class="line">  &#125;</div><div class="line">  return &quot;new&quot; + value</div><div class="line">&#125;);</div><div class="line">// one,0,[&quot;one&quot;, &quot;two&quot;, &quot;three&quot;]</div><div class="line">// two,1,[&quot;one&quot;, &quot;two&quot;, &quot;three&quot;]</div><div class="line">// two,2,[&quot;zero&quot;, &quot;one&quot;, &quot;two&quot;, &quot;three&quot;]</div><div class="line">// two,3,[&quot;zero&quot;,&quot;zero&quot;, &quot;one&quot;, &quot;two&quot;, &quot;three&quot;]</div></pre></td></tr></table></figure></p>
+<p>看完例子可以发现，使用 forEach 方法处理数组时，数组元素的范围是在callback方法第一次调用之前就已经确定了。在 forEach 方法执行的过程中：原数组中新增加的元素将不会被 callback 访问到；若已经存在的元素被改变或删除了，则它们的传递到 callback 的值是 forEach 方法遍历到它们的那一个索引时的值。</p>
+<h3 id="2-2-map"><a href="#2-2-map" class="headerlink" title="2.2 map()"></a>2.2 map()</h3><p>Array.map 方法会给原数组中的每个元素都按顺序调用一次callback函数。callback每次执行后的返回值（没有指定返回值则返回undefined）组合起来形成一个新数组。</p>
+<p><strong>例子：返回每个元素的平方根的数组</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [1,4,9];</div><div class="line">let b = a.map((value) =&gt; &#123;</div><div class="line">   return Math.sqrt(value);    //如果没有return，则默认返回undefined</div><div class="line">&#125;);</div><div class="line">// b= [1,2,3]</div></pre></td></tr></table></figure></p>
+<h3 id="2-3-filter"><a href="#2-3-filter" class="headerlink" title="2.3 filter()"></a>2.3 filter()</h3><p>Array.filter()为数组中的每个元素调用一次 callback 函数，并利用所有使得 callback 返回 true 或 等价于 true 的值 的元素创建一个新数组。那些没有通过 callback 测试的元素会被跳过，不会被包含在新数组中</p>
+<p><strong>例子：数组去重</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3,4,32,6,79,0,1,1,8];</div><div class="line">let b = a.filter((value,index,arr) =&gt; &#123;</div><div class="line">   return arr.indexOf(value) === index;</div><div class="line">&#125;);</div><div class="line">// b = [1, 2, 3, 4, 32, 6, 79, 0, 8]</div></pre></td></tr></table></figure></p>
+<h3 id="2-4-some"><a href="#2-4-some" class="headerlink" title="2.4 some()"></a>2.4 some()</h3><p>Array.some 为数组中的每一个元素执行一次 callback 函数，直到找到一个使得 callback 返回一个“真值”（即可转换为布尔值 true 的值）。如果找到了这样一个值，<strong>some 将会立即返回 true。否则，some 返回 false</strong>。callback 只会在那些”有值“的索引上被调用，不会在那些被删除或从来未被赋值的索引上调用。</p>
+<p><strong>例子：查看数组内是否含有大于0的元素</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [-1,4,9];</div><div class="line">let b = a.some((value) =&gt; &#123;</div><div class="line">   return value &gt; 0;    //如果没有return，则默认返回undefined，将无法告诉some判断</div><div class="line">&#125;);</div><div class="line">// b = true</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>some方法可以理解成拥有跳出功能的forEach()函数，可以用在在一些需要中断函数的地方</p>
+<h3 id="2-5-every"><a href="#2-5-every" class="headerlink" title="2.5 every()"></a>2.5 every()</h3></blockquote>
+<p>Array.every() 方法为数组中的每个元素执行一次 callback 函数，直到它找到一个使 callback 返回 false（表示可转换为布尔值 false 的值）的元素。如果发现了一个这样的元素，every 方法将会立即返回 false。否则，callback 为每一个元素返回 true，every 就会返回 true。callback 只会为那些已经被赋值的索引调用。不会为那些被删除或从来没被赋值的索引调用。</p>
+<p><strong>例子：检测所有数组元素的大小，是否都大于0</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [-1,4,9];</div><div class="line">let b = a.every((value) =&gt; &#123;</div><div class="line">   return value &gt; 0;    //如果没有return，则默认返回undefined</div><div class="line">&#125;);</div><div class="line">// b = false</div></pre></td></tr></table></figure></p>
+<h4 id="2-6-indexOf"><a href="#2-6-indexOf" class="headerlink" title="2.6 indexOf()"></a>2.6 indexOf()</h4><p>Array.indexOf()使用严格相等（strict  equality，即===）进行判断searchElement与数组中包含的元素之间的关系。</p>
+<p>Array.indexOf()提供了两个参数，第一个searchElement代表要查询的元素，第二个代表fromIndex表示从哪个下标开始查找，默认为0。</p>
+<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">arr.indexOf(searchElement)</div><div class="line">arr.indexOf(searchElement, fromIndex = 0)</div></pre></td></tr></table></figure></p>
+<p>Array.indexOf()会返回首个被找到的元素在数组中的索引位置; 若没有找到则返回 -1</p>
+<p><strong>例子：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">let array = [2, 5, 9];</div><div class="line">array.indexOf(2);     // 0</div><div class="line">array.indexOf(7);     // -1</div><div class="line">array.indexOf(9, 2);  // 2</div><div class="line">array.indexOf(2, -1); // -1</div><div class="line">array.indexOf(2, -3); // 0</div></pre></td></tr></table></figure></p>
+<h3 id="2-7-lastIndexOf"><a href="#2-7-lastIndexOf" class="headerlink" title="2.7 lastIndexOf()"></a>2.7 lastIndexOf()</h3><p>Array.lastIndexOf()就不细说了，其实从名字大家也可以看出来，indexOf是正向顺序查找，lastIndexOf是反向从尾部开始查找，但是返回的<strong>索引下标仍然是正向的顺序索引</strong><br>。<br><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">arr.lastIndexOf(searchElement, fromIndex = arr.length - 1)</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>需要注意的是，只是查找的方向相反，fromIndex和返回的索引都是正向顺序的，千万不要搞混了（感觉我这么一说，大家可能搞混了，捂脸）。</p>
+</blockquote>
+<p><strong>例子：各种情况下的的indexOf</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var array = [2, 5, 9, 2];</div><div class="line">var index = array.lastIndexOf(2);   // index = 3</div><div class="line">index = array.lastIndexOf(7);   // index = -1</div><div class="line">index = array.lastIndexOf(2, 3);    // index = 3</div><div class="line">index = array.lastIndexOf(2, 2);    // index = 0</div><div class="line">index = array.lastIndexOf(2, -2);   // index = 0</div><div class="line">index = array.lastIndexOf(2, -1);   // index = 3</div></pre></td></tr></table></figure></p>
+<h3 id="2-8-reduce"><a href="#2-8-reduce" class="headerlink" title="2.8 reduce()"></a>2.8 reduce()</h3><p>Array.reduce() 为数组中的每一个元素依次执行回调函数,最后返回一个函数累计处理的结果。</p>
+<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">array.reduce(function(accumulator, currentValue, currentIndex, array), initialValue)</div></pre></td></tr></table></figure></p>
+<p>reduce的回调函数中的参数与前面的不同，多了第一个参数，是上一次的返回值</p>
+<ul>
+<li>accumulator : 上一次调用回调返回的值，或者是提供的初始值（initialValue）</li>
+<li>currentValue : 数组当前项的值</li>
+<li>currentIndex : 数据当前项的索引。第一次遍历时，如果提供了 initialValue ，从0开始；否则从1开始</li>
+<li>array : 调用 reduce 的数组</li>
+<li>initialValue : 可选项，其值用于第一次调用 callback 的第一个参数。如果没有设置初始值，则将数组中的第一个元素作为初始值。<strong>空数组调用reduce时没有设置初始值将会报错</strong>。</li>
+</ul>
+<p><strong>例子：数组求和</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let sum = [0, 1, 2, 3].reduce(function (o,n) &#123;</div><div class="line">  return o + n;</div><div class="line">&#125;);</div><div class="line">// sum = 6</div></pre></td></tr></table></figure></p>
+<p>对了，当回调函数第一次执行时，accumulator 和 currentValue 的取值有两种情况：</p>
+<ul>
+<li>调用 reduce 时提供initialValue，accumulator 取值为 initialValue ，currentValue 取数组中的第一个值；</li>
+<li>没有提供 initialValue ，accumulator 取数组中的第一个值，currentValue 取数组中的第二个值。</li>
+</ul>
+<p><strong>例子：reduce数组去重</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[1,2,3,4,5,6,78,4,3,2,21,1].reduce(function(accumulator,currentValue)&#123;</div><div class="line">	if(accumulator.indexOf(currentValue) &gt; -1)&#123;</div><div class="line">		return accumulator;</div><div class="line">	&#125;else&#123;</div><div class="line">		accumulator.push(currentValue);</div><div class="line">        return accumulator;</div><div class="line">	&#125;</div><div class="line">&#125;,[])</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意 ：如果数组为空并且没有提供initialValue， 会抛出TypeError 。如果数组仅有一个元素并且没有提供initialValue， 或者有提供initialValue但是数组为空，那么此唯一值将被返回并且callback不会被执行。</p>
+</blockquote>
+<h3 id="2-9-reduceRight-方法"><a href="#2-9-reduceRight-方法" class="headerlink" title="2.9 reduceRight()方法"></a>2.9 reduceRight()方法</h3><p>Array.reduceRight() 为数组中的每一个元素依次执行回调函数，方向相反，从右到左,最后返回一个函数累计处理的结果。</p>
+<p>因为这个方法和reduce方法基本是一模一样的，除了方法相反，所以就不详细的再写一遍了</p>
+<h3 id="2-10-isArray-方法"><a href="#2-10-isArray-方法" class="headerlink" title="2.10 isArray()方法"></a>2.10 isArray()方法</h3><p>之所以将这个方法放在最后，是因为这个方法和前面的不太一致，是用于确定传递的值是否是一个 Array,使用方法也很简单</p>
+<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = Array.isArray([1,2,3]);  //true</div><div class="line">let b = Array.isArray(document.getElementsByTagName(&quot;body&quot;));  //类数组也为false</div></pre></td></tr></table></figure></p>
+<p>不过感觉除非是临时判断，不然一般也不会用这个方法去判断，一般还是下面这种万金油型的吧。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Object.prototype.toString.call([]).slice(8, -1) === &quot;Array&quot;;//true</div></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>好啦，关于ES5的方法基本上就讲到这里了，感觉自己在深入去看了一些文章之后，还是有一些额外的收获的。比如对reduce这个平时不常用的方法了解更加深刻了，感觉之前很多遍历收集数据的场景其实用reduce更加方便。</p>
+</blockquote>
+<hr>
+<h2 id="3-ES6中的数组方法"><a href="#3-ES6中的数组方法" class="headerlink" title="3 ES6中的数组方法"></a>3 ES6中的数组方法</h2><blockquote>
+<p>不同于es5主要以遍历方法为主，es6的方法是各式各样的，不过必须要说一句，在性能上，es6的效率基本上是最低的。</p>
+</blockquote>
+<h3 id="3-1-…方法——concat方法的增强"><a href="#3-1-…方法——concat方法的增强" class="headerlink" title="3.1 …方法——concat方法的增强"></a>3.1 …方法——concat方法的增强</h3><p>英文名字叫做Spread syntax，中文名字叫做扩展运算符。</p>
+<h3 id="3-2-of-方法"><a href="#3-2-of-方法" class="headerlink" title="3.2 of()方法"></a>3.2 of()方法</h3><p>Array.of()方法可以将传入参数以顺序的方式返回成一个新数组的元素。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let a = Array.of(1, 2, 3); // a = [1, 2, 3]</div></pre></td></tr></table></figure></p>
+<p>其实，刚看到这个api和他的用途，还是比较懵逼的，因为看上去这个方法就是直接将传入的参数变成一个数组之外，就没有任何区别了，那么我为什么不直接用以前的写法去实现类似的效果呢，比如 let ＝ [1,2,3];而且看上去也更加直接。然后我去翻了下最新的ECMAScript草案，其中有这么一句话</p>
+<blockquote>
+<p>The of function is an intentionally generic factory method; it does not require that its this value be the Array constructor. Therefore it can be transferred to or inherited by other constructors that may be called with a single numeric argument.</p>
+</blockquote>
+<p>自己理解了一下，其实大概意思就是说为了弥补Array构造函数传入单个函数的不足，所以出了一个of这个更加通用的方法，举个例子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = new Array(1);//a = [undefined × 1]</div><div class="line">let b = new Array(1,2);// b = [1,2]</div></pre></td></tr></table></figure></p>
+<p>大家可以注意到传入一个参数和传入两个参数的结果，完全是不一样的，这就很尴尬了。而为了避免这种尴尬，es6则出了一种通用的of方法，不管你传入了几个参数，都是一种相同类型的输出结果。</p>
+<p>不过我好奇的是，如果只传入几个参数，为什么不直接let a = [1,2,3];效率和直观性也更加的高。如果要创建一个长度的数组，我肯定还是选let a = new Array(10000),这种形式，实在没有感觉到Array.of的实用场景，希望大家可以给我点指导。</p>
+<h3 id="3-2-from-方法"><a href="#3-2-from-方法" class="headerlink" title="3.2 from()方法"></a>3.2 from()方法</h3><p>Array.from()方法从一个类似数组（拥有一个 length 属性和若干索引属性的任意对象）或可迭代的对象(String, Array, Map, Set和 Generator)中创建一个新的数组实例。</p>
+<p>我们先查看Array.from()的语法</p>
+<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Array.from(arrayLike, mapFn, thisArg)</div></pre></td></tr></table></figure></p>
+<p>从语法中，我们可以看出Array.from()最基本的功能是将一个类数组的对象转化成数组，然后通过第二个和第三个参数可以对转化成功后的数组再次执行一次遍历数据map方法,也就是Array.from(obj).map(mapFn, thisArg)。</p>
+<blockquote>
+<p>对了额外说一句，这个方法的性能很差，和直接的for循环的性能对比了一下，差了百倍不止。</p>
+</blockquote>
+<p><strong>例子 :将一串数字字符串转化为数组</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = Array.from(&quot;242365463432&quot;,(value) =&gt; return value * 2);</div><div class="line">//a = [4, 8, 4, 6, 12, 10, 8, 12, 6, 8, 6, 4]</div></pre></td></tr></table></figure></p>
+<h3 id="3-4-copyWithin-方法"><a href="#3-4-copyWithin-方法" class="headerlink" title="3.4 copyWithin()方法"></a>3.4 copyWithin()方法</h3><p>Array.copyWithin方法，在当前数组内部，将指定位置的成员<strong>浅复制</strong>到其他位置（会覆盖原有成员），然后<strong>返回当前数组</strong>。也就是说，使用这个方法，会修改当前数组。</p>
+<blockquote>
+<p>这个方法有点复杂，光看描述可能大家未必能轻易理解，大家可以先看下语法，再看demo配合理解，而且自己没有想到这个方法合适的应用场景。网上也没又看到相关使用场景。但是讲道理，这个方法设计出来，肯定是经过深思熟虑的，如果大家有想到，欢迎评论给我，谢谢。</p>
+</blockquote>
+<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">arr.copyWithin(target, start, end)</div><div class="line">//arr.copyWithin(目标索引, 源开始索引, 结束源索引)</div></pre></td></tr></table></figure></p>
+<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// 将3号位复制到0号位</div><div class="line">[1, 2, 3, 4, 5].copyWithin(0, 3, 4);    // [4, 2, 3, 4, 5]</div><div class="line"></div><div class="line">// 将2号位复制到0号位</div><div class="line">[1, 2, 3, 4, 5].copyWithin(0, 2, 5);    //[3, 4, 5, 4, 5]</div><div class="line"> </div><div class="line"> // 将3号位复制到0号位</div><div class="line">[1, 2, 3, 4, 5].copyWithin(4, 1, 4);    //[1, 2, 3, 4, 2]</div></pre></td></tr></table></figure></p>
+<p>第一个是常规的例子，大家可以对比看第二个可以发现，这个方法是先浅复制了数组一部分暂时存储起来，然后再从目标索引处开始一个个覆盖后面的元素，直到这段复制的数组片段全部粘贴完。</p>
+<p>再看第三个例子，可以发现当复制的数据片段从目标索引开始粘贴时，如果超过了长度，它将停止粘贴，这说明<strong>它不会改变数据的 length，但是会改变数据本身的内容</strong>。</p>
+<p>Array.copyWithin可以理解成复制以及粘贴序列这两者是为一体的操作;即使复制和粘贴区域重叠，粘贴的序列也会有拷贝来的值。</p>
+<h3 id="3-5-find-和-findIndex-方法"><a href="#3-5-find-和-findIndex-方法" class="headerlink" title="3.5 find() 和 findIndex()方法"></a>3.5 find() 和 findIndex()方法</h3><p>Array.find()方法返回数组中满足提供的测试函数的第一个元素的值。否则返回 undefined。<br> Array.findIndex() 方法返回数组中满足提供的测试函数的第一个元素的值的索引。否则返回 -1。</p>
+<p> 这两个方法其实使用非常相似，使用场景有点像ES5中Array.some，都是在找到第一个满足条件的时候，跳出循环，区别的是，三种返回的值完全不一样，我想这也许是为什么要在ES6中增加这两个API的原因吧，可以理解成是数组的方法的补足。</p>
+<p>  <strong>例子：三个方法各自的返回值</strong><br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"> let a = [1,2,3,4,5].find((item)=&gt;&#123;return item &gt; 3&#125;);   // a = 4 返回第一个符合结果的值</div><div class="line">let b = [1,2,3,4,5].findIndex((item)=&gt;&#123;return item &gt; 3&#125;);  // b = 3 返回第一个符合结果的下标</div><div class="line">let c = [1,2,3,4,5].some((item)=&gt;&#123;return item &gt; 3&#125;);    // c = true 返回是否有符合条件的Boolean值</div><div class="line"></div><div class="line">-----------------不满足条件--------------------</div><div class="line"> let a = [1,2,3,4,5].find((item)=&gt;&#123;return item &gt; 6&#125;);   // a = undefined</div><div class="line">let b = [1,2,3,4,5].findIndex((item)=&gt;&#123;return item &gt; 6&#125;);  // b = -1</div><div class="line">let c = [1,2,3,4,5].some((item)=&gt;&#123;return item &gt; 6&#125;);    // c = false</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意：find()和findIndex()方法无法判断NaN,可以说是内部用 ===判断，不同于ES7中的include方法。不过这个判断方式是另外一个话题，不在本文详述了，感兴趣的同学可以去查一下。</p>
+</blockquote>
+<p>其实还可以发现，Array.find() 方法只是返回第一个符合条件的元素，它的增强版是es5中Array.filter()方法，返回所有符合条件的元素到一个新数组中。可以说是当用find方法时考虑跟多的是跳出吧。</p>
+<p>我感觉这4个方法配合相应的回调函数基本上可以完全覆盖大多数需要数组判断的场景了，大家觉得呢？</p>
+<h3 id="3-5-fill方法"><a href="#3-5-fill方法" class="headerlink" title="3.5 fill方法"></a>3.5 fill方法</h3><p>Array.fill()方法用一个固定值填充一个数组中从起始索引到终止索引内的全部元素,<strong>返回原数组</strong></p>
+<p>这个方法的使用也非常简单，大家基本上看个语法和demo就能懂了。需要注意的是，这个方法是返回数组本身，还有一点就是，类数组不能调用这个方法，刚刚自己去改了MDN上面的文档。</p>
+<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">arr.fill(value) </div><div class="line">arr.fill(value, startIndex) </div><div class="line">arr.fill(value, startIndex, endIndex)</div></pre></td></tr></table></figure></p>
+<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let a = new Array(10);</div><div class="line">a.fill(1);  // a = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];</div><div class="line">let b = [1,2,34,5,6,7,8].fill(3,4);    //b =  [1, 2, 34, 5, 3, 3, 3];</div><div class="line">let c = [1,2,34,5,6,7,8].fill(3,2,5);   // c =  [1, 2, 3, 3, 3, 7, 8];</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>个人感觉这个方法初始化数组挺有用的，自己一周每次测试数据时，只要new Array().fill(1);,比以前遍历直观方便多了</p>
+</blockquote>
+<h3 id="3-6-entries-，keys-values-方法"><a href="#3-6-entries-，keys-values-方法" class="headerlink" title="3.6 entries()，keys(),values()方法"></a>3.6 entries()，keys(),values()方法</h3><p>Array.entries()将数组转化成一个中包含<strong>每个索引的键/值对</strong>的Array Iterator对象</p>
+<p>Array.keys()将数组转化成一个中包含<strong>每个索引的键</strong>的Array Iterator对象</p>
+<p>Array.values()将数组转化成一个中包含<strong>每个索引的值</strong>的Array Iterator对象。</p>
+<blockquote>
+<p>Array.values()方法chrome浏览器并不支持，</p>
+</blockquote>
+<p>之所以将这三个方法放在一起是有原因的额，大家可以看这三个方法其实都是一个数组转化为一种新的数据类型——返回新的Array Iterator对象，唯一区别的是转化之后的元素不一样。跟他们的名字一样，entries()方法转化为全部的键值对，key()方法转化为键，value()保留值。</p>
+<p><strong>例子：观察各个迭代器遍历输出的东西</strong></p>
+<p><strong>Array.entries()</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3].entries();</div><div class="line">for(let i of a)&#123;console.log(i);&#125;</div><div class="line">//[0, 1]</div><div class="line">//[1, 2]</div><div class="line">//[2, 3]</div></pre></td></tr></table></figure></p>
+<p><strong>Array.keys()</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let b = [1,2,3].keys();</div><div class="line">for(let i of b)&#123;console.log(i);&#125;</div><div class="line">//0</div><div class="line">//1</div><div class="line">//2</div></pre></td></tr></table></figure></p>
+<p><strong>Array.values()</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let c = [1,2,3].values();</div><div class="line">for(let i of c)&#123;console.log(i);&#125;</div><div class="line">//1</div><div class="line">//2</div><div class="line">//3</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>关于迭代器这个东西，自己说不上什么，因为自己没有亲自用过，如果大家有什么见解课可以评论给我，我来补充和学习一下</p>
+</blockquote>
+<h2 id="4-ES7中的数组方法"><a href="#4-ES7中的数组方法" class="headerlink" title="4 ES7中的数组方法"></a>4 ES7中的数组方法</h2><h3 id="4-1-includes-方法"><a href="#4-1-includes-方法" class="headerlink" title="4.1 includes()方法"></a>4.1 includes()方法</h3><p>Array.includes方法返回一个布尔值，表示某个数组是否包含给定的值，如果包含，则返回true，否则返回false,与<strong>字符串的includes方法</strong>类似。</p>
+<p>这个方法大家可以看作是ES5中Array.indexOf的语义增强版，“includes”这个是否包含的意思，直接返回Boolean值，比起原来的indexOf是否大于-1,显得更加直观,我就是判断有没有包含哪个值</p>
+<p><strong>语法</strong>，使用方法和indexof一模一样<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">arr.includes(searchElement)</div><div class="line">arr.includes(searchElement, fromIndex)</div></pre></td></tr></table></figure></p>
+<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">let array = [2, 5, 9];</div><div class="line">array.includes(2);     // true</div><div class="line">array.includes(7);     // false</div><div class="line">array.includes(9, 2);  // true</div><div class="line">array.includes(2, -1); // false</div><div class="line">array.includes(2, -3); // true</div></pre></td></tr></table></figure></p>
+<hr>
+<p>方法还真是tmd多啊，感觉基本上应该是更新完了，前后两星期花了我4天时间吧，还是挺累的。不过收货还是很多，比如知道了ES5的方法基本上都有第二个this指向的参数，重新认识了reduce方法，感觉自己之前很多场景用reduce更好，重新熟悉了一些ES6的方法可以试用有些场景</p>
+<p>如果能看到最后的，感觉你也是够累的，哈哈哈。<br>既然这么累，点颗星吧</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/24/理解jquery的深拷贝源码/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2100,189 +2511,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/06/2.生活中的经济学原理-----稻草人的由来/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="linzx">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="linzx">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/06/2.生活中的经济学原理-----稻草人的由来/" itemprop="url">第二章-稻草人的由来</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-06T13:47:44+08:00">
-                2017-06-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/《解释的工具-生活中的经济学原理》/" itemprop="url" rel="index">
-                    <span itemprop="name">《解释的工具-生活中的经济学原理》</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/06/06/2.生活中的经济学原理-----稻草人的由来/" class="leancloud_visitors" data-flag-title="第二章-稻草人的由来">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计</span>
-                
-                <span title="字数统计">
-                  1,305
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长</span>
-                
-                <span title="阅读时长">
-                  4
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="《解释的工具-生活中的经济学原理》"><a href="#《解释的工具-生活中的经济学原理》" class="headerlink" title="《解释的工具-生活中的经济学原理》"></a>《解释的工具-生活中的经济学原理》</h4><h6 id="—–第二章-稻草人的由来"><a href="#—–第二章-稻草人的由来" class="headerlink" title="—–第二章-稻草人的由来"></a>—–第二章-稻草人的由来</h6><p>本章其实真的很符合我们生活中的经济学原理。开始书中讲到人们一个“贴标签”的行为。人们会不知不觉的给一个人贴上标贴，比如不认识的工作人员，身边的同事和朋友。<strong>我们为什么会喜欢上贴标签？</strong></p>
-<p>我经常和周围朋友开玩笑说，懒是推动我们今天便利生活的源泉。而“贴标签”其实也是一个人们一个偷懒的行为。胖的人心胸狭窄，瘦的人工余心计，上海人华而不实，北京人趾高气扬（网上地域黑中常见的言论，这不是标签，更多是恶意的栽赃）。当我们给一个个接触的人打上一个标记之后，将事情简单化，然后根据自己的假设。我们可以很快从以往的经验中取舍自己的行为，然后根据“标签”自身发生的微妙变化，加减一些新的属性，根据这些属性继续调整自己，于是我们终于可以简单的进行交往行事了。所以，<strong>贴标签其实是有功用的，可以降低我们行为的成本</strong>。</p>
-<p>但是，贴标签也有他不好的一面。前段时间我的一个好朋友经历了一些事情，一个交往多年的朋友做了一件让她感到意外，并且伤害到她的事情。我在和她不断的交流中，也得出了一些的感悟。我们在和朋友的交往中，如果一个标签贴的成功，并且始终没有改变，它会不断的加深我们的印象。随着时间的流逝，这个人的标签会在我们心中越来越深，如果这时候他做了一件完全不符合你这个“标签”的事情，从而彻底打破自己以往的印象，对于一些感性的人来说，真是一件崩溃的事情。<strong>因为它完全打破了你以往认知人的准则</strong>。最后你将撕下自己多年认知的标签，而打上另一个完全相反的标签，对于心理上的打击，不是亲身经历是感受不到的。这种感觉，更像是 “<strong>背叛</strong>“。</p>
-<p>另外一个典型就是由于摘标签过于麻烦，所以人们不会轻易改变对一个人的印象。比如当我初次在交往中因为一件小事给人打上“爱占便宜”的标签，我与他之后的交往都会有这方面的考虑。虽然事实上他并不是这样的人，但是又如何呢，我并没有因为这个标签吃亏呀，我为什么要改变呢。<strong>人们总会成长与改变，切勿因为一次事件而固执自己的观点。作为一个互联网人，你须记住，唯一不变的是变化。</strong></p>
-<p>降低成本，真的是人们许多行为背后最主要的推动力之一啊。</p>
-<p>由点及面，由人到社会。贴标签是降低个人成本的行为，那么制度则更像是降低人们在社会生活成本的代表。制度可能是一种局限行为的束缚，但是也是人们利用的一种资产。</p>
-<p>在一些带部队的纪录片中，更讲究强调“带兵带心”，而不是“带兵带行”。源于人们只有从心底里认可一样东西之后，才会不自觉的去遵守它。许多规章制度也是一样的道理，如果每个人都可以遵守一项制度成本，那么人们在社会中生活的成本也会降低很多。</p>
-<p>如果在道路上只有一个人，那么我们想怎么走就怎么走，但是当有各种不同性格，年龄，性别的人处在同一环境的时候，我们会不自觉的做出一些公共的行为，时日一久，大家基本遵守这种行为时，一个为众人支持和运用的小制度就诞生了。当团队里面的人越来越多，接触越来越频繁，交往越来越复杂的时候，自然而然的需要更多的规章制度。不过制度的关键还是依赖于人，人们首先要相信这个制度，才能遵守和执行。书中有一个故事很典型，美国加州一个市政府将土地低价卖给了一个财团，用于创造就业机会和拉升当地消费行为，获得更多的营业税和财收税。但是如果这个新闻出现在中国，经过新闻媒体的报道，人们首先想到的就是政府与财团的狼狈为奸，而不是由此带来的经济效益。这其中的关键点就是信任的问题，也是后面几篇文章中阐述的“社会成本“。社会成本高带来的良性经济循环将会远远甩开反向的恶性循环。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2332,7 +2560,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-count">30</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

@@ -299,6 +299,255 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/14/记一次对webpack打包后的代码的失败探究/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linzx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="linzx">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/14/记一次对webpack打包后的代码的失败探究/" itemprop="url">记一次对webpack打包后的代码的失败探究</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-14T13:47:44+08:00">
+                2018-06-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/06/14/记一次对webpack打包后的代码的失败探究/" class="leancloud_visitors" data-flag-title="记一次对webpack打包后的代码的失败探究">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  3,704
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  15
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>记得4月新出webpack4，上个月刚好没什么事情，用webpack4又重新去搭了一遍自己的项目。在搭项目的途中，忽然对webpack模块化之后的代码起了兴趣，于是想搞清楚我们引入的文件到底是怎么运行的。</p>
+</blockquote>
+<h3 id="1、基本版——单入口引入一个js文件"><a href="#1、基本版——单入口引入一个js文件" class="headerlink" title="1、基本版——单入口引入一个js文件"></a>1、基本版——单入口引入一个js文件</h3><p>所谓的基本版，就是我只引入了一个<code>test.js</code>,代码只有一行<code>var a = 1</code>。打包之后，发现生成的文件<code>main.js</code>并没有多少代码，只有90行不到。</p>
+<p>截取出真正执行的代码就更加少了，只有下面4行。我们接下去就从这几行代码中看下打包出来的文件的执行流程是怎么样的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">modules</span>) </span>&#123;</div><div class="line">    <span class="comment">//新建一个对象，记录导入了哪些模块</span></div><div class="line">    <span class="keyword">var</span> installedModules = &#123;&#125;;</div><div class="line">    </div><div class="line">    <span class="comment">// The require function 核心执行方法</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__webpack_require__</span>(<span class="params">moduleId</span>)</span>&#123;<span class="comment">/*内容暂时省略*/</span>&#125;</div><div class="line">    </div><div class="line">    <span class="comment">// expose the modules object (__webpack_modules__) 记录传入的modules作为私有属性</span></div><div class="line">    __webpack_require__.m = modules;</div><div class="line">    </div><div class="line">    <span class="comment">// expose the module cache 缓存对象，记录了导入哪些模块</span></div><div class="line">    __webpack_require__.c = installedModules;</div><div class="line">    </div><div class="line">    </div><div class="line">    <span class="comment">// Load entry module and return exports 默认将传入的数组第一个元素作为参数传入,这个s应该是start的意思了</span></div><div class="line">    <span class="keyword">return</span> __webpack_require__(__webpack_require__.s = <span class="number">0</span>);</div><div class="line">&#125;)([(<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line"><span class="comment">/* 0 */</span></div><div class="line">    <span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"><span class="comment">/***/</span> &#125;)</div><div class="line"><span class="comment">/******/</span> ])</div></pre></td></tr></table></figure>
+<p>首先很明显，整个文件是个<strong>自执行函数</strong>。传入了一个数组参数<code>modules</code>。</p>
+<p>这个自执行函数内部一开始新建了一个对象<code>installedModules</code>，用来记录打包了哪些模块。</p>
+<p>然后新建了函数<code>__webpack_require__</code>，可以说整个自执行函数最核心的就是<code>__webpack_require__</code>。<code>__webpack_require__</code>有许多私有属性，其中就有刚刚新建的<code>installedModules</code>。</p>
+<p>最后自执行函数<code>return</code>了<code>__webpack_require__</code>，并传入了一个参数<code>0</code>。因为<code>__webpack_require__</code>的传参变量名称叫做<code>moduleId</code>,那么传参传进来的也就是<em>模块id*</em>。所以我大胆猜测这个<code>0</code>可能是某个模块的id。</p>
+<p>这时候我瞄到下面有一行注释<code>/* 0 */</code>。可以发现webpack会在每一个模块导入的时候，会在打包模块的顶部写上一个id的注释。那么刚才那个<code>0</code>就能解释了，就是我们引入的那个模块，由于是第一个模块，所以它的id是0。</p>
+<p>那么当传入了<code>moduleId</code>之后，<code>__webpack_require__</code>内部发生了什么？</p>
+<h4 id="webpack-require解析"><a href="#webpack-require解析" class="headerlink" title="webpack_require解析"></a><strong>webpack_require</strong>解析</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">__webpack_require__</span>(<span class="params">moduleId</span>) </span>&#123;</div><div class="line">    <span class="comment">// Check if module is in cache </span></div><div class="line">    <span class="comment">// 检查缓存对象中是否有这个id，判断是否首次引入</span></div><div class="line">    <span class="keyword">if</span>(installedModules[moduleId]) &#123;</div><div class="line">        <span class="keyword">return</span> installedModules[moduleId].exports;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// Create a new module (and put it into the cache) 添加到.c缓存里面</span></div><div class="line">    <span class="keyword">var</span> <span class="built_in">module</span> = installedModules[moduleId] = &#123;</div><div class="line">    	i: moduleId,</div><div class="line">    	l: <span class="literal">false</span>,</div><div class="line">    	exports: &#123;&#125;</div><div class="line">    &#125;;</div><div class="line">    <span class="comment">// Execute the module function 执行通过moduleId获取到的函数</span></div><div class="line">    modules[moduleId].call(<span class="built_in">module</span>.exports, <span class="built_in">module</span>, <span class="built_in">module</span>.exports, __webpack_require__);</div><div class="line">    <span class="comment">// Flag the module as loaded</span></div><div class="line">    <span class="comment">// 表示module对象里面的模块加载了</span></div><div class="line">    <span class="built_in">module</span>.l = <span class="literal">true</span>;</div><div class="line">    <span class="comment">// Return the exports of the module</span></div><div class="line">    <span class="keyword">return</span> <span class="built_in">module</span>.exports;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>首先通过<code>moduleId</code>判断这个模块是否引入过。如果已经引入过的话，则直接返回。否则<code>installedModules</code>去记录下这次引入。这样子如果别的文件也要引入这个模块的话，避免去重复执行相同的代码。</p>
+<p>然后通过<code>modules[moduleId].call</code>去执行了引入的JS文件。</p>
+<p>看完这个函数之后，大家可以发现其实<code>webpack</code>打包之后的文件并没有什么很复杂的内容嘛。当然这很大一部分原因是因为我们的场景太简单了，那么接下来就增加一点复杂性。</p>
+<h3 id="2、升级版——单入口引入多个文件"><a href="#2、升级版——单入口引入多个文件" class="headerlink" title="2、升级版——单入口引入多个文件"></a>2、升级版——单入口引入多个文件</h3><p>接下来我修改一下webpack入口，单个入口同时下引入三个个文件<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">entry: [path.resolve(__dirname, <span class="string">'../src/test.js'</span>),path.resolve(__dirname, <span class="string">'../src/test2.js'</span>),path.resolve(__dirname, <span class="string">'../src/test3.js'</span>)],</div></pre></td></tr></table></figure></p>
+<p>三个文件的内容分别为<code>var a = 1</code>,<code>var b = 2</code>,<code>var c = 3</code>。接下来我们可以看看打包之后的代码</p>
+<p>打包之后的文件<code>main.js</code>核心内容并没有发生变化，和上面一模一样。但是这个自执行函数传入的参数却发生了变化。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">modules</span>) </span>&#123;</div><div class="line">    <span class="comment">/*这部分内容省略，和前面一模一样*/</span></div><div class="line">&#125;)([</div><div class="line"><span class="comment">/* 0 */</span></div><div class="line"><span class="comment">/***/</span> (<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line">        __webpack_require__(<span class="number">1</span>);</div><div class="line">        __webpack_require__(<span class="number">2</span>);</div><div class="line">        <span class="built_in">module</span>.exports = __webpack_require__(<span class="number">3</span>);</div><div class="line"><span class="comment">/***/</span> &#125;),</div><div class="line"><span class="comment">/* 1 */</span></div><div class="line"><span class="comment">/***/</span> (<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"><span class="comment">/***/</span> &#125;),</div><div class="line"><span class="comment">/* 2 */</span></div><div class="line"><span class="comment">/***/</span> (<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> b = <span class="number">2</span>;</div><div class="line"><span class="comment">/***/</span> &#125;)</div><div class="line"><span class="comment">/* 3 */</span></div><div class="line"><span class="comment">/***/</span> (<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> c = <span class="number">3</span>;</div><div class="line"><span class="comment">/***/</span> &#125;)</div><div class="line"><span class="comment">/******/</span> ]);</div></pre></td></tr></table></figure></p>
+<p>前面说过，自执行函数默认将传入的参数数组的第一个元素传入<code>__webpack_require__</code>执行代码。</p>
+<p>我们可以看一下传入第一个参数的内容，在上一章中是我们引入的文件内容<code>var a = 1</code>，但是这里却不是了。而是按模块引入顺序执行函数<code>__webpack_require__(1)</code>,<code>__webpack_require__(2)</code>,<code>__webpack_require__(3)</code>,通过<code>__webpack_require__</code>函数去执行了我们引入的代码。</p>
+<blockquote>
+<p>大家可以先想一下这里的1,2,3是怎么来的，为什么可以函数调用的时候，直接传参1,2,3</p>
+<p>不过到这里还不明白，module.exports到底起了什么作用，如果起作用，为什么又只取最后一个呢？</p>
+</blockquote>
+<h3 id="3-升级版——多入口，多文件引入方式"><a href="#3-升级版——多入口，多文件引入方式" class="headerlink" title="3.升级版——多入口，多文件引入方式"></a>3.升级版——多入口，多文件引入方式</h3><p>因为好奇如果多入口多文件是怎么样的，接下去我又将入口改了一下，变成了下面这样<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">entry: &#123;</div><div class="line">    index1: [path.resolve(__dirname, <span class="string">'../src/test1.js'</span>)],</div><div class="line">    index2: [path.resolve(__dirname, <span class="string">'../src/test2.js'</span>),path.resolve(__dirname, <span class="string">'../src/test3.js'</span>)],</div><div class="line">&#125;,</div></pre></td></tr></table></figure></p>
+<p>打包生成了<code>index1.js</code>和<code>index2.js</code>。发现<code>index1.js</code>和第一章讲的一样，<code>index2.js</code>和第二个文件一样。并没有什么让我很意外的东西。</p>
+<h3 id="4、进阶版——引入公共模块"><a href="#4、进阶版——引入公共模块" class="headerlink" title="4、进阶版——引入公共模块"></a>4、进阶版——引入公共模块</h3><p>在前面的打包文件中，我们发现每个模块id似乎是和引入顺序有关的。而在我们日常开发环境中，必然会引入各种公共文件，那么webpack会怎么处理这些id呢</p>
+<p>于是我们在配置文件中新增了<code>webpack.optimize.SplitChunksPlugin</code>插件。</p>
+<blockquote>
+<p>在<code>webpack2和3版本</code>中是<code>webpack.optimize.CommonsChunkPlugin</code>插件。但是在<code>webpack4</code>进行了一次优化改进，想要了解的可以看一下这篇文章<a href="https://blog.csdn.net/qq_35534823/article/details/79406995" target="_blank" rel="external">webpack4:代码分割CommonChunkPlugin的寿终正寝</a>。所以这里的代码将是使用<code>webpack4</code>打包出来的。</p>
+</blockquote>
+<p>然后修改一下配置文件中的入口，我们开了两个入口，并且两个入口都引入了<code>test3.js</code>这个文件<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">entry: &#123;</div><div class="line">        index1: [path.resolve(__dirname, <span class="string">'../src/test.js'</span>),path.resolve(__dirname, <span class="string">'../src/test3.js'</span>)],</div><div class="line">        index2: [path.resolve(__dirname, <span class="string">'../src/test2.js'</span>),path.resolve(__dirname, <span class="string">'../src/test3.js'</span>)],</div><div class="line">    &#125;,</div></pre></td></tr></table></figure></p>
+<p>可以看到，打包后生成了3个文件。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"scripts/bundle.4474bdd2169853ce33a7.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"scripts/index1.4474bdd2169853ce33a7.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"scripts/index2.4474bdd2169853ce33a7.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>首先<code>bundle.js</code>（文件名自己定义的）很明显是一个公共文件，里面应该有我们提取<code>test3.js</code>出来的内容。打开文件后，发现里面的代码并不多，只有下面几行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">(window[&quot;webpackJsonp&quot;] = window[&quot;webpackJsonp&quot;] || []).push([[2],&#123;</div><div class="line">/***/ 2:</div><div class="line">/***/ (function(module, exports, __webpack_require__) &#123;</div><div class="line">var c = 1;</div><div class="line">/***/ &#125;)</div><div class="line">&#125;]);</div></pre></td></tr></table></figure></p>
+<p>单纯看文件内容，我们大概能推测出几点：</p>
+<ul>
+<li>window全局环境下有一个名为<code>webpackJsonp</code>的数组</li>
+<li>数组的第一个元素仍然是数组，记录了数字<code>2</code>,应该是这个模块的id</li>
+<li>数组第二个元素是一个记录了形式为<code>{模块id：模块内容}</code>的对象。</li>
+<li>对象中的<code>模块内容</code>就是我们<code>test3.js</code>，被一个匿名函数包裹</li>
+</ul>
+<blockquote>
+<p>在<code>webpack2</code>中，采用的是<code>{文件路径：模块内容}</code>的对象形式。不过在升级到webpack3中优化采用了数字形式，为了方便提取公共模块。</p>
+</blockquote>
+<p>注意到一点，这个文件中的<code>2</code>并不像之前一样作为注释的形式存在了,而是作为属性名。但是它为什么直接就将这个<strong>模块id</strong>命名为<code>2</code>呢,目前来看，应该是这个模块是第二个引入的。带着这个想法，我接下去看了打包出来的<code>index1.js</code>文件</p>
+<p>截取出了真正执行并且有用的代码出来。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// index1.js</span></div><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">modules</span>) </span>&#123; <span class="comment">// webpackBootstrap</span></div><div class="line">    <span class="comment">// install a JSONP callback for chunk loading</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">webpackJsonpCallback</span>(<span class="params"></span>)</span>&#123;</div><div class="line">        <span class="comment">/*暂时省略内容*/</span></div><div class="line">        <span class="keyword">return</span> checkDeferredModules</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">checkDeferredModules</span>(<span class="params"></span>)</span>&#123;<span class="comment">/*暂时省略内容*/</span>&#125;</div><div class="line">    </div><div class="line">    <span class="comment">// The module cache</span></div><div class="line">    <span class="keyword">var</span> installedModules = &#123;&#125;;</div><div class="line">    </div><div class="line">    <span class="comment">// object to store loaded and loading chunks</span></div><div class="line">    <span class="comment">// undefined = chunk not loaded, null = chunk preloaded/prefetched</span></div><div class="line">    <span class="comment">// Promise = chunk loading, 0 = chunk loaded</span></div><div class="line">    <span class="keyword">var</span> installedChunks = &#123;</div><div class="line">    	<span class="number">0</span>: <span class="number">0</span></div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">    <span class="keyword">var</span> deferredModules = [];   <span class="comment">//</span></div><div class="line">    </div><div class="line">    <span class="keyword">var</span> jsonpArray = <span class="built_in">window</span>[<span class="string">"webpackJsonp"</span>] = <span class="built_in">window</span>[<span class="string">"webpackJsonp"</span>] || [];</div><div class="line">    <span class="keyword">var</span> oldJsonpFunction = jsonpArray.push.bind(jsonpArray);</div><div class="line">    jsonpArray.push = webpackJsonpCallback;</div><div class="line">    jsonpArray = jsonpArray.slice();</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; jsonpArray.length; i++)&#123; </div><div class="line">        webpackJsonpCallback(jsonpArray[i]);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> parentJsonpFunction = oldJsonpFunction;</div><div class="line">    </div><div class="line">    </div><div class="line">    <span class="comment">// add entry module to deferred list</span></div><div class="line">    deferredModules.push([<span class="number">0</span>,<span class="number">2</span>]);</div><div class="line">    <span class="comment">// run deferred modules when ready</span></div><div class="line">    <span class="keyword">return</span> checkDeferredModules();</div><div class="line">    </div><div class="line">&#125;)([</div><div class="line"><span class="comment">/* 0 */</span></div><div class="line"><span class="comment">/***/</span> (<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line">    __webpack_require__(<span class="number">1</span>);</div><div class="line">    <span class="built_in">module</span>.exports = __webpack_require__(<span class="number">2</span>);</div><div class="line">    <span class="comment">/***/</span> &#125;),</div><div class="line">    <span class="comment">/* 1 */</span></div><div class="line">    <span class="comment">/***/</span> (<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line">    <span class="comment">/***/</span> &#125;)</div><div class="line"><span class="comment">/******/</span> ]);</div></pre></td></tr></table></figure></p>
+<p>在引入<code>webpack.optimize.SplitChunksPlugin</code>之后，核心代码在原来基础上新增了两个函数<code>webpackJsonpCallback</code>和<code>checkDeferredModules</code>。然后在原来的<code>installedModules</code>基础上，多了一个<code>installedModules</code>，用来记录了模块的运行状态；一个<code>deferredModules</code>,暂时不知道干嘛，看名字像是存储待执行的模块，等到后面用到时再看。</p>
+<p>此外，还有这个自执行函数最后一行代码调用形式不再像之前一样。之前是通过调用<code>__webpack_require__(0)</code>，现在则变成了<code>checkDeferredModules</code>。那么我们便顺着它现在的调用顺序再去分析一下现在的代码。</p>
+<p>在分析了不同之后，接下来就按照运行顺序来查看代码，首先能看到一个熟悉的变量名字<code>webpackJsonp</code>。没错，就是刚才<code>bundle.js</code>中暴露到全局的那个数组。由于在html中先引入了<code>bundle.js</code>文件，所以我们可以直接从全局变量中获取到这个数组。</p>
+<p>前面已经简单分析过<code>window[&quot;webpackJsonp&quot;]</code>了，就不细究了。接下来这个数组进行了一次for循环,将数组中的每一个元素传参给了方法<code>webpackJsonpCallback</code>。而在这里的演示中，传入就是我们<code>bundle.js</code>中一个包含模块信息的数组<code>[[2],{2:fn}}]</code>。</p>
+<p>接下来就看<code>webpackJsonpCallback</code>如何处理传进来的参数了</p>
+<h4 id="webpackJsonpCallback简析"><a href="#webpackJsonpCallback简析" class="headerlink" title="webpackJsonpCallback简析"></a>webpackJsonpCallback简析</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/******/</span> 	<span class="function"><span class="keyword">function</span> <span class="title">webpackJsonpCallback</span>(<span class="params">data</span>) </span>&#123;</div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">var</span> chunkIds = data[<span class="number">0</span>]; <span class="comment">// 模块id</span></div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">var</span> moreModules = data[<span class="number">1</span>];  <span class="comment">// 提取出来的公共模块，也就是文件内容</span></div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">var</span> executeModules = data[<span class="number">2</span>];   <span class="comment">// 需要执行的模块，但演示中没有</span></div><div class="line"><span class="comment">/******/</span> 		<span class="comment">// add "moreModules" to the modules object,</span></div><div class="line"><span class="comment">/******/</span> 		<span class="comment">// then flag all "chunkIds" as loaded and fire callback</span></div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">var</span> moduleId, chunkId, i = <span class="number">0</span>, resolves = [];</div><div class="line"><span class="comment">/******/</span></div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">for</span>(;i &lt; chunkIds.length; i++) &#123;</div><div class="line"><span class="comment">/******/</span> 			chunkId = chunkIds[i];</div><div class="line"><span class="comment">/******/</span> 			<span class="keyword">if</span>(installedChunks[chunkId]) &#123;</div><div class="line"><span class="comment">/******/</span> 				resolves.push(installedChunks[chunkId][<span class="number">0</span>]);</div><div class="line"><span class="comment">/******/</span> 			&#125;</div><div class="line"><span class="comment">/******/</span> 			installedChunks[chunkId] = <span class="number">0</span>;</div><div class="line"><span class="comment">/******/</span> 		&#125;</div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">for</span>(moduleId <span class="keyword">in</span> moreModules) &#123;</div><div class="line"><span class="comment">/******/</span> 			<span class="keyword">if</span>(<span class="built_in">Object</span>.prototype.hasOwnProperty.call(moreModules, moduleId)) &#123;</div><div class="line"><span class="comment">/******/</span> 				modules[moduleId] = moreModules[moduleId];</div><div class="line"><span class="comment">/******/</span> 			&#125;</div><div class="line"><span class="comment">/******/</span> 		&#125;</div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">if</span>(parentJsonpFunction) parentJsonpFunction(data);</div><div class="line"><span class="comment">/******/</span></div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">while</span>(resolves.length) &#123;</div><div class="line"><span class="comment">/******/</span> 			resolves.shift()();</div><div class="line"><span class="comment">/******/</span> 		&#125;</div><div class="line"><span class="comment">/******/</span></div><div class="line"><span class="comment">/******/</span> 		<span class="comment">// add entry modules from loaded chunk to deferred list</span></div><div class="line"><span class="comment">/******/</span> 		deferredModules.push.apply(deferredModules, executeModules || []);</div><div class="line"><span class="comment">/******/</span></div><div class="line"><span class="comment">/******/</span> 		<span class="comment">// run deferred modules when all chunks ready</span></div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">return</span> checkDeferredModules();</div><div class="line"><span class="comment">/******/</span> 	&#125;;</div></pre></td></tr></table></figure>
+<p>这个函数中主要干了两件事情，分别是在那两个for循环中。</p>
+<p>一是在<code>installedChunks</code>对象记录引入的公共模块id，并且将这个模块标为已经导入的状态<code>0</code>。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">installedChunks[chunkId] = <span class="number">0</span>;</div></pre></td></tr></table></figure></p>
+<p>然后在另一个for循环中，设置传参数组<code>modules</code>的数据。我们公共模块的id是<code>2</code>,那么便设置<code>modules</code>数组中索引为<code>2</code>的位置为引入的公共模块函数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">modules[moduleId] = moreModules[moduleId];</div><div class="line">//这段代码在我们的例子中等同于 modules[2] = (function()&#123;/*test3.js公共模块中的代码*/&#125;)</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>其实当看到这段代码时，心里就有个疑问了。因为<code>index1.js</code>中设置<code>modulesp[2]</code>这个操作并不是一个push操作，如果说数组索引为2的位置已经有内容了呢？暂时保留着心中的疑问，继续走下去。心中隐隐感觉到这个打包后的代码其实并不是一个独立的产物了。</p>
+</blockquote>
+<p>我们知道modules是传进来的一个数组参数，在第二个章节中可以看到，我们会在最后执行函数<code>__webpack_require__(0)</code>，然后依顺序去执行所有引入模块。</p>
+<p>不过这次却和以前不一样了，可以看到<code>webpackJsonpCallback</code>最后返回的代码是<code>checkDeferredModules</code>。前面也说了整个自执行函数最后返回的函数也是<code>checkDeferredModules</code>，可以说它替代了<code>__webpack_require__(0)</code>。接下去就去看看<code>checkDeferredModules</code>发生了什么</p>
+<h4 id="checkDeferredModules简析"><a href="#checkDeferredModules简析" class="headerlink" title="checkDeferredModules简析"></a>checkDeferredModules简析</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/******/</span> 	<span class="function"><span class="keyword">function</span> <span class="title">checkDeferredModules</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">var</span> result;</div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; deferredModules.length; i++) &#123;</div><div class="line"><span class="comment">/******/</span> 			<span class="keyword">var</span> deferredModule = deferredModules[i];</div><div class="line"><span class="comment">/******/</span> 			<span class="keyword">var</span> fulfilled = <span class="literal">true</span>;</div><div class="line"><span class="comment">/******/</span> 			<span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">1</span>; j &lt; deferredModule.length; j++) &#123;</div><div class="line"><span class="comment">/******/</span> 				<span class="keyword">var</span> depId = deferredModule[j];</div><div class="line"><span class="comment">/******/</span> 				<span class="keyword">if</span>(installedChunks[depId] !== <span class="number">0</span>) fulfilled = <span class="literal">false</span>;</div><div class="line"><span class="comment">/******/</span> 			&#125;</div><div class="line"><span class="comment">/******/</span> 			<span class="keyword">if</span>(fulfilled) &#123;</div><div class="line"><span class="comment">/******/</span> 				deferredModules.splice(i--, <span class="number">1</span>);</div><div class="line"><span class="comment">/******/</span> 				result = __webpack_require__(__webpack_require__.s = deferredModule[<span class="number">0</span>]);</div><div class="line"><span class="comment">/******/</span> 			&#125;</div><div class="line"><span class="comment">/******/</span> 		&#125;</div><div class="line"><span class="comment">/******/</span> 		<span class="keyword">return</span> result;</div><div class="line"><span class="comment">/******/</span> 	&#125;</div></pre></td></tr></table></figure>
+<p>这个函数关键点似乎是在<code>deferredModules</code>,但是我们刚才<code>webpackJsonpCallback</code>唯一涉及到这个的只有这么一句，并且<code>executeModules</code>其实是没有内容的，所以可以说是空数组。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">deferredModules.push.apply(deferredModules, executeModules || []);</div></pre></td></tr></table></figure></p>
+<p>既然没有内容，那么<code>webpackJsonpCallback</code>就只能结束函数了。回到主线程，发现下面马上是两句代码，得，又绕回来了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// add entry module to deferred list</div><div class="line">deferredModules.push([0,2]);</div><div class="line">// run deferred modules when ready</div><div class="line">return checkDeferredModules();</div></pre></td></tr></table></figure></p>
+<p>不过现在就有<code>deferredModules</code>这个数组终于有内容了，一次for循环下来，最后去执行我们模块的代码仍然是这一句<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">result = __webpack_require__(__webpack_require__.s = deferredModule[<span class="number">0</span>]);</div></pre></td></tr></table></figure></p>
+<p>很熟悉，有木有，最后还是回到了<code>__webpack_require__</code>,然后就是熟悉的流程了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">__webpack_require__(1);</div><div class="line">module.exports = __webpack_require__(2);</div></pre></td></tr></table></figure></p>
+<p>但是当我看到这个内容竟然有这行代码时<code>__webpack_require__(2);</code>还是有点崩溃的。为什么？因为它<strong>代码</strong>明确直接执行了<code>__webpack_require__(2)</code>。但是<code>2</code>这个模块id是通过在全局属性<code>webpackJsonp</code>获得的，<strong>代码</strong>不应该明确知道的啊。</p>
+<p>我原来以为的运行过程是，每个js文件通过全局变量<code>webpackJsonp</code>获得到公共模块id，然后push到自执行函数传参数组<code>modules</code>。那么等到真正执行的时候，会按照for循环依次执行数组内的每个函数。它不会知道有<code>1,2</code>这种明确的id的。</p>
+<blockquote>
+<p>为什么我会这么想呢？因为我一开始认为每个js文件都是独立的，想交互只能通过全局变量来。既然是独立的，我自然不知道公共模块id是<code>2</code>事实上，<code>webpackJsonp</code>的确是验证了我的想法。</p>
+</blockquote>
+<p>可惜结果跟我想象的完全不一样，在<code>index1.js</code>直接指定执行哪些模块。这只能说明一个事情，其实<code>webpack</code>内部已经将所有的代码顺序都确定好了，而不是在js文件中通过代码来确定的。事实上，当我去查看<code>index2.js</code>文件时，更加确定了我的想法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">/******/ (function(modules) &#123;/*内容和index1.js一样*/&#125;)</div><div class="line">/************************************************************************/</div><div class="line">/******/ ([</div><div class="line">/* 0 */,</div><div class="line">/* 1 */,</div><div class="line">/* 2 */,</div><div class="line">/* 3 */</div><div class="line">/***/ (function(module, exports, __webpack_require__) &#123;</div><div class="line">    __webpack_require__(4);</div><div class="line">    module.exports = __webpack_require__(2);</div><div class="line">/***/ &#125;),</div><div class="line">/* 4 */</div><div class="line">/***/ (function(module, exports, __webpack_require__) &#123;</div><div class="line">    var b = 2;</div><div class="line">/***/ &#125;)</div><div class="line">/******/ ]);</div><div class="line">//# sourceMappingURL=index2.19eeab4e90ee99ee1ce4.js.map</div></pre></td></tr></table></figure></p>
+<p>仔细查看自执行函数的传参数组，发现它的第<code>0,1,2</code>位都是undefined。我们知道这几个数字其实就是每个模块本身的Id。而这几个id恰恰就是<code>index1.js</code>和<code>bundle.js</code>中的模块。理论上来说在浏览器下运行，<code>index2.js</code>应该无法得知的，但是事实却完全相反。</p>
+<p>走到这一步，我对webpack打包后的代码也没有特别大的欲望了，webpack内部实现才是更重要的了。好了，不说了，我先去看了，等我搞明白了，再回来写续集。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/13/vue源码解析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2333,417 +2582,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/Javascripts数组原生方法集合/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="linzx">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="linzx">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/03/Javascripts数组原生方法集合/" itemprop="url">js中数组的原生方法</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T23:47:44+08:00">
-                2017-09-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/javascript/" itemprop="url" rel="index">
-                    <span itemprop="name">javascript</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/09/03/Javascripts数组原生方法集合/" class="leancloud_visitors" data-flag-title="js中数组的原生方法">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计</span>
-                
-                <span title="字数统计">
-                  7,515
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长</span>
-                
-                <span title="阅读时长">
-                  30
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>数组应该是我们在写程序中应用到最多的数据结构了，相比于无序的对象，有序的数组帮我们在处理数据时，实在是帮了太多的忙了。今天刚好看到一篇Array.include的文章，忽然发现经过几个ES3,ES5,ES6,ES7几个版本的更迭，发现在代码中用到了好多数组的方法，所以准备全部列出来，也是给自己加深印象</p>
-</blockquote>
-<h2 id="1-ES3中的数组方法"><a href="#1-ES3中的数组方法" class="headerlink" title="1 ES3中的数组方法"></a>1 ES3中的数组方法</h2><ul>
-<li>ES3兼容现在所有主流浏览器</li>
-</ul>
-<p>ES3中的方法毫无疑问大家已经烂熟在心了，不过中间有些细节可以回顾加深一下记忆，比如是否修改原数组返回新数组，执行方法之后的返回值是什么，某些参数的意义是否搞混等等。熟悉的的可以直接快速浏览或者跳过。</p>
-<h3 id="1-1-join-方法"><a href="#1-1-join-方法" class="headerlink" title="1.1 join()方法"></a>1.1 join()方法</h3><p>Array.join()方法是将一个数组里面的所有元素转换成字符串，然后再将他们连接起来<strong>返回一个新数组</strong>。可以传入一个可选的字符串来分隔结果字符串中的所有元素。如果没有指定分隔字符串，就默认使用逗号分隔。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let a  = [1,2,3,4,5,6,7];</div><div class="line">let b = a.join();    // b = &quot;1,2,3,4,5,6,7&quot;;</div><div class="line">let c = a.a.join(&quot; &quot;);    // b = &quot;1 2 3 4 5 6 7&quot;;</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>方法Array.join()恰好与String.split()相反，后者是通过将一个字符串分隔成几个元素来创建数组</p>
-</blockquote>
-<h3 id="1-2-reverse-方法"><a href="#1-2-reverse-方法" class="headerlink" title="1.2 reverse()方法"></a>1.2 reverse()方法</h3><p>Array.reverse()方法将颠倒数组中元素的顺序并返回一个颠倒后的数组。<strong>它在原数组上执行这一操作，所以说并不是创建了一个新数组</strong>，而是在已存在的数组中对元素进行重排。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a  = [1,2,3,4,5,6,7];</div><div class="line">a.reverse();    // a =  [7,6,5,4,3,2,1]</div></pre></td></tr></table></figure></p>
-<h3 id="1-3-sort-方法"><a href="#1-3-sort-方法" class="headerlink" title="1.3 sort()方法"></a>1.3 sort()方法</h3><p>Array.sort()是在<strong>原数组上进行排序</strong>,返回排序后的数组。如果调用方法时不传入参数，那么它将按照字母顺序对数组元素进行排序，说得更精确点，是按照字符编码的顺序进行排序。要实现这一点，首先应把数组的元素都转换成字符串（如有必要），以便进行比较。</p>
-<p>如果数组中有未定义的元素，这些元素将放在数组的末尾<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let a  = [1,12,23,14,,undefined,null,NaN,56,6,7,&quot;a&quot;,&#123;&#125;,[]];</div><div class="line">a.sort();    //[[], 1, 12, 14, 23, 56, 6, 7, &quot;NaN&quot;, &#123;&#125;, &quot;a&quot;, null,undefined,undefined × 1]  </div><div class="line">//返回的NaN已经是一个字符串，说明在比较过程中将其转化成了字符串进行比较</div></pre></td></tr></table></figure></p>
-<p>仔细看可以发现，上面顺序并没有按照数字大小进行排序。如果想按照其他标准进行排序，就需要提供比较函数。该函数比较前后两个值，然后返回一个用于说明这两个值的相对顺序的数字。比较函数应该具有两个参数 a 和 b，其返回值如下：</p>
-<ul>
-<li>若 a 小于 b，在排序后的数组中 a 应该出现在 b 之前，则返回一个小于 0 的值。</li>
-<li>若 a 等于 b，则返回 0。</li>
-<li>若 a 大于 b，在排序后的数组中 a 应该出现在 b 之后，则返回一个大于 0 的值。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a  = [1,12,23,14,,undefined,null,NaN,56,6,7,&quot;a&quot;,&#123;&#125;,[]];</div><div class="line">a.sort((a,b) =&gt; &#123;return a - b&#125;);   //[null, Array(0), NaN, Object, 1, 6, 7, 12, 14, 23, 56, &quot;a&quot;,undefined, undefined × 1]</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="1-4-concat-方法"><a href="#1-4-concat-方法" class="headerlink" title="1.4 concat()方法"></a>1.4 concat()方法</h3><p>Array.concat() 方法用于连接两个或多个参数（数组，字符串等），<strong>该方法不会改变现有的数组，而会返回连接多个参数的一个新数组</strong>。如果传入的参数是数组，那么它将被展开，将元素添加到返回的数组中。但要注意，<strong>concat并不能递归的展开一个元素为数组的参数。</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3];</div><div class="line">let b = a.concat(4,5,[6,7,[9,10]]);  // b = [1,2,3,4,5,6,7,[9,10]]];</div></pre></td></tr></table></figure>
-<h3 id="1-5-slice-方法"><a href="#1-5-slice-方法" class="headerlink" title="1.5 slice()方法"></a>1.5 slice()方法</h3><p>Array.slice() 方法可从已有的数组中返回指定的一个片段(slice)，或者说是子数组。<strong>它是从原数组中截取了一个片段，并返回到了一个新数组</strong>。</p>
-<p>Array.slice(a,b) 它有两个参数a,b</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td><strong>必选</strong>。规定从何处开始选取。如果是负数，那么它规定从数组尾部开始算起的位置。也就是说，-1 指最后一个元素，-2 指倒数第二个元素，以此类推。</td>
-</tr>
-<tr>
-<td>b</td>
-<td><strong>可选</strong>。规定从何处结束选取。该参数是数组片断结束处的数组下标。如果没有指定该参数，那么切分的数组包含从 start 到数组结束的所有元素。如果这个参数是负数，那么它规定的是从数组尾部开始算起的元素。</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3,4,5,7,8];</div><div class="line">let b = a.slice(3);     //  [4, 5, 7, 8]</div><div class="line">let c = a.slice(3,5);   //  [4, 5]</div><div class="line">let d = a.slice(-5,-2); //  [3, 4, 5]</div><div class="line">let d = a.slice(2,1);   //  []</div></pre></td></tr></table></figure>
-<p>请注意，该方法并不会修改数组，而是返回一个新的子数组。如果想删除数组中的一段元素，应该使用下面这个方法 Array.splice()。</p>
-<h3 id="1-6-splice-方法"><a href="#1-6-splice-方法" class="headerlink" title="1.6 splice()方法"></a>1.6 splice()方法</h3><p>Array.splice() 方法从数组中添加/删除元素，然后<strong>返回被删除的元素</strong>。<strong>它在原数组上修改数组</strong>，并不像slice和concat那样创建新数组。注意，虽然splice和slice名字非常相似，但是执行的却是完全不同的操作。</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>index</td>
-<td><strong>必选,整数</strong>。规定添加/删除项目的位置，使用负数可从数组结尾处倒着寻找位置。</td>
-</tr>
-<tr>
-<td>howmany</td>
-<td><strong>可选,整数</strong>。要删除的元素数量。如果设置为 0，则不会删除元素。如果没有选择，则默认从index开始到数组结束的所有元素</td>
-</tr>
-<tr>
-<td>item1, …, itemX</td>
-<td><strong>可选</strong>。向数组添加新的元素。</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3,4,5,7,8];</div><div class="line">let b = a.splice(3);     // a = [1,2,3]  b = [4, 5, 7, 8]</div><div class="line">-----------------------------------------------------------</div><div class="line">let c = [1,2,3,4,5,7,8]; </div><div class="line">let d = c.splice(3,5); // c = [1,2]   d = [3,4,5,7,8]</div><div class="line">-----------------------------------------------------------</div><div class="line">let e = [1,2,3,4,5,7,8]; </div><div class="line">let f = e.splice(3,2,111,222,[1,2]); // e = [1, 2, 3, 111, 222,[1,2], 7, 8]   f = [4,5]</div></pre></td></tr></table></figure>
-<p>大家要记住<strong>slice()和splice()两个方法第二个参数代表的意义是不一样的</strong>。虽然这很基础，可是有时候还是会弄混。</p>
-<h3 id="1-7-push-和pop-方法"><a href="#1-7-push-和pop-方法" class="headerlink" title="1.7 push()和pop()方法"></a>1.7 push()和pop()方法</h3><p>Array.push() 方法可向数组的末尾添加一个或多个元素，并<strong>返回新的长度</strong>。</p>
-<p>Array.pop()方法用于删除并<strong>返回数组的最后一个元素</strong>。如果数组已经为空，则 pop() 不改变数组，并返回 undefined 值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3,4,5];</div><div class="line">let b = a.pop(); //a = [1,2,3,4]    b = 5</div><div class="line">let c =  a.push(1,3,5); // a = [1,2,3,4,1,3,5]  c = 7</div></pre></td></tr></table></figure></p>
-<p>上面两个方法都是直接对原数组进行操作。通过上面两个方法可以实现一个先进后出的栈。</p>
-<h3 id="1-8-unshift和shift-方法"><a href="#1-8-unshift和shift-方法" class="headerlink" title="1.8 unshift和shift()方法"></a>1.8 unshift和shift()方法</h3><p>unshift，shift()的方法行为和push()，pop()非常相似，只不过他们是对数组的头部元素进行插入和删除。</p>
-<p>Array.unshift() 方法可向数组的头部添加一个或多个元素，并<strong>返回新的长度</strong>。</p>
-<p>Array.shift()方法用于删除并<strong>返回数组的第一个元素</strong>。如果数组已经为空，则 pop() 不改变数组，并返回 undefined 值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3,4,5];</div><div class="line">let b = a.shift(); //a = [2,3,4,5]    b = 1</div><div class="line">let c =  a.unshift(1,3,5); // a = [1,3,5,2,3,45]  c = 7</div></pre></td></tr></table></figure></p>
-<h3 id="1-9-toString-和toLocaleString-方法"><a href="#1-9-toString-和toLocaleString-方法" class="headerlink" title="1.9 toString()和toLocaleString()方法"></a>1.9 toString()和toLocaleString()方法</h3><p>和所有javascript的对象一样，数组也有toString()方法，这个方法可以将数组的每一个元素转化成字符串(如果必要的话，就调用元素的toString()方法)，然后输出字符串的列表，字符串之间用逗号隔开。(用我的话来理解，其实就是遍历数组元素调用每个元素自身的toString()方法，然后用逗号连接)</p>
-<p>toString()的返回值和没有参数的join()方法返回的字符串相同<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = let e = [1,undefined,null,Boolean,&#123;&#125;,[],function()&#123;console.log(1);&#125;];</div><div class="line">let b = a.toString();   // b = &quot;1,,,function Boolean() &#123; [native code] &#125;,[object Object],,function ()&#123;console.log(1);&#125;&quot;</div></pre></td></tr></table></figure></p>
-<p>注意，输出的结果中，返回的数组值周围没有括号。</p>
-<p>toLocaleString方法是toString()方法的<strong>本地化版本</strong>。它是使用地区特定的分隔符把生成的字符串连接起来，形成一个字符串。</p>
-<p>虽然是两个方法，但是一般元素两个方法的输出结果却基本是一样的，去网上找了相关文章，发现只有两种情况比较有区分，一个是时间，一个是4位数字以上的数字,举例如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">let a = 1111;</div><div class="line">let b = a.toLocaleString();   // b = &quot;1,111&quot;</div><div class="line">let c = a.toString();   // c = &quot;1111&quot;;</div><div class="line">-------------------------------------------------------</div><div class="line">let date = new Date();</div><div class="line">let d = date.toString();    // d = &quot;Sun Sep 03 2017 21:52:18 GMT+0800 (中国标准时间)&quot;</div><div class="line">let e = date.toLocaleString();  //e = &quot;2017/9/3 下午9:52:18&quot;</div></pre></td></tr></table></figure></p>
-<p>好吧，这个api和数组关系不大。。。主要还是和数组中元素自身有关。啊哈哈，尴尬。</p>
-<h3 id="1-10-valueOf"><a href="#1-10-valueOf" class="headerlink" title="1.10 valueOf()"></a>1.10 valueOf()</h3><p>Array.valueOf()方法在日常中用的比较少，该方法继承与Object。javascript中许多内置对象都针对自身重写了该方法，数组Array.valueOf()直接返回自身。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let a = [1,&quot;1&quot;,&#123;&#125;,[]];</div><div class="line">let b = a.valueOf();</div><div class="line">a === b; // true</div></pre></td></tr></table></figure></p>
-<hr>
-<blockquote>
-<p>好啦，关于ES3的方法就不详细描述了，我相信大家基本上都已经完全是烂熟于心的那种，唯一可能需要加强记忆的就是一些参数含义，返回数据这些了。</p>
-</blockquote>
-<hr>
-<h2 id="2-ES5中的数组方法"><a href="#2-ES5中的数组方法" class="headerlink" title="2 ES5中的数组方法"></a>2 ES5中的数组方法</h2><ol>
-<li>ES5中的数组方法在各大浏览器的兼容性</li>
-</ol>
-<ul>
-<li>Opera 11+</li>
-<li>Firefox 3.6+</li>
-<li>Safari 5+</li>
-<li>Chrome 8+</li>
-<li>Internet Explorer 9+</li>
-</ul>
-<p>2.Array在ES5新增的方法中接受两个参数，第一个参数都是function类型，必选，默认有传参，这些参数分别是：</p>
-<ul>
-<li>currentValue : 数组当前项的值</li>
-<li>index : 数组当前项的索引</li>
-<li>array : 数组对象本身</li>
-</ul>
-<p>第二个参数是当执行回调函数时指向的this(参考对象)，不提供默认为window，严格模式下为undefined。</p>
-<p>以forEach举例</p>
-<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">array.forEach(callback, thisArg)</div><div class="line"></div><div class="line">array.forEach(callback(currentValue, index, array)&#123;</div><div class="line">    //do something</div><div class="line">&#125;, thisArg)</div></pre></td></tr></table></figure></p>
-<p><strong>例子：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//demo,注意this指向</div><div class="line">//我这个demo没有用箭头函数来测试</div><div class="line">let a = [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;];</div><div class="line"></div><div class="line">a.forEach(function(currentValue, index, array)&#123;</div><div class="line">    this.info(currentValue, index, array);</div><div class="line">&#125;,&#123;info:function(value,index,array)&#123;</div><div class="line">    console.log(`当前值$&#123;value&#125;，下标$&#123;index&#125;,数组$&#123;array&#125;`)&#125;</div><div class="line">&#125;);</div><div class="line">function info(value,index,array)&#123;</div><div class="line">    console.log(`外放方法 ： 当前值$&#123;value&#125;，下标$&#123;index&#125;,数组$&#123;array&#125;`)&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 当前值a,下标0,数组a,b,c</div><div class="line">// 当前值b,下标1,数组a,b,c</div><div class="line">// 当前值c,下标2,数组a,b,c</div></pre></td></tr></table></figure></p>
-<p>3.ES5中的所有关于遍历的方法按升序为数组中含有效值的每一项执行一次callback函数，那些<strong>已删除（使用delete方法等情况）或者未初始化的项</strong>将被跳过（但不包括那些值为 undefined 的项）（例如在稀疏数组上）。</p>
-<p><strong>例子：数组哪些项被跳过了</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">function logArrayElements(element, index, array) &#123;</div><div class="line">    console.log(`a[$&#123;index&#125;] = $&#123;element&#125;`);</div><div class="line">&#125;</div><div class="line">let xxx;  //定义未赋值</div><div class="line">let a = [1,2,&quot;&quot;, ,undefined,xxx,3];</div><div class="line">delete a[1];  // 移除 2</div><div class="line">a.forEach(logArrayElements);</div><div class="line"></div><div class="line">// a[0] = 1</div><div class="line">// 注意索引1被跳过了，因为在数组的这个位置没有项 被删除了</div><div class="line">// a[2] = &quot;&quot;</div><div class="line">// 注意索引3被跳过了，因为在数组的这个位置没有项,可以理解成没有被初始化</div><div class="line">// a[4] = undefined</div><div class="line">// a[5] = undefined</div><div class="line">// a[6] = 3</div></pre></td></tr></table></figure></p>
-<p>好了，上面3点基本上是ES5中所有方法的共性，下面就不重复述说了。开始正文解析每个方法的不同了</p>
-<hr>
-<h3 id="2-1-forEach"><a href="#2-1-forEach" class="headerlink" title="2.1 forEach()"></a>2.1 forEach()</h3><p>Array.forEach() 为每个数组元素执行callback函数；不像map() 或者reduce() ，<strong>它总是返回 undefined值</strong>，并且不可链式调用。典型用例是在一个链的最后执行副作用。</p>
-<blockquote>
-<p>注意： 没有办法中止或者跳出 forEach 循环，除了抛出一个异常。如果你需要跳出函数，推荐使用Array.some。如果可以，新方法 find() 或者findIndex() 也可被用于真值测试的提早终止。</p>
-</blockquote>
-<p><strong>如果数组在迭代时被修改了</strong></p>
-<p>下面的例子输出”one”, “two”, “three”。当到达包含值”two”的项时，整个数组添加了一个项在第一位，这导致所有的元素下移一个位置。此时在下次执行回调中，因为元素 “two”符合条件，结果一直增加元素，直到遍历次数完毕。forEach()不会在迭代之前创建数组的副本。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">let a = [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;];</div><div class="line">let b = a.forEach((value,index,arr) =&gt; &#123;</div><div class="line">  if (value === &quot;two&quot;) &#123;</div><div class="line">    a.unshift(&quot;zero&quot;);</div><div class="line">  &#125;</div><div class="line">  return &quot;new&quot; + value</div><div class="line">&#125;);</div><div class="line">// one,0,[&quot;one&quot;, &quot;two&quot;, &quot;three&quot;]</div><div class="line">// two,1,[&quot;one&quot;, &quot;two&quot;, &quot;three&quot;]</div><div class="line">// two,2,[&quot;zero&quot;, &quot;one&quot;, &quot;two&quot;, &quot;three&quot;]</div><div class="line">// two,3,[&quot;zero&quot;,&quot;zero&quot;, &quot;one&quot;, &quot;two&quot;, &quot;three&quot;]</div></pre></td></tr></table></figure></p>
-<p>看完例子可以发现，使用 forEach 方法处理数组时，数组元素的范围是在callback方法第一次调用之前就已经确定了。在 forEach 方法执行的过程中：原数组中新增加的元素将不会被 callback 访问到；若已经存在的元素被改变或删除了，则它们的传递到 callback 的值是 forEach 方法遍历到它们的那一个索引时的值。</p>
-<h3 id="2-2-map"><a href="#2-2-map" class="headerlink" title="2.2 map()"></a>2.2 map()</h3><p>Array.map 方法会给原数组中的每个元素都按顺序调用一次callback函数。callback每次执行后的返回值（没有指定返回值则返回undefined）组合起来形成一个新数组。</p>
-<p><strong>例子：返回每个元素的平方根的数组</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [1,4,9];</div><div class="line">let b = a.map((value) =&gt; &#123;</div><div class="line">   return Math.sqrt(value);    //如果没有return，则默认返回undefined</div><div class="line">&#125;);</div><div class="line">// b= [1,2,3]</div></pre></td></tr></table></figure></p>
-<h3 id="2-3-filter"><a href="#2-3-filter" class="headerlink" title="2.3 filter()"></a>2.3 filter()</h3><p>Array.filter()为数组中的每个元素调用一次 callback 函数，并利用所有使得 callback 返回 true 或 等价于 true 的值 的元素创建一个新数组。那些没有通过 callback 测试的元素会被跳过，不会被包含在新数组中</p>
-<p><strong>例子：数组去重</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3,4,32,6,79,0,1,1,8];</div><div class="line">let b = a.filter((value,index,arr) =&gt; &#123;</div><div class="line">   return arr.indexOf(value) === index;</div><div class="line">&#125;);</div><div class="line">// b = [1, 2, 3, 4, 32, 6, 79, 0, 8]</div></pre></td></tr></table></figure></p>
-<h3 id="2-4-some"><a href="#2-4-some" class="headerlink" title="2.4 some()"></a>2.4 some()</h3><p>Array.some 为数组中的每一个元素执行一次 callback 函数，直到找到一个使得 callback 返回一个“真值”（即可转换为布尔值 true 的值）。如果找到了这样一个值，<strong>some 将会立即返回 true。否则，some 返回 false</strong>。callback 只会在那些”有值“的索引上被调用，不会在那些被删除或从来未被赋值的索引上调用。</p>
-<p><strong>例子：查看数组内是否含有大于0的元素</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [-1,4,9];</div><div class="line">let b = a.some((value) =&gt; &#123;</div><div class="line">   return value &gt; 0;    //如果没有return，则默认返回undefined，将无法告诉some判断</div><div class="line">&#125;);</div><div class="line">// b = true</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>some方法可以理解成拥有跳出功能的forEach()函数，可以用在在一些需要中断函数的地方</p>
-<h3 id="2-5-every"><a href="#2-5-every" class="headerlink" title="2.5 every()"></a>2.5 every()</h3></blockquote>
-<p>Array.every() 方法为数组中的每个元素执行一次 callback 函数，直到它找到一个使 callback 返回 false（表示可转换为布尔值 false 的值）的元素。如果发现了一个这样的元素，every 方法将会立即返回 false。否则，callback 为每一个元素返回 true，every 就会返回 true。callback 只会为那些已经被赋值的索引调用。不会为那些被删除或从来没被赋值的索引调用。</p>
-<p><strong>例子：检测所有数组元素的大小，是否都大于0</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [-1,4,9];</div><div class="line">let b = a.every((value) =&gt; &#123;</div><div class="line">   return value &gt; 0;    //如果没有return，则默认返回undefined</div><div class="line">&#125;);</div><div class="line">// b = false</div></pre></td></tr></table></figure></p>
-<h4 id="2-6-indexOf"><a href="#2-6-indexOf" class="headerlink" title="2.6 indexOf()"></a>2.6 indexOf()</h4><p>Array.indexOf()使用严格相等（strict  equality，即===）进行判断searchElement与数组中包含的元素之间的关系。</p>
-<p>Array.indexOf()提供了两个参数，第一个searchElement代表要查询的元素，第二个代表fromIndex表示从哪个下标开始查找，默认为0。</p>
-<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">arr.indexOf(searchElement)</div><div class="line">arr.indexOf(searchElement, fromIndex = 0)</div></pre></td></tr></table></figure></p>
-<p>Array.indexOf()会返回首个被找到的元素在数组中的索引位置; 若没有找到则返回 -1</p>
-<p><strong>例子：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">let array = [2, 5, 9];</div><div class="line">array.indexOf(2);     // 0</div><div class="line">array.indexOf(7);     // -1</div><div class="line">array.indexOf(9, 2);  // 2</div><div class="line">array.indexOf(2, -1); // -1</div><div class="line">array.indexOf(2, -3); // 0</div></pre></td></tr></table></figure></p>
-<h3 id="2-7-lastIndexOf"><a href="#2-7-lastIndexOf" class="headerlink" title="2.7 lastIndexOf()"></a>2.7 lastIndexOf()</h3><p>Array.lastIndexOf()就不细说了，其实从名字大家也可以看出来，indexOf是正向顺序查找，lastIndexOf是反向从尾部开始查找，但是返回的<strong>索引下标仍然是正向的顺序索引</strong><br>。<br><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">arr.lastIndexOf(searchElement, fromIndex = arr.length - 1)</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>需要注意的是，只是查找的方向相反，fromIndex和返回的索引都是正向顺序的，千万不要搞混了（感觉我这么一说，大家可能搞混了，捂脸）。</p>
-</blockquote>
-<p><strong>例子：各种情况下的的indexOf</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var array = [2, 5, 9, 2];</div><div class="line">var index = array.lastIndexOf(2);   // index = 3</div><div class="line">index = array.lastIndexOf(7);   // index = -1</div><div class="line">index = array.lastIndexOf(2, 3);    // index = 3</div><div class="line">index = array.lastIndexOf(2, 2);    // index = 0</div><div class="line">index = array.lastIndexOf(2, -2);   // index = 0</div><div class="line">index = array.lastIndexOf(2, -1);   // index = 3</div></pre></td></tr></table></figure></p>
-<h3 id="2-8-reduce"><a href="#2-8-reduce" class="headerlink" title="2.8 reduce()"></a>2.8 reduce()</h3><p>Array.reduce() 为数组中的每一个元素依次执行回调函数,最后返回一个函数累计处理的结果。</p>
-<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">array.reduce(function(accumulator, currentValue, currentIndex, array), initialValue)</div></pre></td></tr></table></figure></p>
-<p>reduce的回调函数中的参数与前面的不同，多了第一个参数，是上一次的返回值</p>
-<ul>
-<li>accumulator : 上一次调用回调返回的值，或者是提供的初始值（initialValue）</li>
-<li>currentValue : 数组当前项的值</li>
-<li>currentIndex : 数据当前项的索引。第一次遍历时，如果提供了 initialValue ，从0开始；否则从1开始</li>
-<li>array : 调用 reduce 的数组</li>
-<li>initialValue : 可选项，其值用于第一次调用 callback 的第一个参数。如果没有设置初始值，则将数组中的第一个元素作为初始值。<strong>空数组调用reduce时没有设置初始值将会报错</strong>。</li>
-</ul>
-<p><strong>例子：数组求和</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let sum = [0, 1, 2, 3].reduce(function (o,n) &#123;</div><div class="line">  return o + n;</div><div class="line">&#125;);</div><div class="line">// sum = 6</div></pre></td></tr></table></figure></p>
-<p>对了，当回调函数第一次执行时，accumulator 和 currentValue 的取值有两种情况：</p>
-<ul>
-<li>调用 reduce 时提供initialValue，accumulator 取值为 initialValue ，currentValue 取数组中的第一个值；</li>
-<li>没有提供 initialValue ，accumulator 取数组中的第一个值，currentValue 取数组中的第二个值。</li>
-</ul>
-<p><strong>例子：reduce数组去重</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[1,2,3,4,5,6,78,4,3,2,21,1].reduce(function(accumulator,currentValue)&#123;</div><div class="line">	if(accumulator.indexOf(currentValue) &gt; -1)&#123;</div><div class="line">		return accumulator;</div><div class="line">	&#125;else&#123;</div><div class="line">		accumulator.push(currentValue);</div><div class="line">        return accumulator;</div><div class="line">	&#125;</div><div class="line">&#125;,[])</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>注意 ：如果数组为空并且没有提供initialValue， 会抛出TypeError 。如果数组仅有一个元素并且没有提供initialValue， 或者有提供initialValue但是数组为空，那么此唯一值将被返回并且callback不会被执行。</p>
-</blockquote>
-<h3 id="2-9-reduceRight-方法"><a href="#2-9-reduceRight-方法" class="headerlink" title="2.9 reduceRight()方法"></a>2.9 reduceRight()方法</h3><p>Array.reduceRight() 为数组中的每一个元素依次执行回调函数，方向相反，从右到左,最后返回一个函数累计处理的结果。</p>
-<p>因为这个方法和reduce方法基本是一模一样的，除了方法相反，所以就不详细的再写一遍了</p>
-<h3 id="2-10-isArray-方法"><a href="#2-10-isArray-方法" class="headerlink" title="2.10 isArray()方法"></a>2.10 isArray()方法</h3><p>之所以将这个方法放在最后，是因为这个方法和前面的不太一致，是用于确定传递的值是否是一个 Array,使用方法也很简单</p>
-<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = Array.isArray([1,2,3]);  //true</div><div class="line">let b = Array.isArray(document.getElementsByTagName(&quot;body&quot;));  //类数组也为false</div></pre></td></tr></table></figure></p>
-<p>不过感觉除非是临时判断，不然一般也不会用这个方法去判断，一般还是下面这种万金油型的吧。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Object.prototype.toString.call([]).slice(8, -1) === &quot;Array&quot;;//true</div></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>好啦，关于ES5的方法基本上就讲到这里了，感觉自己在深入去看了一些文章之后，还是有一些额外的收获的。比如对reduce这个平时不常用的方法了解更加深刻了，感觉之前很多遍历收集数据的场景其实用reduce更加方便。</p>
-</blockquote>
-<hr>
-<h2 id="3-ES6中的数组方法"><a href="#3-ES6中的数组方法" class="headerlink" title="3 ES6中的数组方法"></a>3 ES6中的数组方法</h2><blockquote>
-<p>不同于es5主要以遍历方法为主，es6的方法是各式各样的，不过必须要说一句，在性能上，es6的效率基本上是最低的。</p>
-</blockquote>
-<h3 id="3-1-…方法——concat方法的增强"><a href="#3-1-…方法——concat方法的增强" class="headerlink" title="3.1 …方法——concat方法的增强"></a>3.1 …方法——concat方法的增强</h3><p>英文名字叫做Spread syntax，中文名字叫做扩展运算符。</p>
-<h3 id="3-2-of-方法"><a href="#3-2-of-方法" class="headerlink" title="3.2 of()方法"></a>3.2 of()方法</h3><p>Array.of()方法可以将传入参数以顺序的方式返回成一个新数组的元素。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let a = Array.of(1, 2, 3); // a = [1, 2, 3]</div></pre></td></tr></table></figure></p>
-<p>其实，刚看到这个api和他的用途，还是比较懵逼的，因为看上去这个方法就是直接将传入的参数变成一个数组之外，就没有任何区别了，那么我为什么不直接用以前的写法去实现类似的效果呢，比如 let ＝ [1,2,3];而且看上去也更加直接。然后我去翻了下最新的ECMAScript草案，其中有这么一句话</p>
-<blockquote>
-<p>The of function is an intentionally generic factory method; it does not require that its this value be the Array constructor. Therefore it can be transferred to or inherited by other constructors that may be called with a single numeric argument.</p>
-</blockquote>
-<p>自己理解了一下，其实大概意思就是说为了弥补Array构造函数传入单个函数的不足，所以出了一个of这个更加通用的方法，举个例子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = new Array(1);//a = [undefined × 1]</div><div class="line">let b = new Array(1,2);// b = [1,2]</div></pre></td></tr></table></figure></p>
-<p>大家可以注意到传入一个参数和传入两个参数的结果，完全是不一样的，这就很尴尬了。而为了避免这种尴尬，es6则出了一种通用的of方法，不管你传入了几个参数，都是一种相同类型的输出结果。</p>
-<p>不过我好奇的是，如果只传入几个参数，为什么不直接let a = [1,2,3];效率和直观性也更加的高。如果要创建一个长度的数组，我肯定还是选let a = new Array(10000),这种形式，实在没有感觉到Array.of的实用场景，希望大家可以给我点指导。</p>
-<h3 id="3-2-from-方法"><a href="#3-2-from-方法" class="headerlink" title="3.2 from()方法"></a>3.2 from()方法</h3><p>Array.from()方法从一个类似数组（拥有一个 length 属性和若干索引属性的任意对象）或可迭代的对象(String, Array, Map, Set和 Generator)中创建一个新的数组实例。</p>
-<p>我们先查看Array.from()的语法</p>
-<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Array.from(arrayLike, mapFn, thisArg)</div></pre></td></tr></table></figure></p>
-<p>从语法中，我们可以看出Array.from()最基本的功能是将一个类数组的对象转化成数组，然后通过第二个和第三个参数可以对转化成功后的数组再次执行一次遍历数据map方法,也就是Array.from(obj).map(mapFn, thisArg)。</p>
-<blockquote>
-<p>对了额外说一句，这个方法的性能很差，和直接的for循环的性能对比了一下，差了百倍不止。</p>
-</blockquote>
-<p><strong>例子 :将一串数字字符串转化为数组</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = Array.from(&quot;242365463432&quot;,(value) =&gt; return value * 2);</div><div class="line">//a = [4, 8, 4, 6, 12, 10, 8, 12, 6, 8, 6, 4]</div></pre></td></tr></table></figure></p>
-<h3 id="3-4-copyWithin-方法"><a href="#3-4-copyWithin-方法" class="headerlink" title="3.4 copyWithin()方法"></a>3.4 copyWithin()方法</h3><p>Array.copyWithin方法，在当前数组内部，将指定位置的成员<strong>浅复制</strong>到其他位置（会覆盖原有成员），然后<strong>返回当前数组</strong>。也就是说，使用这个方法，会修改当前数组。</p>
-<blockquote>
-<p>这个方法有点复杂，光看描述可能大家未必能轻易理解，大家可以先看下语法，再看demo配合理解，而且自己没有想到这个方法合适的应用场景。网上也没又看到相关使用场景。但是讲道理，这个方法设计出来，肯定是经过深思熟虑的，如果大家有想到，欢迎评论给我，谢谢。</p>
-</blockquote>
-<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">arr.copyWithin(target, start, end)</div><div class="line">//arr.copyWithin(目标索引, 源开始索引, 结束源索引)</div></pre></td></tr></table></figure></p>
-<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// 将3号位复制到0号位</div><div class="line">[1, 2, 3, 4, 5].copyWithin(0, 3, 4);    // [4, 2, 3, 4, 5]</div><div class="line"></div><div class="line">// 将2号位复制到0号位</div><div class="line">[1, 2, 3, 4, 5].copyWithin(0, 2, 5);    //[3, 4, 5, 4, 5]</div><div class="line"> </div><div class="line"> // 将3号位复制到0号位</div><div class="line">[1, 2, 3, 4, 5].copyWithin(4, 1, 4);    //[1, 2, 3, 4, 2]</div></pre></td></tr></table></figure></p>
-<p>第一个是常规的例子，大家可以对比看第二个可以发现，这个方法是先浅复制了数组一部分暂时存储起来，然后再从目标索引处开始一个个覆盖后面的元素，直到这段复制的数组片段全部粘贴完。</p>
-<p>再看第三个例子，可以发现当复制的数据片段从目标索引开始粘贴时，如果超过了长度，它将停止粘贴，这说明<strong>它不会改变数据的 length，但是会改变数据本身的内容</strong>。</p>
-<p>Array.copyWithin可以理解成复制以及粘贴序列这两者是为一体的操作;即使复制和粘贴区域重叠，粘贴的序列也会有拷贝来的值。</p>
-<h3 id="3-5-find-和-findIndex-方法"><a href="#3-5-find-和-findIndex-方法" class="headerlink" title="3.5 find() 和 findIndex()方法"></a>3.5 find() 和 findIndex()方法</h3><p>Array.find()方法返回数组中满足提供的测试函数的第一个元素的值。否则返回 undefined。<br> Array.findIndex() 方法返回数组中满足提供的测试函数的第一个元素的值的索引。否则返回 -1。</p>
-<p> 这两个方法其实使用非常相似，使用场景有点像ES5中Array.some，都是在找到第一个满足条件的时候，跳出循环，区别的是，三种返回的值完全不一样，我想这也许是为什么要在ES6中增加这两个API的原因吧，可以理解成是数组的方法的补足。</p>
-<p>  <strong>例子：三个方法各自的返回值</strong><br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"> let a = [1,2,3,4,5].find((item)=&gt;&#123;return item &gt; 3&#125;);   // a = 4 返回第一个符合结果的值</div><div class="line">let b = [1,2,3,4,5].findIndex((item)=&gt;&#123;return item &gt; 3&#125;);  // b = 3 返回第一个符合结果的下标</div><div class="line">let c = [1,2,3,4,5].some((item)=&gt;&#123;return item &gt; 3&#125;);    // c = true 返回是否有符合条件的Boolean值</div><div class="line"></div><div class="line">-----------------不满足条件--------------------</div><div class="line"> let a = [1,2,3,4,5].find((item)=&gt;&#123;return item &gt; 6&#125;);   // a = undefined</div><div class="line">let b = [1,2,3,4,5].findIndex((item)=&gt;&#123;return item &gt; 6&#125;);  // b = -1</div><div class="line">let c = [1,2,3,4,5].some((item)=&gt;&#123;return item &gt; 6&#125;);    // c = false</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>注意：find()和findIndex()方法无法判断NaN,可以说是内部用 ===判断，不同于ES7中的include方法。不过这个判断方式是另外一个话题，不在本文详述了，感兴趣的同学可以去查一下。</p>
-</blockquote>
-<p>其实还可以发现，Array.find() 方法只是返回第一个符合条件的元素，它的增强版是es5中Array.filter()方法，返回所有符合条件的元素到一个新数组中。可以说是当用find方法时考虑跟多的是跳出吧。</p>
-<p>我感觉这4个方法配合相应的回调函数基本上可以完全覆盖大多数需要数组判断的场景了，大家觉得呢？</p>
-<h3 id="3-5-fill方法"><a href="#3-5-fill方法" class="headerlink" title="3.5 fill方法"></a>3.5 fill方法</h3><p>Array.fill()方法用一个固定值填充一个数组中从起始索引到终止索引内的全部元素,<strong>返回原数组</strong></p>
-<p>这个方法的使用也非常简单，大家基本上看个语法和demo就能懂了。需要注意的是，这个方法是返回数组本身，还有一点就是，类数组不能调用这个方法，刚刚自己去改了MDN上面的文档。</p>
-<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">arr.fill(value) </div><div class="line">arr.fill(value, startIndex) </div><div class="line">arr.fill(value, startIndex, endIndex)</div></pre></td></tr></table></figure></p>
-<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let a = new Array(10);</div><div class="line">a.fill(1);  // a = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];</div><div class="line">let b = [1,2,34,5,6,7,8].fill(3,4);    //b =  [1, 2, 34, 5, 3, 3, 3];</div><div class="line">let c = [1,2,34,5,6,7,8].fill(3,2,5);   // c =  [1, 2, 3, 3, 3, 7, 8];</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>个人感觉这个方法初始化数组挺有用的，自己一周每次测试数据时，只要new Array().fill(1);,比以前遍历直观方便多了</p>
-</blockquote>
-<h3 id="3-6-entries-，keys-values-方法"><a href="#3-6-entries-，keys-values-方法" class="headerlink" title="3.6 entries()，keys(),values()方法"></a>3.6 entries()，keys(),values()方法</h3><p>Array.entries()将数组转化成一个中包含<strong>每个索引的键/值对</strong>的Array Iterator对象</p>
-<p>Array.keys()将数组转化成一个中包含<strong>每个索引的键</strong>的Array Iterator对象</p>
-<p>Array.values()将数组转化成一个中包含<strong>每个索引的值</strong>的Array Iterator对象。</p>
-<blockquote>
-<p>Array.values()方法chrome浏览器并不支持，</p>
-</blockquote>
-<p>之所以将这三个方法放在一起是有原因的额，大家可以看这三个方法其实都是一个数组转化为一种新的数据类型——返回新的Array Iterator对象，唯一区别的是转化之后的元素不一样。跟他们的名字一样，entries()方法转化为全部的键值对，key()方法转化为键，value()保留值。</p>
-<p><strong>例子：观察各个迭代器遍历输出的东西</strong></p>
-<p><strong>Array.entries()</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let a = [1,2,3].entries();</div><div class="line">for(let i of a)&#123;console.log(i);&#125;</div><div class="line">//[0, 1]</div><div class="line">//[1, 2]</div><div class="line">//[2, 3]</div></pre></td></tr></table></figure></p>
-<p><strong>Array.keys()</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let b = [1,2,3].keys();</div><div class="line">for(let i of b)&#123;console.log(i);&#125;</div><div class="line">//0</div><div class="line">//1</div><div class="line">//2</div></pre></td></tr></table></figure></p>
-<p><strong>Array.values()</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let c = [1,2,3].values();</div><div class="line">for(let i of c)&#123;console.log(i);&#125;</div><div class="line">//1</div><div class="line">//2</div><div class="line">//3</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>关于迭代器这个东西，自己说不上什么，因为自己没有亲自用过，如果大家有什么见解课可以评论给我，我来补充和学习一下</p>
-</blockquote>
-<h2 id="4-ES7中的数组方法"><a href="#4-ES7中的数组方法" class="headerlink" title="4 ES7中的数组方法"></a>4 ES7中的数组方法</h2><h3 id="4-1-includes-方法"><a href="#4-1-includes-方法" class="headerlink" title="4.1 includes()方法"></a>4.1 includes()方法</h3><p>Array.includes方法返回一个布尔值，表示某个数组是否包含给定的值，如果包含，则返回true，否则返回false,与<strong>字符串的includes方法</strong>类似。</p>
-<p>这个方法大家可以看作是ES5中Array.indexOf的语义增强版，“includes”这个是否包含的意思，直接返回Boolean值，比起原来的indexOf是否大于-1,显得更加直观,我就是判断有没有包含哪个值</p>
-<p><strong>语法</strong>，使用方法和indexof一模一样<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">arr.includes(searchElement)</div><div class="line">arr.includes(searchElement, fromIndex)</div></pre></td></tr></table></figure></p>
-<p><strong>例子</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">let array = [2, 5, 9];</div><div class="line">array.includes(2);     // true</div><div class="line">array.includes(7);     // false</div><div class="line">array.includes(9, 2);  // true</div><div class="line">array.includes(2, -1); // false</div><div class="line">array.includes(2, -3); // true</div></pre></td></tr></table></figure></p>
-<hr>
-<p>方法还真是tmd多啊，感觉基本上应该是更新完了，前后两星期花了我4天时间吧，还是挺累的。不过收货还是很多，比如知道了ES5的方法基本上都有第二个this指向的参数，重新认识了reduce方法，感觉自己之前很多场景用reduce更好，重新熟悉了一些ES6的方法可以试用有些场景</p>
-<p>如果能看到最后的，感觉你也是够累的，哈哈哈。<br>既然这么累，点颗星吧</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2793,7 +2631,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-count">30</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
